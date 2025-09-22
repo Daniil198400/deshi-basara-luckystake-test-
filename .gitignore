@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+REPORT_OF_ALL_GAMES/playwright-report/
+HTML-Report-GC-Providers-Prod/playwright-report/
+Dev.GC.Felt.Report/playwright-report/
+1spin4win_report_games.zip/playwright-report/
+
+Dev.GC.1spin4win.Report.zip
+Dev.GC.4ThePlayer.Report.zip
+Dev.GC.Fantasma.Report.zip
+Dev.GC.Felt.Report.zip
+Dev.GC.Four7.Report.zip
+Checking_All_Sections.zip
+
+REPORT_OF_ALL_GAMES.zip

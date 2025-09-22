@@ -1,0 +1,23 @@
+Record Test Commands
+
+Record on a specific browser: npx playwright codegen --browser chromium (firefox etc)
+
+Emulate the device: npx playwright codegen --device="iPhone 11"
+
+Record and save to a file: npx playwright codegen --target javascript -o record_ example.js
+
+Set viewport, screen resolution (size): npx playwright codegen --viewport-size=800,600
+
+Emulate color scheme: npx playwright codegen --color-scheme=dark (if available on the website)
+
+See all options: npx playwright codegen --help
+
+Open browser with report: npx playwright show-report ./playwright-report
+
+Start tests with checking Providers' games: npx playwright test tests/Prod.Games/GC/Providers --grep "@providers" --headed
+For Dev: npx playwright test tests/Dev.Games/GC/Providers --grep "@providersDev" --headed
+
+
+Start tests (all): npx playwright test
+
+Start a specific test: npx playwright test tests/login.luckystake.spec.ts
