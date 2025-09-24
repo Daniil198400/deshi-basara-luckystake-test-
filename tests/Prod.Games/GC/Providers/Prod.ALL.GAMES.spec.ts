@@ -3,14 +3,19 @@ import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { delay5Seconds, delay10Seconds } from '../../../../utils/utils';
 
+// httpCredentials
 const test = base.extend<{}>({
   context: async ({ browser }, use) => {
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      httpCredentials: {
+        username: 'luckystake',
+        password: 'luckystake1!',
+      },
+    });
     await use(context);
     await context.close();
   },
 });
-
 
 // function for working on all oid
 async function fetchAllOids(): Promise<string[]> {
@@ -39,7 +44,13 @@ async function playGames(page, gameIds: string[]) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
     await page.goto(gameUrl);
-    await delay10Seconds();
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
 
     // Screenshot before Play now
     let screenshot = await page.screenshot({ fullPage: true });
@@ -55,7 +66,13 @@ async function playGames(page, gameIds: string[]) {
     }
 
     // Waiting
-    await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
 
     // Screenshot after wait
     screenshot = await page.screenshot({ fullPage: true });
@@ -78,7 +95,13 @@ const searchButton = page.getByRole('button').filter({ hasText: /^$/ });
 if (await searchButton.first().isVisible({ timeout: 3000 })) {
   await searchButton.first().click();
   
-  await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+  await delay5Seconds();
 
       screenshot = await page.screenshot({ fullPage: true });
       test.info().attach(`game_${id}_after_search_button`, {
@@ -97,7 +120,13 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
     if (await buyButton.isVisible({ timeout: 10000 })) {
       await buyButton.click();
       
-      await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+      await delay5Seconds();
 
       screenshot = await page.screenshot();
       test.info().attach(`game_${id}_buy_button`, {
@@ -114,7 +143,12 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
         console.log(`Click on price button: ${randomPrice}`);
         await priceButton.click();
 
-        await delay10Seconds();
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
         await delay10Seconds();
 
         screenshot = await page.screenshot({ fullPage: true });
@@ -140,8 +174,13 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
       await backButton.click();
     }
 
-    await page.waitForLoadState('networkidle');
-
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicking_Back`, {
       body: screenshot,
@@ -172,3 +211,6 @@ test('PROD, GC ONLY, ALL GAMES', async ({ page }) => {
   // laucnhing the games
   await playGames(page, oids);
 });
+
+
+

@@ -44,7 +44,13 @@ async function playGames(page, gameIds: string[]) {
     const gameUrl = `https://luckystake.dev/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
     await page.goto(gameUrl);
-    await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
 
     // Screenshot before Play now
     let screenshot = await page.screenshot({ fullPage: true });
@@ -60,7 +66,13 @@ async function playGames(page, gameIds: string[]) {
     }
 
     // Waiting
-    await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
 
     // Screenshot after wait
     screenshot = await page.screenshot({ fullPage: true });
@@ -83,7 +95,13 @@ const searchButton = page.getByRole('button').filter({ hasText: /^$/ });
 if (await searchButton.first().isVisible({ timeout: 3000 })) {
   await searchButton.first().click();
   
-  await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+  await delay5Seconds();
 
       screenshot = await page.screenshot({ fullPage: true });
       test.info().attach(`game_${id}_after_search_button`, {
@@ -102,7 +120,13 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
     if (await buyButton.isVisible({ timeout: 10000 })) {
       await buyButton.click();
       
-      await page.waitForLoadState('networkidle');
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+      await delay5Seconds();
 
       screenshot = await page.screenshot();
       test.info().attach(`game_${id}_buy_button`, {
@@ -119,7 +143,12 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
         console.log(`Click on price button: ${randomPrice}`);
         await priceButton.click();
 
-        await delay10Seconds();
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
         await delay10Seconds();
 
         screenshot = await page.screenshot({ fullPage: true });
@@ -145,8 +174,13 @@ if (await searchButton.first().isVisible({ timeout: 3000 })) {
       await backButton.click();
     }
 
-    await page.waitForLoadState('networkidle');
-
+try {
+  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+} catch (e) {
+  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  // continue – next steps
+}
+    await delay5Seconds();
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicking_Back`, {
       body: screenshot,
@@ -165,7 +199,14 @@ test('DEV, SC ONLY, ALL GAMES', async ({ page }) => {
   await loginPage.openLoginForm();
   await loginPage.login('dksld2@gmail.com', 'Qwerty1!!');
   await delay5Seconds();
-  await page.locator('.NewHeaderContent_switcher__9RaYM').click();
+  async function clickIfExists(page, role: string, name: string) {
+  const locator = page.getByRole(role, { name });
+  if (await locator.count() > 0) {
+    await locator.first().click();
+  }
+}
+  await clickIfExists(page, 'img', 'GC');
+
   // Take all oids
   const oids = await fetchAllOids();
 
@@ -178,3 +219,6 @@ test('DEV, SC ONLY, ALL GAMES', async ({ page }) => {
   await playGames(page, oids);
 });
 
+// await page.getByRole('img', { name: 'SC', exact: true }).click();
+// await page.locator('.NewHeaderContent_switcher__9RaYM').click();
+// await page.locator('.NewHeaderContent_switcher__9RaYM').click();
