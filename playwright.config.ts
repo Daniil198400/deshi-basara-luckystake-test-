@@ -4,12 +4,16 @@ const isCI = !!process.env.CI;
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: isCI,
   retries: 0,
-  workers: 3,
-  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  workers: 1,
+reporter: [
+  ['list'],
+  ['html', { outputFolder: 'playwright-report', open: 'never' }],
+],
   timeout: 200000000, // time
+
 
   use: {
     headless: true,

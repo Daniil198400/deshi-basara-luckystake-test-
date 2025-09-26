@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { delay5Seconds, delay10Seconds } from '../../../../utils/utils';
@@ -39,7 +39,7 @@ async function fetchAllOids(): Promise<string[]> {
 }
 
 // The main function to play games by their IDs
-async function playGames(page, gameIds: string[]) {
+async function playGames(page: Page, gameIds: string[]) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);

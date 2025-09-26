@@ -56,7 +56,7 @@ async function loadAllGames(page: Page) {
 }
 
 // --- Play game by name and take screenshot ---
-async function playGameByName(page: Page, gameName: string, screenshotPrefix: string, testInfo) {
+async function playGameByName(page: Page, gameName: string, screenshotPrefix: string, testInfo: any) {
   await closeChatWidget(page);
 
   const gameCard = page
