@@ -37,7 +37,7 @@ async function forceClickBuy(page: Page) {
 // -----------------
 // Getting all OID
 async function fetchAllOids(): Promise<string[]> {
-  const url = "https://static.genetiko.com/prod/games_pack/1a2a9023-dd0c-4052-93ef-b5e696daeb32.json";
+  const url = "https://wiztechgroup-cdn.com/stage/games_pack/5138631f-8d60-4327-b46c-8a4e41d68c93.json";
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Не удалось скачать JSON: ${response.status} ${response.statusText}`);
   const data = await response.json();
@@ -49,7 +49,7 @@ async function fetchAllOids(): Promise<string[]> {
 // The main function
 async function playGames(page: Page, gameIds: string[]) {
   for (const id of gameIds) {
-    const gameUrl = `https://luckystake.com/game/real/${id}`;
+    const gameUrl = `https://luckystake.dev/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
     await page.goto(gameUrl);
 
@@ -74,7 +74,7 @@ async function playGames(page: Page, gameIds: string[]) {
     } catch {
       console.warn('⏱️ Network idle is not found after 30 sec, continue...');
     }
-    await delay5Seconds();
+    await delay10Seconds();
 
     // Screenshot after Play now
     screenshot = await page.screenshot({ fullPage: true });
@@ -159,13 +159,6 @@ try {
   // Ждём 35 секунд после клика по цене
   await new Promise(r => setTimeout(r, 35000));
 
-  // Скриншот после выбора цены
-  screenshot = await page.screenshot({ fullPage: true });
-  test.info().attach(`game_${id}_after_clicking_random_price`, {
-    body: screenshot,
-    contentType: 'image/png',
-  });
-
 } catch {
   console.warn(`⚠️ Random price button ${randomPrice} не найден, пробуем другие секции...`);
 }
@@ -232,10 +225,10 @@ test('MOBILE PROD, GC ONLY, ALL GAMES', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
 
-  await page.goto('https://luckystake.com/');
+  await page.goto('https://luckystake.dev/');
   await homePage.closePopupIfVisible();
   await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
+  await loginPage.login('dksld1@gmail.com', 'Qwerty1!!');
   await delay5Seconds();
   
   const oids = await fetchAllOids();

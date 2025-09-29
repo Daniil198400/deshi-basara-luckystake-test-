@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { delay5Seconds, delay10Seconds } from '../../../../utils/utils';
@@ -19,7 +19,7 @@ const test = base.extend<{}>({
 
 // -----------------
 // Force click Buy button
-async function forceClickBuy(page) {
+async function forceClickBuy(page: Page) {
   try {
     await page.getByRole('button', { name: 'buy' }).click();
     console.log('✅ Buy button clicked');
@@ -47,7 +47,7 @@ async function fetchAllOids(): Promise<string[]> {
 
 // -----------------
 // The main function
-async function playGames(page, gameIds: string[]) {
+async function playGames(page: Page, gameIds: string[]) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.dev/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
@@ -72,9 +72,9 @@ async function playGames(page, gameIds: string[]) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 30000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 sec, continue...');
+      console.warn('⏱️ Network idle is not reached after 30 sec, continue...');
     }
-    await delay5Seconds();
+    await delay10Seconds();
 
     // Screenshot after Play now
     screenshot = await page.screenshot({ fullPage: true });
@@ -126,7 +126,7 @@ async function playGames(page, gameIds: string[]) {
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
-    await delay10Seconds();
+    await delay5Seconds();
 
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicking_on_buy`, {
@@ -134,45 +134,51 @@ async function playGames(page, gameIds: string[]) {
       contentType: 'image/png',
     });
 
-    // Random price
-    const prices = ["$1.99", "$4.99", "$9.99", "$24.99", "$34.99"];
-const randomPrice = prices[Math.floor(Math.random() * prices.length)];
+    await delay5Seconds();
 
-let priceClicked = false;
+    // Random price
+    const prices = ["$1.99", "$4.99", "$9.99", "$19.99", "$34.99", "49.99", "$74.99", "$99.99", "$199.99", "$299.99", "$499.99", "$999.99"];
+    const randomPrice = prices[Math.floor(Math.random() * prices.length)];
 
 try {
   const priceButton = page.getByRole('button', { name: randomPrice });
-  await priceButton.waitFor({ timeout: 5000 });
-  await priceButton.click();
+  await priceButton.waitFor({ timeout: 90000 });
+  await priceButton.click({ force: true });
   console.log(`✅ Clicked random price button: ${randomPrice}`);
-  priceClicked = true;
   await delay5Seconds();
 } catch {
   console.warn(`⚠️ Random price button ${randomPrice} не найден, пробуем другие секции...`);
 }
 
-// Если не удалось кликнуть по случайной цене — кликаем по страницам с предложениями
-if (!priceClicked) {
-  const paginationSelectors = [
-    '.Swiper_pagination___gMTF > span:nth-child(2)',
-    '.Swiper_pagination___gMTF > span:nth-child(3)',
-    '.Swiper_pagination___gMTF > span:nth-child(4)',
-    '.Swiper_bullet__i1rPR:first-child'
-  ];
+// // Если не удалось кликнуть по случайной цене — кликаем по страницам с предложениями
+// if (!priceClicked) {
+//   const paginationSelectors = [
+//     '.Swiper_bullet__i1rPR:first-child',
+//     '.Swiper_pagination___gMTF > span:nth-child(2)',
+//     '.Swiper_pagination___gMTF > span:nth-child(3)',
+//     '.Swiper_pagination___gMTF > span:nth-child(4)',
+//     '.Swiper_pagination___gMTF > span:nth-child(5)',
+//     '.Swiper_pagination___gMTF > span:nth-child(6)',
+//     '.Swiper_pagination___gMTF > span:nth-child(7)',
+//     '.Swiper_pagination___gMTF > span:nth-child(8)',
+//     '.Swiper_pagination___gMTF > span:nth-child(9)',
+//     '.Swiper_pagination___gMTF > span:nth-child(10)',
+//     '.Swiper_pagination___gMTF > span:nth-child(11)',
+//   ];
 
-  for (const selector of paginationSelectors) {
-    try {
-      const element = page.locator(selector);
-      if (await element.isVisible({ timeout: 3000 })) {
-        await element.click();
-        console.log(`📄 Clicked pagination/bullet: ${selector}`);
-        await delay5Seconds();
-      }
-    } catch {
-      console.warn(`⚠️ Элемент ${selector} не найден, пропускаем`);
-    }
-  }
-}
+//   for (const selector of paginationSelectors) {
+//     try {
+//       const element = page.locator(selector);
+//       if (await element.isVisible({ timeout: 3000 })) {
+//         await element.click();
+//         console.log(`📄 Clicked pagination/bullet: ${selector}`);
+//         await delay5Seconds();
+//       }
+//     } catch {
+//       console.warn(`⚠️ Элемент ${selector} не найден, пропускаем`);
+//     }
+//   }
+// }
 
 
     screenshot = await page.screenshot({ fullPage: true });
@@ -186,7 +192,7 @@ if (!priceClicked) {
 
     // Back button
     const backButton = page.getByTestId('ArrowBackIosIcon');
-    if (await backButton.isVisible({ timeout: 6000 })) {
+    if (await backButton.isVisible({ timeout: 60000 })) {
       await backButton.click();
     }
 
@@ -207,15 +213,22 @@ if (!priceClicked) {
 
 // -----------------
 // Main Test
-test('MOBILE DEV, GC ONLY, ALL GAMES', async ({ page }) => {
+test('MOBILE DEV, SC ONLY, ALL GAMES', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
 
   await page.goto('https://luckystake.dev/');
   await homePage.closePopupIfVisible();
   await loginPage.openLoginForm();
-  await loginPage.login('dksld1@gmail.com', 'Qwerty1!!');
+  await loginPage.login('dksld2@gmail.com', 'Qwerty1!!');
   await delay5Seconds();
+  async function clickIfExists(page: Page, role: string, name: string) {
+  const locator = page.getByRole(role as any, { name });
+  if (await locator.count() > 0) {
+    await locator.first().click();
+  }
+}
+  await clickIfExists(page, 'img', 'GC');
 
   const oids = await fetchAllOids();
   if (oids.length === 0) {
