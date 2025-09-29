@@ -36,27 +36,21 @@ reporter: [
     //   use: { ...devices['Desktop Safari'] },
     // },
 
-    {
-  name: 'Mobile Chrome',
-  use: { 
-    ...devices['Pixel 5'], 
-    channel: 'chrome', // <- именно мобильный Chrome
-      },
-    },
-
-
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-
-    {
-  name: 'Mobile Edge',
-  use: { 
-    ...devices['Pixel 5'],   // мобильное устройство
-    channel: 'msedge',       // запуск через Edge
+    
+  {
+    name: 'Mobile Chrome Official',  // Chrome с channel
+    use: { ...devices['Pixel 5'], channel: 'chrome' },
   },
-},
+  {
+    name: 'Mobile Chromium',        // чистый Chromium
+    use: { ...devices['Pixel 5'] },
+  },
+  {
+    name: 'Mobile Edge',
+    use: { ...devices['Pixel 5'], channel: 'msedge' },
+  },
+  
+
 
     // {
     //   name: 'Mobile Safari',
