@@ -28,7 +28,7 @@ jobs:
         run: npx playwright install
 
       - name: Run mobileSmoke tests
-        run: npx playwright test --grep "@mobile1" --reporter=list --headed
+        run: npx playwright test --grep "@mobile1" --reporter=list
 
       - name: Upload Playwright Test Report
         uses: actions/upload-artifact@v4
