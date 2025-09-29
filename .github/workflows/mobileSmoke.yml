@@ -27,11 +27,16 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Run mobileSmoke tests
-        run: npx playwright test --grep "@mobile1"
+      - name: Run mobileSmoke tests in random browser
+        run: |
+          # Список проектов, которые указаны в playwright.config.ts
+          projects=("Mobile Chrome" "Mobile Chromium" "Mobile Edge")
+          # Выбираем случайный проект
+          PROJECT=${projects[$RANDOM % ${#projects[@]}]}
+          echo "Running tests in project: $PROJECT"
+          # Запуск тестов только для выбранного проекта
+          npx playwright test --grep "@mobileSmoke" --project="$PROJECT"
 
-      # Шаг show-report убран, чтобы workflow не зависал
-      # Если нужен HTML репорт — загружаем его как артефакт
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         with:

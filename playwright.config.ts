@@ -7,7 +7,7 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: isCI,
   retries: 0,
-  workers: 1,
+  workers: 4,
 reporter: [
   ['list'],
   ['html', { outputFolder: 'playwright-report', open: 'never' }],
@@ -23,10 +23,10 @@ reporter: [
   },
 
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'] },
+    // },
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
@@ -36,10 +36,28 @@ reporter: [
     //   use: { ...devices['Desktop Safari'] },
     // },
 
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
+    {
+  name: 'Mobile Chrome',
+  use: { 
+    ...devices['Pixel 5'], 
+    channel: 'chrome', // <- именно мобильный Chrome
+      },
+    },
+
+
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+
+    {
+  name: 'Mobile Edge',
+  use: { 
+    ...devices['Pixel 5'],   // мобильное устройство
+    channel: 'msedge',       // запуск через Edge
+  },
+},
+
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
