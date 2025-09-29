@@ -43,5 +43,4 @@ await homePage.closePopupIfVisible();
     });
   // await page.screenshot({ path: 'screenshots/login_searching.png', fullPage: true });
   await delay5Seconds();
-  await page.close();
 });
