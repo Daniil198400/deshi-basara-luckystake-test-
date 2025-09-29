@@ -29,8 +29,8 @@ jobs:
 
       - name: Run mobileSmoke tests in random browser
         run: |
-          # Список проектов, которые указаны в playwright.config.ts
-          projects=("Mobile Chrome" "Mobile Chromium" "Mobile Edge")
+          # Список проектов (имена должны совпадать с playwright.config.ts)
+          projects=("Mobile Chrome Official" "Mobile Chromium" "Mobile Edge")
           # Выбираем случайный проект
           PROJECT=${projects[$RANDOM % ${#projects[@]}]}
           echo "Running tests in project: $PROJECT"
