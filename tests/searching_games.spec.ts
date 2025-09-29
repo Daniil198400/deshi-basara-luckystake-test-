@@ -16,7 +16,7 @@ const context = await browser.newContext({
 },
 });
 
-test('luckystake searching', async ({ context }) => {
+test('@mobile1 luckystake searching', async ({ context }) => {
 const page = await context.newPage();
 const loginPage = new LoginPage(page);
 const homePage = new HomePage(page);
@@ -33,10 +33,15 @@ await homePage.closePopupIfVisible();
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('textbox', { name: 'Search' }).fill('aztec');
   await page.getByRole('textbox', { name: 'Search' }).press('Enter');
-  await page.locator('.SearchGames_search_games__cards_wrapper__8c4ac > div > .WizGameCard_container_gameImage__cFsR9').first().click();
-  await page.getByRole('button', { name: 'Play now' }).click();
-  await delay5Seconds();
-  await page.screenshot({ path: 'screenshots/login_searching.png', fullPage: true });
+  // await page.locator('.SearchGames_search_games__cards_wrapper__8c4ac > div > .WizGameCard_container_gameImage__cFsR9').first().click();
+  // await page.getByRole('button', { name: 'Play now' }).click();
+  // await delay5Seconds();
+  let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_before_playNow`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+  // await page.screenshot({ path: 'screenshots/login_searching.png', fullPage: true });
   await delay5Seconds();
   await page.close();
 });

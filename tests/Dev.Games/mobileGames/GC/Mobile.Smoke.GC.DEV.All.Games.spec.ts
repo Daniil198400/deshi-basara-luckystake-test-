@@ -117,7 +117,7 @@ async function playGames(page: Page, gameIds: string[]) {
 
 // -----------------
 // Main Test
-test('MOBILE DEV, Smoke, GC ONLY, ALL GAMES', async ({ page }) => {
+test('@mobileSmoke MOBILE DEV, Smoke, GC ONLY, ALL GAMES', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
 
