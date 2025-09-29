@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Playwright browsers
+        run: npx playwright install
+
       - name: Run mobileSmoke tests
         run: npx playwright test --grep "@mobile1" --reporter=list --headed
 
