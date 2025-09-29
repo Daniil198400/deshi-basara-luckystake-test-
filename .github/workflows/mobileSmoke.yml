@@ -28,7 +28,7 @@ jobs:
         run: npx playwright install
 
       - name: Run mobileSmoke tests
-        run: npx playwright test --grep "@mobile1" --reporter=list
+        run: npx playwright test --grep "@mobile1"
 
       - name: Show Playwright HTML Report
         run: npx playwright show-report
