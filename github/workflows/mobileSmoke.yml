@@ -3,8 +3,10 @@ name: Mobile Smoke Tests
 on:
   push:
     branches:
-      - main   # запускать при пуше в main
+      - tests-only-branch   # запускать CI только при пуше в tests-only-branch
   pull_request:
+    branches:
+      - tests-only-branch   # можно добавить и для PR в эту ветку
 
 jobs:
   mobileSmokeTests:
