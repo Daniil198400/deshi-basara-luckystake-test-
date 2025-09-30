@@ -12,7 +12,7 @@ const test = base.extend<{}>({
   },
 });
 
-test('Prod Checking All Games Sections', async ({ context }) => {
+test('@CheckPresenceOfGames Prod Checking All Games Sections', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);

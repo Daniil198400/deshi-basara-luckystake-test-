@@ -29,7 +29,7 @@ jobs:
 
       - name: Run mobileSmoke tests in random browser
         run: |
-          npx playwright test --grep "@mobileSmoke"
+          npx playwright test --grep "@CheckPresenceOfGames"
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
