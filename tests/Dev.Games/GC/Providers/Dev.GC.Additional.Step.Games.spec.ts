@@ -1,4 +1,4 @@
-import { test as base, expect, devices } from '@playwright/test';
+import { test as base, Page, expect, devices } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { delay5Seconds, delay10Seconds } from '../../../../utils/utils';
@@ -16,7 +16,7 @@ const test = base.extend<{}>({
   },
 });
 
-async function clickRandomPrice(page) {
+async function clickRandomPrice(page: Page) {
   const prices = ["$1.99", "$4.99", "$9.99", "$24.99", "$34.99"];
   const randomPrice = prices[Math.floor(Math.random() * prices.length)];
   const priceButton = page.getByRole('button', { name: randomPrice });
@@ -179,6 +179,9 @@ await delay10Seconds();
     body: screenshot,
     contentType: 'image/png',
   });
+
+  
+
 });
 
 
