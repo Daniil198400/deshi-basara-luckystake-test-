@@ -12,7 +12,7 @@ reporter: [
   ['list'],
   ['html', { outputFolder: 'playwright-report', open: 'never' }],
 ],
-  timeout: 2000000, // time
+  timeout: 900000, // time
 
 
   use: {
