@@ -783,6 +783,303 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#hud-can
 //In Turbo Games provider 
 
 
+// 1spin4win - no games found
+
+
+//Four7 - games don't load
+
+
+
+
+//28507 (very long loading)
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
+    position: {
+      x: 663,
+      y: 525
+    }
+  });
+
+
+
+//28509
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
+    position: {
+      x: 638,
+      y: 528
+    }
+  });
+
+
+
+
+
+//28506
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
+    position: {
+      x: 650,
+      y: 484
+    }
+  });
+
+
+//28508
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
+    position: {
+      x: 642,
+      y: 569
+    }
+  });
+
+
+//34255
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START', exact: true }).click();
+
+
+  //14621
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
+
+
+//28504
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START', exact: true }).click();
+
+//28503
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START', exact: true }).click();
+
+//28502
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
+
+//28501
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START', exact: true }).click();
+
+//28629 (infinity loading is expected)
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
+    position: {
+      x: 642,
+      y: 569
+    }
+  });
+
+//21055
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('body').press('AudioVolumeMute');
+
+//22703
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').nth(1).click({
+    position: {
+      x: 632,
+      y: 613
+    }
+  });
+
+
+//28622
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').nth(1).click({
+    position: {
+      x: 627,
+      y: 566
+    }
+  });
+
+//28545
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'Win up to 50 000x Click to' }).click();
+
+//28551
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START' }).click();
+
+//28555
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'TWO WAYS TO WIN FREE SPINS!' }).click();
+
+//28574
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 682,
+      y: 573
+    }
+  });
+
+//28587
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('heading', { name: 'Click to continue' }).click();
+
+//28605
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 682,
+      y: 573
+    }
+  });
+
+//21054 (the same games as 28605)
+
+//22144
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('.fadeOverlay').click();
+await page.locator('iframe[src="https://cf-casino-cdn-tdc-stage.relaxg.net/casino/apex/layer/?gameid=ancienttumble_94&ticket=5ca2c701-e8cd-4f41-9fdf-1ad09ef5d95f&jurisdiction=IM&lang=en_SC&channel=web&partner=luckystake&partnerid=3269&moneymode=real&&apex=1&gameurl=https%3A%2F%2Fcf-casino-cdn-tdc-stage.relaxg.net%2Fcasino%2Flauncher.html"]').contentFrame().locator('#bonusReelsPromoPopup').click();
+
+//21067
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('Click to continue').click();
+
+//21070
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21069
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START', exact: true }).click();
+
+//21068
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 682,
+      y: 573
+    }
+  });
+
+//21065
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#splash-screen').click();
+
+//21064
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#test-id canvas').click({
+    position: {
+      x: 620,
+      y: 594
+    }
+  });
+
+//21063
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 334,
+      y: 522
+    }
+  });
+
+//21062
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21061
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('heading', { name: 'Click to continue' }).click();
+
+//21060
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('heading', { name: 'Click to continue' }).click();
+
+//21059
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#test-id canvas').click({
+    position: {
+      x: 633,
+      y: 602
+    }
+  });
+
+//21058
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 636,
+      y: 523
+    }
+  });
+
+//21056
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 414,
+      y: 515
+    }
+  });
+
+//21053
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 291,
+      y: 475
+    }
+  });
+
+//21052
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#splash-stage canvas').click({
+    position: {
+      x: 646,
+      y: 597
+    }
+  });
+
+//21051
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('WIN UP TO 100,000X!CLEAR ALL').click();
+
+//21050
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 654,
+      y: 547
+    }
+  });
+
+//21049
+await page
+  .frameLocator('iframe[title="Real game"]')
+  .frameLocator('#game')
+  .locator('span:has-text("START")')
+  .click();
+
+//21048
+await page
+  .frameLocator('iframe[title="Real game"]')
+  .frameLocator('#game')
+  .locator('span:has-text("START")')
+  .click();
+
+//21046
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('.logo').click();
+
+//21044
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21043
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21042
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21041
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('heading', { name: 'Click to continue' }).click();
+
+//21040
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('Click to continue').click();
+
+//21039
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21038
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21037
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+//21036
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 355,
+      y: 517
+    }
+  });
+
+//21035 (duplicate)
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('canvas').click({
+    position: {
+      x: 710,
+      y: 560
+    }
+  });
+
+
+
+
+
+  // Continue with Relax Provider (start from the first load more)
 
 
 
@@ -793,7 +1090,44 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#hud-can
 
 
 
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

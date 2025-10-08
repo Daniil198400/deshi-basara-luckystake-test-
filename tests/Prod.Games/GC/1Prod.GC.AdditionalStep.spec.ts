@@ -1,12 +1,12 @@
 import { test, Page, expect } from '@playwright/test';
-import { LoginPage } from '../../../../pages/LoginPage';
-import { HomePage } from '../../../../pages/HomePage';
-import { GamePage } from '../../../../pages/ClickOnPlayPage';
-import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
+import { LoginPage } from '../../../pages/LoginPage';
+import { HomePage } from '../../../pages/HomePage';
+import { GamePage } from '../../../pages/ClickOnPlayPage';
+import { delay10Seconds, delay5Seconds } from '../../../utils/utils';
 
 // Массив айдишников игр
 const gameIds = [
-        "24178",
+     "24178",
         "24177",
         "24176",
         "24175",

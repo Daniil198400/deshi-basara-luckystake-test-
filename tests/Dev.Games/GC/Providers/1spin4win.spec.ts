@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
@@ -26,7 +26,7 @@ const gameIds: string[] = [
 ];
 
 // function
-async function playGames(page) {
+async function playGames(page: Page) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.dev/game/real/${id}`;
     await page.goto(gameUrl);
