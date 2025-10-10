@@ -65,11 +65,12 @@ await page.goto('https://luckystake.com/game/real/35552');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('⏱️ Network idle is not found after 50 сек, continue...');
     }
-        await delay5Seconds();
+        await delay10Seconds();
+        await delay10Seconds();
 
     await page.locator('iframe[title="Real game"]').contentFrame().getByText('CONTINUE').click();
           await delay5Seconds();

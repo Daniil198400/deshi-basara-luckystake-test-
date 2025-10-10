@@ -1,130 +1,112 @@
-import { test, expect } from '@playwright/test';
+import { test, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
 import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
-// array of IDs
+// массив ID игр
 const gameIds = [
-        "35161",
-        "35159",
-        "35158",
-        "35157",
-        "35156",
-        "35154",
-        "35148",
-        "35147",
-        "35144",
-        "35143",
-        "35195",
-        "35193",
-        "35191",
-        "35190",
-        "35189",
-        "35185",
-        "35174",
-        "35173",
-        "35172",
-        "35168",
-        "35167",
-        "35163",
-        "35162"
-    ];
+  "35158",
+  "35143",
+  "35195",
+  "35193",
+  "35167",
+  "35163",
+  "35162"
+];
 
-// function
-async function playGames(page) {
-    for (const id of gameIds) {
-        const gameUrl = `https://luckystake.com/game/real/${id}`;
-        await page.goto(gameUrl);
-        await delay5Seconds();
+// координаты для кликов
+const gameClickMap: Record<string, { selector: string, x: number, y: number }> = {
+  "35158": { selector: '#GameCanvas', x: 628, y: 445 },
+  "35143": { selector: '#gameCanvas', x: 438, y: 469 },
+  "35195": { selector: '#gameCanvas', x: 642, y: 557 },
+  "35193": { selector: '#gameCanvas', x: 622, y: 547 },
+  "35167": { selector: '#gameCanvas', x: 593, y: 528 },
+  "35163": { selector: '#gameCanvas', x: 634, y: 545 },
+  "35162": { selector: '#gameCanvas', x: 1085, y: 266 }
+};
 
-        // screenshot before Play now button
-        let screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_before_playnow`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-        // click on Play now
-        await page.getByRole('button', { name: 'Play now' }).click();
-        await delay5Seconds();
-
-        // waiting
-        await delay10Seconds();
-        await delay10Seconds();
-        await delay10Seconds();
-
-        // второй скриншот
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_after_wait`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-        // проверяем кнопку "Explore games"
-        const exploreButton = page.getByRole('button', { name: 'Explore games' });
-        if (await exploreButton.isVisible({ timeout: 5000 })) {
-            await exploreButton.click();
-            await delay5Seconds();
-        } else {
-            console.log(`Explore games button for game ${id} not found, continuing...`);
-        }
-
-        // Click on buy button
-        const buyButton = page.getByRole('button', { name: 'buy' });
-        await delay5Seconds();
-
-        if (await buyButton.isVisible({ timeout: 1000 })) {
-            await buyButton.click();
-            await delay5Seconds();
-
-            // Screenshot after clicking buy button
-            screenshot = await page.screenshot();
-            test.info().attach(`game_${id}_buy_button`, { 
-                body: screenshot, 
-                contentType: 'image/png' 
-            });
-
-            const priceButton = page.getByRole('button', { name: '$19.99' });
-            if (await priceButton.isVisible({ timeout: 3000 })) {
-                await priceButton.click();
-                await delay10Seconds();
-
-                const confirmButton = page.getByRole('button').nth(2);
-                if (await confirmButton.isVisible({ timeout: 3000 })) {
-                    await confirmButton.click();
-                } else {
-                    console.log(`Confirm button for game ${id} is not available, skipping...`);
-                }
-            }
-        }
-
-        // click on Back button
-        const backButton = page.getByTestId('ArrowBackIosIcon');
-        if (await backButton.isVisible({ timeout: 3000 })) {
-            await backButton.click();
-        }
-
-        await delay5Seconds();
-    }
-}
-
-test('@providers Microgaming', async ({ context }) => {
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
-
-    // autorization
-    await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-    await page.getByText('Social Games').click();
-    await page.getByRole('link', { name: 'Providers' }).click();
-    await page.getByRole('link', { name: 'Microgaming' }).click();
+async function playGames(page: Page) {
+  for (const id of gameIds) {
+    const gameUrl = `https://luckystake.com/game/real/${id}`;
+    await page.goto(gameUrl);
     await delay5Seconds();
 
-    // launching the games
-    await playGames(page);
-}); 
+    // скриншот до Play now
+    let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_before_playnow`, {
+      body: screenshot,
+      contentType: 'image/png'
+    });
+
+    // клик по Play now
+    await page.getByRole('button', { name: 'Play now' }).click();
+    await delay5Seconds();
+
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('⏱️ Network idle не найден, продолжаем...');
+    }
+
+    await delay10Seconds();
+
+    // получаем данные для конкретного ID
+    const clickData = gameClickMap[id];
+    if (clickData) {
+      try {
+        // находим iframe
+        const iframeLocator = page.locator('iframe[title="Real game"]');
+        const iframeElement = await iframeLocator.elementHandle();
+        if (!iframeElement) {
+          console.warn(`⚠️ iframe не найден для игры ${id}`);
+          continue;
+        }
+
+        // получаем контент фрейма
+        const frame = await iframeElement.contentFrame();
+        if (!frame) {
+          console.warn(`⚠️ contentFrame не получен для игры ${id}`);
+          continue;
+        }
+
+        console.log(`🖱️ Клик по игре ${id} (${clickData.selector}) в (${clickData.x}, ${clickData.y})`);
+
+        await frame.locator(clickData.selector).click({
+          position: { x: clickData.x, y: clickData.y },
+          force: true
+        });
+
+        await delay5Seconds();
+      } catch (err) {
+        console.warn(`⚠️ Ошибка при клике по игре ${id}: ${err}`);
+      }
+    }
+
+    // скриншот после
+    screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_after_wait`, {
+      body: screenshot,
+      contentType: 'image/png'
+    });
+
+    await delay5Seconds();
+  }
+}
+
+test('@ClickOnAdditionalStep Microgaming', async ({ context }) => {
+  const page = await context.newPage();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const gamePage = new GamePage(page);
+
+  // авторизация
+  await page.goto('https://luckystake.com/');
+  await homePage.closePopupIfVisible();
+  await loginPage.openLoginForm();
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  await delay5Seconds();
+
+  // запуск игр
+  await playGames(page);
+});

@@ -15,7 +15,10 @@ See all options: npx playwright codegen --help
 Open browser with report: npx playwright show-report ./playwright-report
 
 Start tests with checking Providers' games: npx playwright test tests/Prod.Games/GC/Providers --grep "@providers" --headed
-For Dev: npx playwright test tests/Dev.Games/GC/Providers --grep "@providersDev" --headed
+npx playwright test tests/Prod.Games/GC/Providers/Playson.spec.ts --headed
+
+
+For Dev: npx playwright test tests/Dev.Games/GC/Providers --headed
 
 Launch the test with final html report - npx playwright test "Prod.Games/mobileGamesProd/MobileProdCheckingCategories.spec.ts" --reporter=list --reporter=html --headed
 

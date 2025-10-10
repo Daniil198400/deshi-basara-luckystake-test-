@@ -6,70 +6,122 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // Массив айдишников игр
 const gameIds = [
-        "28509",
-        "28508",
-        "28506" 
+  "28509",
+  "28508",
+  "28506"
 ];
 
-// function
-async function playGames(page: Page) {
-    for (const id of gameIds) {
-        const gameUrl = `https://luckystake.com/game/real/${id}`;
-        await page.goto(gameUrl);
-        await delay5Seconds();
+/**
+ * Кликает по #stageOverlay внутри вложенного iframe.
+ * Проходит по всем координатам из списка и кликает по каждой по очереди.
+ */
+async function clickOnStageOverlay(page: Page): Promise<boolean> {
+  const clickPositions = [
+    { x: 640, y: 545 }, // первая точка
+    { x: 622, y: 529 }, // вторая точка
+    { x: 635, y: 552 },
+    { x: 650, y: 540 },
+    { x: 628, y: 560 },
+    { x: 646, y: 489 }
+  ];
 
-        // screenshot before Play now button
-        let screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_before_playnow`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
+  try {
+    // используем frameLocator для вложенных iframe
+    const innerFrame = page.frameLocator('iframe[title="Real game"]').frameLocator('#game');
+    const overlay = innerFrame.locator('#stageOverlay');
 
-        // click on Play now
-        await page.getByRole('button', { name: 'Play now' }).click();
-       
-        try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
-    } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+    // ждем появления overlay
+    await overlay.waitFor({ state: 'visible', timeout: 15000 });
+
+    console.log(`#stageOverlay is found, starting ${clickPositions.length} positions`);
+
+    for (const [index, pos] of clickPositions.entries()) {
+      console.log(`👉 Кликаем #${index + 1}: x=${pos.x}, y=${pos.y}`);
+      await overlay.click({
+        position: pos,
+        force: true,
+      });
+      await page.waitForTimeout(400); // небольшая пауза между кликами
     }
-    await delay5Seconds
-    
-await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#stageOverlay').click({
-    position: {
-      x: 640,
-      y: 545
-    }
-  });  
-       await delay5Seconds();
 
-        // второй скриншот
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_after_wait`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-    }
+    console.log('✅ all clickings #stageOverlay completed');
+    return true;
+  } catch (err) {
+    console.warn('❗ error during #stageOverlay:', err);
+    return false;
+  }
 }
-       await delay5Seconds();
 
+// Основная функция запуска игр
+async function playGames(page: Page) {
+  for (const id of gameIds) {
+    const gameUrl = `https://luckystake.com/game/real/${id}`;
+    console.log(`opening game ${id}: ${gameUrl}`);
 
-
-
-test('@ClickOnAdditionalStep Max Win Gaming', async ({ context }) => {
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
-
-    // autorization
-    await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+    await page.goto(gameUrl);
     await delay5Seconds();
 
-    // launching the games
-    await playGames(page);
-}); 
+    // Скриншот до кнопки Play now
+    let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_before_playnow`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+
+    // Нажимаем Play now
+    try {
+      await page.getByRole('button', { name: 'Play now' }).click();
+    } catch (err) {
+      console.warn('⚠️ clicking on Play now is not succesful:', err);
+    }
+
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
+    } catch {
+      console.warn('⏱️ Network idle is not reached after 50 sec, continuing...');
+    }
+    await delay10Seconds();
+    await delay5Seconds();
+    await delay10Seconds();
+    await delay10Seconds();
+
+    // Кликаем по stageOverlay во всех координатах
+    const overlayClicked = await clickOnStageOverlay(page);
+    if (!overlayClicked) {
+      console.warn('not succesful clicking');
+    }
+
+    await delay5Seconds();
+
+    // Скриншот после действий
+    screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_after_wait`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+
+    console.log(`Completed game ${id}\n`);
+  }
+}
+
+// Тест
+test('@ClickOnAdditionalStep Max Win Gaming', async ({ context }) => {
+  const page = await context.newPage();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const gamePage = new GamePage(page);
+
+  console.log('Launching Max Win Gaming');
+
+  // Авторизация
+  await page.goto('https://luckystake.com/');
+  await homePage.closePopupIfVisible();
+  await loginPage.openLoginForm();
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  await delay5Seconds();
+
+  // Запуск игр
+  await playGames(page);
+
+  console.log('🏁 Тест завершён');
+});

@@ -1,216 +1,145 @@
-import { test, Page, expect } from '@playwright/test';
+import { test, Page } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
 import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
-// Массив айдишников игр
+// Все айдишники игр (из твоего списка)
 const gameIds = [
-         "3771",
-        "3763",
-        "13527",
-        "22548",
-        "14875",
-        "3765",
-        "13529",
-        "3770",
-        "3781",
-        "3776",
-        "3787",
-        "3737",
-        "3752",
-        "3729",
-        "3744",
-        "13530",
-        "3741",
-        "3724",
-        "3774",
-        "3762",
-        "3772",
-        "3768",
-        "35547",
-        "35549",
-        "21434",
-        "22167",
-        "3755",
-        "3746",
-        "3731",
-        "3760",
-        "3727",
-        "3751",
-        "3750",
-        "3730",
-        "3797",
-        "3786",
-        "3722",
-        "13534",
-        "3757",
-        "3794",
-        "3721",
-        "3761",
-        "3789",
-        "3753",
-        "3788",
-        "3767",
-        "3743",
-        "3739",
-        "3756",
-        "3764",
-        "3738",
-        "3795",
-        "3791",
-        "3754",
-        "3784",
-        "3793",
-        "3720",
-        "3783",
-        "3726",
-        "3775",
-        "3785",
-        "3796",
-        "22773",
-        "23276",
-        "35674",
-        "3733",
-        "3735",
-        "3778",
-        "3758",
-        "3777",
-        "22346",
-        "35676",
-        "35675",
-        "13537",
-        "13533",
-        "13531",
-        "13528",
-        "13538",
-        "13526",
-        "13535",
-        "13532",
-        "3748",
-        "3723",
-        "3790",
-        "3792",
-        "3742",
-        "3734",
-        "3747",
-        "3749",
-        "3782",
-        "3779",
-        "3732",
-        "3719",
-        "3759",
-        "3718",
-        "3740",
-        "3725",
-        "3769",
-        "3736",
-        "3780",
-        "3717",
-        "3773",
-        "3728",
-        "3766",
-        "23887",
-        "3745",
-        "24166",
-        "13536"
-    ];
+  13527, 22548, 14875, 13529, 3787, 3737, 3752, 3729, 3744, 13530, 3741, 3724,
+  35547, 35549, 21434, 22167, 3755, 3746, 3731, 3727, 3751, 3750, 3730, 3786,
+  3722, 13534, 3757, 3721, 3753, 3788, 3743, 3739, 3756, 3738, 3754, 3784, 3720,
+  3783, 3726, 3785, 22773, 23276, 35674, 3733, 3735, 3758, 22346, 35676, 35675,
+  13537, 13533, 13531, 13528, 13538, 13526, 13535, 13532, 3748, 3723, 3742, 3734,
+  3747, 3749, 3782, 3732, 3719, 3759, 3718, 3740, 3725, 3736, 3717, 3728, 23887,
+  3745, 24166, 13536
+];
 
+// Универсальная функция, которая ищет и кликает по любому доступному элементу
+async function clickGameButton(page: Page) {
+  const frame = await page
+    .locator('iframe[title="Real game"]')
+    .contentFrame();
 
-// function
-async function playGames(page: Page) {
-    for (const id of gameIds) {
-        const gameUrl = `https://luckystake.com/game/real/${id}`;
-        await page.goto(gameUrl);
-        await delay5Seconds();
+  if (!frame) {
+    console.warn('⚠️ Iframe не найден.');
+    return;
+  }
 
-        // screenshot before Play now button
-        let screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_before_playnow`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
+  // Возможные варианты кнопок/областей
+  const clickOptions = [
+    { selector: '#hud-canvas', x: 619, y: 525 },
+    { selector: '#hud-canvas', x: 629, y: 516 },
+    { selector: '#hud-canvas', x: 623, y: 543 },
+    { selector: '#hud-canvas', x: 623, y: 530 },
+    { selector: '#hud-canvas', x: 630, y: 522 },
+    { selector: '#hud-canvas', x: 612, y: 529 },
+    { selector: '#hud-canvas', x: 639, y: 542 },
+    { selector: '#hud-canvas', x: 605, y: 529 },
+    { selector: '#hud-canvas', x: 621, y: 552 },
+    { selector: '#hud-canvas', x: 607, y: 545 },
+    { selector: '#hud-canvas', x: 636, y: 521 },
+    { selector: '#hud-canvas', x: 604, y: 524 },
+    { selector: '#hud-canvas', x: 629, y: 528 },
+    { selector: '#hud-canvas', x: 626, y: 523 },
+    { selector: '#hud-canvas', x: 615, y: 521 },
+    { selector: '#hud-canvas', x: 609, y: 532 },
+    { selector: '#canvas', x: 608, y: 567 },
+    { selector: '#preloader-frame', buttonText: 'CONTINUE' },
+    { selector: '.preloader_startBtnBg' },
+    { selector: '#continueDivBtn' },
+    { selector: 'text=START' }
+  ];
+
+  // Перебираем все возможные варианты
+  for (const option of clickOptions) {
+    try {
+      if (option.buttonText) {
+        const frame2 = await frame
+          .locator(option.selector)
+          .contentFrame();
+        const button = frame2?.getByRole('button', {
+          name: option.buttonText,
+          exact: true
         });
-
-        // click on Play now
-        await page.getByRole('button', { name: 'Play now' }).click();
-        await delay5Seconds();
-
-        // waiting
-        await delay10Seconds();
-        await delay10Seconds();
-        await delay10Seconds();
-
-        // второй скриншот
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_after_wait`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-        // проверяем кнопку "Explore games"
-        const exploreButton = page.getByRole('button', { name: 'Explore games' });
-        if (await exploreButton.isVisible({ timeout: 5000 })) {
-            await exploreButton.click();
-            await delay5Seconds();
+        if (button && (await button.count()) > 0) {
+          await button.first().click();
+          console.log(`✅ Нажата кнопка "${option.buttonText}" в ${option.selector}`);
+          return;
+        }
+      } else if (option.selector && (await frame.locator(option.selector).count()) > 0) {
+        const target = frame.locator(option.selector);
+        if (option.x && option.y) {
+          await target.click({ position: { x: option.x, y: option.y } });
+          console.log(`🎯 Клик по ${option.selector} (${option.x}, ${option.y})`);
+          return;
         } else {
-            console.log(`Explore games button for game ${id} not found, continuing...`);
+          await target.first().click();
+          console.log(`✅ Клик по ${option.selector}`);
+          return;
         }
-
-        // Click on buy button
-        const buyButton = page.getByRole('button', { name: 'buy' });
-        await delay5Seconds();
-
-        if (await buyButton.isVisible({ timeout: 1000 })) {
-            await buyButton.click();
-            await delay5Seconds();
-
-            // Screenshot after clicking buy button
-            screenshot = await page.screenshot();
-            test.info().attach(`game_${id}_buy_button`, { 
-                body: screenshot, 
-                contentType: 'image/png' 
-            });
-
-            const priceButton = page.getByRole('button', { name: '$19.99' });
-            if (await priceButton.isVisible({ timeout: 3000 })) {
-                await priceButton.click();
-                await delay10Seconds();
-
-                const confirmButton = page.getByRole('button').nth(2);
-                if (await confirmButton.isVisible({ timeout: 3000 })) {
-                    await confirmButton.click();
-                } else {
-                    console.log(`Confirm button for game ${id} is not available, skipping...`);
-                }
-            }
-        }
-
-        // click on Back button
-        const backButton = page.getByTestId('ArrowBackIosIcon');
-        if (await backButton.isVisible({ timeout: 3000 })) {
-            await backButton.click();
-        }
-
-        await delay5Seconds();
+      }
+    } catch (err) {
+      continue;
     }
+  }
+
+  console.warn('⚠️ Ни один из вариантов не найден.');
 }
 
-test('@providers Platipus', async ({ context }) => {
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
-
-    // autorization
-    await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-    await page.getByText('Social Games').click();
-    await page.getByRole('link', { name: 'Providers' }).click();
-    await page.getByRole('link', { name: 'Platipus' }).click();
+// Основная функция
+async function playGames(page: Page) {
+  for (const id of gameIds) {
+    const gameUrl = `https://luckystake.com/game/real/${id}`;
+    await page.goto(gameUrl);
     await delay5Seconds();
 
-    // launching the games
-    await playGames(page);
-}); 
+    // Скрин до кнопки
+    let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_before_playnow`, {
+      body: screenshot,
+      contentType: 'image/png'
+    });
+
+    // Нажимаем "Play now"
+    await page.getByRole('button', { name: 'Play now' }).click();
+    await delay5Seconds();
+
+    // Ждём загрузку
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
+    } catch {
+      console.warn('⏱️ Network idle не наступил за 50 сек, продолжаем...');
+    }
+
+    await delay10Seconds();
+    await clickGameButton(page);
+    await delay5Seconds();
+
+    // Скрин после
+    screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_after_play`, {
+      body: screenshot,
+      contentType: 'image/png'
+    });
+
+    await delay5Seconds();
+  }
+}
+
+test('@ClickOnAdditionalStep Platipus', async ({ context }) => {
+  const page = await context.newPage();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const gamePage = new GamePage(page);
+
+  // Авторизация
+  await page.goto('https://luckystake.com/');
+  await homePage.closePopupIfVisible();
+  await loginPage.openLoginForm();
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  await delay5Seconds();
+
+  // Запуск игр
+  await playGames(page);
+});

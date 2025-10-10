@@ -1,12 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
 import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
-// Массив айдишников игр
+// Array of IDs
 const gameIds = [
-    "35816",
+        "35816",
         "35818",
         "35819",
         "35820",
@@ -53,7 +53,7 @@ const gameIds = [
 ];
 
 // function
-async function playGames(page) {
+async function playGames(page: Page) {
     for (const id of gameIds) {
         const gameUrl = `https://luckystake.com/game/real/${id}`;
         await page.goto(gameUrl);
@@ -68,12 +68,23 @@ async function playGames(page) {
 
         // click on Play now
         await page.getByRole('button', { name: 'Play now' }).click();
-        await delay5Seconds();
+        
+        try {
+                await page.waitForLoadState('networkidle', { timeout: 20000 });
+              } catch {
+                console.warn('⏱️ Network idle is not found after 20 сек, continue...');
+              }
+                await delay10Seconds();
 
-        // waiting
-        await delay10Seconds();
-        await delay10Seconds();
-        await delay10Seconds();
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+                  position: {
+                    x: 595,
+                    y: 559
+                  }
+                });
+
+ 
+        await delay5Seconds();
 
         // второй скриншот
         screenshot = await page.screenshot({ fullPage: true });
@@ -82,55 +93,11 @@ async function playGames(page) {
             contentType: 'image/png' 
         });
 
-        // проверяем кнопку "Explore games"
-        const exploreButton = page.getByRole('button', { name: 'Explore games' });
-        if (await exploreButton.isVisible({ timeout: 5000 })) {
-            await exploreButton.click();
-            await delay5Seconds();
-        } else {
-            console.log(`Explore games button for game ${id} not found, continuing...`);
-        }
-
-        // Click on buy button
-        const buyButton = page.getByRole('button', { name: 'buy' });
-        await delay5Seconds();
-
-        if (await buyButton.isVisible({ timeout: 1000 })) {
-            await buyButton.click();
-            await delay5Seconds();
-
-            // Screenshot after clicking buy button
-            screenshot = await page.screenshot();
-            test.info().attach(`game_${id}_buy_button`, { 
-                body: screenshot, 
-                contentType: 'image/png' 
-            });
-
-            const priceButton = page.getByRole('button', { name: '$19.99' });
-            if (await priceButton.isVisible({ timeout: 3000 })) {
-                await priceButton.click();
-                await delay10Seconds();
-
-                const confirmButton = page.getByRole('button').nth(2);
-                if (await confirmButton.isVisible({ timeout: 3000 })) {
-                    await confirmButton.click();
-                } else {
-                    console.log(`Confirm button for game ${id} is not available, skipping...`);
-                }
-            }
-        }
-
-        // click on Back button
-        const backButton = page.getByTestId('ArrowBackIosIcon');
-        if (await backButton.isVisible({ timeout: 3000 })) {
-            await backButton.click();
-        }
-
         await delay5Seconds();
     }
 }
 
-test('@providers Slotmill', async ({ context }) => {
+test('@ClickOnAdditionalStep Slotmill', async ({ context }) => {
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
@@ -141,11 +108,25 @@ test('@providers Slotmill', async ({ context }) => {
     await homePage.closePopupIfVisible();
     await loginPage.openLoginForm();
     await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-    await page.getByText('Social Games').click();
-    await page.getByRole('link', { name: 'Providers' }).click();
-    await page.getByRole('link', { name: 'Slotmill' }).click();
+    
     await delay5Seconds();
 
     // launching the games
     await playGames(page);
 }); 
+
+
+// await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+//     position: {
+//       x: 611,
+//       y: 603
+//     }
+//   });
+
+
+//   await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+//     position: {
+//       x: 618,
+//       y: 449
+//     }
+//   });

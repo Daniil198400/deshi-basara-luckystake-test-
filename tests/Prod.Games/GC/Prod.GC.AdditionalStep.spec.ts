@@ -464,9 +464,12 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1
 
 
 
-  
+
 
 //All games of Octoplay Provider should be tested manually cause of endless loading during autotest
+
+
+//peter and sons
 
   //28510
   await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#game').click({
@@ -476,6 +479,7 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1
     }
   });
 
+//Platipus
 
 //13527
 
@@ -512,7 +516,8 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#hud-can
     }
   });
 
-//3787
+
+//3787 (Also Platipus)
 await page.locator('iframe[title="Real game"]').contentFrame().getByRole('button', { name: 'START' }).click();
 
 //3737
@@ -969,6 +974,7 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#hud-can
 
 
 
+//Playson
 
 //35512
 await page.locator('iframe[title="Real game"]').contentFrame().locator('#game_canvas').click({
@@ -1139,7 +1145,26 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#game_ca
   });
 
 
+
+
+
+
+
+
+
+
+
+
 //Start with Relax games
+
+
+
+
+
+
+
+
+
 
 //28546
 await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('.logo').click();

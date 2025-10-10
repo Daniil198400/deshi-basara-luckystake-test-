@@ -45,7 +45,7 @@ async function playGames(page: Page, gameIds: string[]) {
     console.log(`Открываю игру ${id}: ${gameUrl}`);
     await page.goto(gameUrl);
 try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+  await page.waitForLoadState('networkidle', { timeout: 40000 }); // 30 секунд
 } catch (e) {
   console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
   // continue – next steps

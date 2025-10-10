@@ -106,7 +106,7 @@
 //     }
 // }
 
-// test('@providers Iconic21', async ({ context }) => {
+// test('@ClickOnAdditionalStep Iconic21', async ({ context }) => {
 //     const page = await context.newPage();
 //     const loginPage = new LoginPage(page);
 //     const homePage = new HomePage(page);

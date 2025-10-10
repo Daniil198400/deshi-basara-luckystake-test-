@@ -6,118 +6,107 @@ import { delay10Seconds, delay5Seconds } from '../../../utils/utils';
 
 // массив ID игр
 const gameIds = [
-  "28492", "28484", "28493", "28479", "28481", "28494", "28485",
-  "28478", "28487", "28490", "28480", "28482", "28488", "28491",
-  "28495", "28483", "28489", "28486"
+  "35158",
+  "35143",
+  "35195",
+  "35193",
+  "35167",
+  "35163",
+  "35162"
 ];
 
-// основная функция, проходящая по всем играм
+// координаты для кликов
+const gameClickMap: Record<string, { selector: string, x: number, y: number }> = {
+  "35158": { selector: '#GameCanvas', x: 628, y: 445 },
+  "35143": { selector: '#gameCanvas', x: 438, y: 469 },
+  "35195": { selector: '#gameCanvas', x: 642, y: 557 },
+  "35193": { selector: '#gameCanvas', x: 622, y: 547 },
+  "35167": { selector: '#gameCanvas', x: 593, y: 528 },
+  "35163": { selector: '#gameCanvas', x: 634, y: 545 },
+  "35162": { selector: '#gameCanvas', x: 1085, y: 266 }
+};
+
 async function playGames(page: Page) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
-    console.log(`🎮 Открываем игру ${id} → ${gameUrl}`);
-
     await page.goto(gameUrl);
     await delay5Seconds();
 
-    // Скриншот до Play now
+    // скриншот до Play now
     let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_before_playnow`, {
       body: screenshot,
       contentType: 'image/png'
     });
 
-    // Нажимаем Play now
+    // клик по Play now
     await page.getByRole('button', { name: 'Play now' }).click();
+    await delay5Seconds();
 
     try {
-      await page.waitForLoadState('networkidle', { timeout: 40000 });
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
     } catch {
-      console.warn('⏱️ Network idle не достигнут за 30 сек, продолжаем...');
+      console.warn('⏱️ Network idle не найден, продолжаем...');
     }
 
     await delay10Seconds();
-    await delay10Seconds();
 
-    // --- Работа с iframe и кликами ---
-    const outerFrameHandle = await page.locator('iframe[title="Real game"]').elementHandle();
-    const outerFrame = await outerFrameHandle?.contentFrame();
+    // получаем данные для конкретного ID
+    const clickData = gameClickMap[id];
+    if (clickData) {
+      try {
+        // находим iframe
+        const iframeLocator = page.locator('iframe[title="Real game"]');
+        const iframeElement = await iframeLocator.elementHandle();
+        if (!iframeElement) {
+          console.warn(`⚠️ iframe не найден для игры ${id}`);
+          continue;
+        }
 
-    if (!outerFrame) {
-      console.warn('❗ Не удалось получить внешний iframe');
-      continue;
-    }
+        // получаем контент фрейма
+        const frame = await iframeElement.contentFrame();
+        if (!frame) {
+          console.warn(`⚠️ contentFrame не получен для игры ${id}`);
+          continue;
+        }
 
-    await outerFrame.waitForSelector('#game', { timeout: 15000 });
-    const innerFrameHandle = await outerFrame.locator('#game').elementHandle();
-    const innerFrame = await innerFrameHandle?.contentFrame();
+        console.log(`🖱️ Клик по игре ${id} (${clickData.selector}) в (${clickData.x}, ${clickData.y})`);
 
-    if (!innerFrame) {
-      console.warn('❗ Не удалось получить внутренний iframe');
-      continue;
-    }
-
-    // Проверяем наличие #GameCanvas
-    const hasGameCanvas = await innerFrame.locator('#GameCanvas').count();
-
-    if (hasGameCanvas > 0) {
-      console.log('✅ Найден #GameCanvas — кликаем несколько раз вокруг точки');
-
-      // Координаты вокруг центра (583, 585)
-      const clickPositions = [
-        { x: 583, y: 585 },
-        { x: 577, y: 583 },
-        { x: 589, y: 587 },
-        { x: 580, y: 590 },
-        { x: 586, y: 580 }
-      ];
-
-      for (const pos of clickPositions) {
-        console.log(`🖱️ Кликаем по x:${pos.x}, y:${pos.y}`);
-        await innerFrame.locator('#GameCanvas').click({
-          position: pos,
+        await frame.locator(clickData.selector).click({
+          position: { x: clickData.x, y: clickData.y },
           force: true
         });
-        await page.waitForTimeout(200); // пауза 200 мс между кликами
-      }
 
-    } else {
-      console.log('⚠️ Элемент #GameCanvas не найден, пробуем canvas');
-      await innerFrame.locator('canvas').click({
-        position: { x: 617, y: 596 },
-        force: true
-      });
+        await delay5Seconds();
+      } catch (err) {
+        console.warn(`⚠️ Ошибка при клике по игре ${id}: ${err}`);
+      }
     }
 
-    await delay10Seconds();
-
-    // Скриншот после кликов
+    // скриншот после
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_wait`, {
       body: screenshot,
       contentType: 'image/png'
     });
 
-    console.log(`✅ Завершено выполнение для игры ${id}`);
+    await delay5Seconds();
   }
 }
 
-// --- Основной тест ---
-test('@ClickOnAdditionalStep Fantasma Games', async ({ context }) => {
+test('@ClickOnAdditionalStep Microgaming', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  console.log('🚀 Запуск теста Fantasma Games');
-
-  // Авторизация
+  // авторизация
   await page.goto('https://luckystake.com/');
   await homePage.closePopupIfVisible();
   await loginPage.openLoginForm();
   await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
   await delay5Seconds();
 
-  // Запуск игр
+  // запуск игр
   await playGames(page);
 });

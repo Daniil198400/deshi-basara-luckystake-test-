@@ -146,12 +146,13 @@ async function playGames(page: Page) {
         await page.getByRole('button', { name: 'Play now' }).click();
         
         try {
-        await page.waitForLoadState('networkidle', { timeout: 10000 });
+        await page.waitForLoadState('networkidle', { timeout: 50000 });
       } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+        console.warn('⏱️ Network idle is not found after 50 сек, continue...');
       }
         await delay10Seconds();
-        
+        await delay10Seconds();
+
         await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
          position: {
             x: 627,
@@ -174,7 +175,7 @@ async function playGames(page: Page) {
     }
 }
 
-test('@ADDTITIONAL STEP Rubyplay', async ({ context }) => {
+test('@ClickOnAdditionalStep Rubyplay', async ({ context }) => {
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
