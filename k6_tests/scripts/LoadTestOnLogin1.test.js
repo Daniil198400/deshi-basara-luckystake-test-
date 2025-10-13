@@ -15,6 +15,8 @@ const LOGIN_URL = 'https://api.luckystake.com/player/crm/login';
 
 export const options = {
   stages: [
+    { duration: '10s', target: 10 },    
+    { duration: '20s', target: 30 }, 
     { duration: '30s', target: 50 }, // пик нагрузки (стресс)
     { duration: '20s', target: 30 }, 
     { duration: '10s', target: 10 },
