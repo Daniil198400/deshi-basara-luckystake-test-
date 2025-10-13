@@ -52,6 +52,14 @@ async function playGames(page: Page) {
     }
   });
 
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+    position: {
+      x: 592,
+      y: 617
+    }
+  });
+
+
   await delay5Seconds();
   
         // second screenshot

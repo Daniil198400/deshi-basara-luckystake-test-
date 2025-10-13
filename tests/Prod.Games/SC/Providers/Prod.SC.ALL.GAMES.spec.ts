@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { delay5Seconds, delay10Seconds } from '../../../../utils/utils';
@@ -39,7 +39,7 @@ async function fetchAllOids(): Promise<string[]> {
 }
 
 // The main function to play games by their IDs
-async function playGames(page, gameIds: string[]) {
+async function playGames(page: Page, gameIds: string[]) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
@@ -199,8 +199,8 @@ test('PROD, SC ONLY, ALL GAMES', async ({ page }) => {
   await loginPage.openLoginForm();
   await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
   await delay5Seconds();
-async function clickIfExists(page, role: string, name: string) {
-  const locator = page.getByRole(role, { name });
+async function clickIfExists(page: Page, role: string, name: string) {
+  const locator = page.getByRole(role as any, { name });
   if (await locator.count() > 0) {
     await locator.first().click();
   }
