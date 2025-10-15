@@ -1,0 +1,5 @@
+{
+  "BASE_URL": "https://luckystake.com",
+  "USERS": 10,
+  "DURATION": "30s"
+}

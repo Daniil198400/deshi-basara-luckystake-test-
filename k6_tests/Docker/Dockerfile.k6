@@ -1,0 +1,14 @@
+# Используем современный образ K6
+FROM grafana/k6:latest
+
+# Рабочая директория внутри контейнера
+WORKDIR /app
+
+# Копируем все скрипты K6 из папки scripts
+COPY ../scripts ./scripts
+
+# ENTRYPOINT для K6
+ENTRYPOINT ["k6"]
+
+# По умолчанию запускаем первый тест
+CMD ["run", "scripts/first.load.test.js"]
