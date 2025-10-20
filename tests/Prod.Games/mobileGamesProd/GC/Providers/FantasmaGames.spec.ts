@@ -1,8 +1,8 @@
 import { test, Page, expect } from '@playwright/test';
-import { LoginPage } from '../../../../pages/LoginPage';
-import { HomePage } from '../../../../pages/HomePage';
-import { GamePage } from '../../../../pages/ClickOnPlayPage';
-import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
+import { LoginPage } from '../../../../../pages/LoginPage';
+import { HomePage } from '../../../../../pages/HomePage';
+import { GamePage } from '../../../../../pages/ClickOnPlayPage';
+import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
 // массив ID игр
 const gameIds = [
@@ -31,9 +31,9 @@ async function playGames(page: Page) {
     await page.getByRole('button', { name: 'Play now' }).click();
 
     try {
-      await page.waitForLoadState('networkidle', { timeout: 40000 });
+      await page.waitForLoadState('networkidle', { timeout: 60000 });
     } catch {
-      console.warn('⏱️ Network idle не достигнут за 40 сек, продолжаем...');
+      console.warn('network idle is not found after 60 sec await page.locator');
     }
 
     await delay10Seconds();
@@ -63,14 +63,12 @@ async function playGames(page: Page) {
     if (hasGameCanvas > 0) {
       console.log('✅ Найден #GameCanvas — кликаем несколько раз вокруг точки');
 
-
-
       const clickPositions = [
-        { x: 618, y: 597 },
-        { x: 612, y: 593 },
-        { x: 619, y: 610 },
-        { x: 620, y: 600 },
-        { x: 626, y: 613 }
+        { x: 178, y: 567 },
+        { x: 182, y: 583 },
+        { x: 189, y: 587 },
+        { x: 172, y: 590 },
+        { x: 176, y: 580 }
       ];
 
       for (const pos of clickPositions) {
@@ -104,7 +102,7 @@ async function playGames(page: Page) {
 }
 
 // --- Основной тест ---
-test('@ClickOnAdditionalStep Fantasma Games', async ({ context }) => {
+test('@ClickOnAdditionalStepMobile Fantasma Games', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);

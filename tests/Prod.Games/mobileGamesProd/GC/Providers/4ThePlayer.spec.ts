@@ -1,8 +1,8 @@
 import { test, Page, expect } from '@playwright/test';
-import { LoginPage } from '../../../../pages/LoginPage';
-import { HomePage } from '../../../../pages/HomePage';
-import { GamePage } from '../../../../pages/ClickOnPlayPage';
-import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
+import { LoginPage } from '../../../../../pages/LoginPage';
+import { HomePage } from '../../../../../pages/HomePage';
+import { GamePage } from '../../../../../pages/ClickOnPlayPage';
+import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
 // array of IDs
 const gameIds = [
@@ -63,9 +63,9 @@ async function playGames(page: Page) {
 
     if (await noButton.isVisible()) {
       await noButton.click();
-      console.log('click on "NO" is done');
+      console.log('Клик по кнопке "NO" выполнен');
     } else {
-      console.log('"NO" is not visible, continue...');
+      console.log('Кнопка "NO" не видна — клик пропущен');
     }
 
     await delay5Seconds();
@@ -75,9 +75,9 @@ async function playGames(page: Page) {
 
     await canvas.waitFor({ state: 'visible' });
 
-    await canvas.click({ position: { x: 621, y: 586 } });
-    await canvas.click({ position: { x: 625, y: 596 } });
-    await canvas.click({ position: { x: 615, y: 586 } });
+    await canvas.click({ position: { x: 177, y: 586 } });
+    await canvas.click({ position: { x: 180, y: 589 } });
+    await canvas.click({ position: { x: 175, y: 586 } });
 
     await delay5Seconds();
 
@@ -90,7 +90,7 @@ async function playGames(page: Page) {
   }
 }
 
-test('@ClickOnAdditionalStep 4ThePlayer', async ({ context }) => {
+test('@ClickOnAdditionalStepMobile 4ThePlayer', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);

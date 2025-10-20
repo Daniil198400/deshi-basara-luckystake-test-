@@ -29,7 +29,7 @@ const test = base.extend<{}>({
   },
 });
 
-test('Full Registration with pay card', async ({ context }) => {
+test('@mobile Full Registration with pay card', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);

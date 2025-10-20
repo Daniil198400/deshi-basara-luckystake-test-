@@ -1,8 +1,8 @@
 import { test, Page, expect } from '@playwright/test';
-import { LoginPage } from '../../../../pages/LoginPage';
-import { HomePage } from '../../../../pages/HomePage';
-import { GamePage } from '../../../../pages/ClickOnPlayPage';
-import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
+import { LoginPage } from '../../../../../pages/LoginPage';
+import { HomePage } from '../../../../../pages/HomePage';
+import { GamePage } from '../../../../../pages/ClickOnPlayPage';
+import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
 // Массив айдишников игр
 const gameIds = [
@@ -45,26 +45,25 @@ async function playGames(page: Page) {
       }
         await delay5Seconds();
         
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+    position: {
+      x: 203,
+      y: 198
+    }
+  });
 await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
     position: {
-      x: 584,
-      y: 616
+      x: 199,
+      y: 206
+    }
+  });
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+    position: {
+      x: 205,
+      y: 208
     }
   });
 
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
-    position: {
-      x: 580,
-      y: 610
-    }
-  });
-
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
-    position: {
-      x: 590,
-      y: 600
-    }
-  });
 
   await delay5Seconds();
   
@@ -77,7 +76,7 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas'
     }
 }
 
-test('@ClickOnAdditionalStep 1spin4win', async ({ context }) => {
+test('@ClickOnAdditionalStepMobile 1spin4win', async ({ context }) => {
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);

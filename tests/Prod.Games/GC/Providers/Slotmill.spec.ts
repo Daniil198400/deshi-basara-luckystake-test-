@@ -70,9 +70,9 @@ async function playGames(page: Page) {
         await page.getByRole('button', { name: 'Play now' }).click();
         
         try {
-                await page.waitForLoadState('networkidle', { timeout: 20000 });
+                await page.waitForLoadState('networkidle', { timeout: 50000 });
               } catch {
-                console.warn('⏱️ Network idle is not found after 20 сек, continue...');
+                console.warn('⏱️ Network idle is not found after 50 сек, continue...');
               }
                 await delay10Seconds();
 

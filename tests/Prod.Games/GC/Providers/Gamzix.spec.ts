@@ -6,22 +6,9 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // array of IDs
 const gameIds = [
-        "32510",
         "40476",
         "32479",
-        "32482",
         "32476",
-        "32483",
-        "32493",
-        "32494",
-        "35554",
-        "32495",
-        "32499",
-        "32500",
-        "32502",
-        "32504",
-        "32505",
-        "32509"
     ];
 
 // function
@@ -40,7 +27,8 @@ async function playGames(page: Page) {
 
         // click on Play now
         await page.getByRole('button', { name: 'Play now' }).click();
-       
+       await delay5Seconds();
+
         try {
       await page.waitForLoadState('networkidle', { timeout: 30000 });
     } catch {
@@ -48,8 +36,34 @@ async function playGames(page: Page) {
     }
     await delay5Seconds
     
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
-  
+    await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+    position: {
+      x: 639,
+      y: 592
+    }
+  });
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+          position: {
+            x: 635,
+            y: 530
+          }
+        });
+    
+
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+          position: {
+            x: 639,
+            y: 573
+          }
+        });
+
+// await page.locator('iframe[src="https://cdn-v2.fmk0.com/only-coins/v1.0.19/?gid=2011&host=play-game-service.fmk0.com&port=443&client=desktop&lang=en&home=https%3A%2F%2Fluckystake.com&sid=97b43870-aad2-11f0-abf3-fd736ad16f32&wss=1&assets=cdn-v2.fmk0.com&debug=false&promoVersion=v3.2.29&cid=0"]').contentFrame().locator('canvas').click({
+//           position: {
+//             x: 642,
+//             y: 519
+//           }
+//         });
+
        await delay5Seconds();
 
         // второй скриншот

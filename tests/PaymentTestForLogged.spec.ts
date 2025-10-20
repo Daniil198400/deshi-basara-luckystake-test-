@@ -19,7 +19,7 @@ const context = await browser.newContext({
 },
 });
 
-test('luckystake payment test', async ({ context }) => {
+test('@Regress luckystake payment test', async ({ context }) => {
 const page = await context.newPage();
 const loginPage = new LoginPage(page);
 const homePage = new HomePage(page);
@@ -31,8 +31,10 @@ await homePage.closePopupIfVisible();
 await loginPage.openLoginForm();
 await loginPage.login('wiztestIsabell_Borer@hotmail.com', 'password');
 
-
+await delay5Seconds();
 await homePage.closePopupIfVisible();
+await delay5Seconds();
+
   // Going to Store
 await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
 
@@ -48,8 +50,7 @@ const loggedInPaymentForm = new LoggedInPaymentForm(page);
 await loggedInPaymentForm.fillSecurityCode('345');         
 await loggedInPaymentForm.deposit();    
 
-await delay5Seconds();
 
-  await page.getByRole('button', { name: 'Close' }).click();
+await delay5Seconds();
 await delay5Seconds();
 });

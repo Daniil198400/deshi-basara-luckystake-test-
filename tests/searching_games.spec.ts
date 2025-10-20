@@ -16,7 +16,7 @@ const context = await browser.newContext({
 },
 });
 
-test('@mobile1 luckystake searching', async ({ context }) => {
+test('@Regress luckystake searching', async ({ context }) => {
 const page = await context.newPage();
 const loginPage = new LoginPage(page);
 const homePage = new HomePage(page);
@@ -26,8 +26,11 @@ await homePage.closePopupIfVisible();
 await loginPage.openLoginForm();
 await loginPage.login('wiztestIsabell_Borer@hotmail.com', 'password');
 
-await page
-.waitForSelector('.NewHeader_wrapper__8_z0Y', { state: 'detached', timeout: 5000 })
+await delay5Seconds();
+
+await page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn').click();
+
+await page.waitForSelector('.NewHeader_wrapper__8_z0Y', { state: 'detached', timeout: 5000 })
 .catch(() => {});
 await homePage.closePopupIfVisible();
   await page.getByRole('button', { name: 'Search' }).click();

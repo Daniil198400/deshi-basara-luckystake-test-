@@ -6,10 +6,10 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // Все айдишники игр (из твоего списка)
 const gameIds = [
-  13527, 22548, 14875, 13529, 3787, 3737, 3752, 3729, 3744, 13530, 3741, 3724,
+  35675, 3787, 13527, 22548, 14875, 13529, 3737, 3752, 3729, 3744, 13530, 3741, 3724,
   35547, 35549, 21434, 22167, 3755, 3746, 3731, 3727, 3751, 3750, 3730, 3786,
   3722, 13534, 3757, 3721, 3753, 3788, 3743, 3739, 3756, 3738, 3754, 3784, 3720,
-  3783, 3726, 3785, 22773, 23276, 35674, 3733, 3735, 3758, 22346, 35676, 35675,
+  3783, 3726, 3785, 22773, 23276, 35674, 3733, 3735, 3758, 22346, 35676,
   13537, 13533, 13531, 13528, 13538, 13526, 13535, 13532, 3748, 3723, 3742, 3734,
   3747, 3749, 3782, 3732, 3719, 3759, 3718, 3740, 3725, 3736, 3717, 3728, 23887,
   3745, 24166, 13536
@@ -17,16 +17,38 @@ const gameIds = [
 
 // Универсальная функция, которая ищет и кликает по любому доступному элементу
 async function clickGameButton(page: Page) {
-  const frame = await page
-    .locator('iframe[title="Real game"]')
-    .contentFrame();
+  const frameHandle = await page.locator('iframe[title="Real game"]').contentFrame();
 
-  if (!frame) {
+  if (!frameHandle) {
     console.warn('⚠️ Iframe не найден.');
     return;
   }
 
-  // Возможные варианты кнопок/областей
+  // ✅ 1. Проверяем наличие кнопки "START"
+  try {
+    const startButton = frameHandle.getByRole('button', { name: 'START', exact: true });
+    if (await startButton.count() > 0) {
+      await startButton.first().click();
+      console.log('✅ Найдена и нажата кнопка "START".');
+      return;
+    }
+  } catch (err) {
+    console.warn('❌ Ошибка при поиске кнопки START:', err);
+  }
+
+  // ✅ 2. Проверяем наличие кнопки ".preloader_startBtnBg"
+  try {
+    const preloaderBtn = frameHandle.locator('.preloader_startBtnBg');
+    if (await preloaderBtn.count() > 0) {
+      await preloaderBtn.first().click();
+      console.log('✅ Найдена и нажата кнопка ".preloader_startBtnBg".');
+      return;
+    }
+  } catch (err) {
+    console.warn('❌ Ошибка при поиске кнопки .preloader_startBtnBg:', err);
+  }
+
+  // 3. Возможные варианты кнопок/областей (резерв)
   const clickOptions = [
     { selector: '#hud-canvas', x: 619, y: 525 },
     { selector: '#hud-canvas', x: 629, y: 516 },
@@ -51,24 +73,19 @@ async function clickGameButton(page: Page) {
     { selector: 'text=START' }
   ];
 
-  // Перебираем все возможные варианты
+  // 4. Перебираем все возможные варианты
   for (const option of clickOptions) {
     try {
       if (option.buttonText) {
-        const frame2 = await frame
-          .locator(option.selector)
-          .contentFrame();
-        const button = frame2?.getByRole('button', {
-          name: option.buttonText,
-          exact: true
-        });
+        const innerFrame = await frameHandle.locator(option.selector).contentFrame();
+        const button = innerFrame?.getByRole('button', { name: option.buttonText, exact: true });
         if (button && (await button.count()) > 0) {
           await button.first().click();
           console.log(`✅ Нажата кнопка "${option.buttonText}" в ${option.selector}`);
           return;
         }
-      } else if (option.selector && (await frame.locator(option.selector).count()) > 0) {
-        const target = frame.locator(option.selector);
+      } else if (option.selector && (await frameHandle.locator(option.selector).count()) > 0) {
+        const target = frameHandle.locator(option.selector);
         if (option.x && option.y) {
           await target.click({ position: { x: option.x, y: option.y } });
           console.log(`🎯 Клик по ${option.selector} (${option.x}, ${option.y})`);
@@ -86,6 +103,8 @@ async function clickGameButton(page: Page) {
 
   console.warn('⚠️ Ни один из вариантов не найден.');
 }
+
+
 
 // Основная функция
 async function playGames(page: Page) {
@@ -115,6 +134,7 @@ async function playGames(page: Page) {
     await delay10Seconds();
     await clickGameButton(page);
     await delay5Seconds();
+
 
     // Скрин после
     screenshot = await page.screenshot({ fullPage: true });

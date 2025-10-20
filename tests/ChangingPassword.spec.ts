@@ -18,7 +18,7 @@ const context = await browser.newContext({
 });
 
 
-test('login, change password and logout, login', async ({ page }) => {
+test('@Regress login, change password and logout, login', async ({ page }) => {
  
  const profile = new ProfilePage(page);
 

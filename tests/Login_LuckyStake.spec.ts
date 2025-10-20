@@ -14,7 +14,7 @@ const test = base.extend<{}>({
   },
 });
 
-test('luckystake login using test-ids', async ({ context }) => {
+test('@Regress luckystake login using test-ids', async ({ context }) => {
   const page = await context.newPage();
 
   await page.goto('https://luckystake.dev/');
@@ -30,8 +30,9 @@ test('luckystake login using test-ids', async ({ context }) => {
   await loginModal.getByTestId('email-input-login').fill('wiztestIsabell_Borer@hotmail.com');
   await loginModal.getByTestId('password-input-login').fill('password');
 
-  // Включаем "Remember me" (если нужно)
-  //await loginModal.getByTestId('remember-me-toggle-login').click();
+  await delay5Seconds();
+  // "Remember me" disabled for now
+  // await loginModal.getByTestId('remember-me-toggle-login').click();
 
   // Отправляем форму
   await loginModal.getByTestId('submit-button-login').click();

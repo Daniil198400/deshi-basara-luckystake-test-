@@ -32,7 +32,7 @@ test('@ClickOnAdditionalStep Novomatic', async ({ context }) => {
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
@@ -97,7 +97,7 @@ await page.goto('https://luckystake.com/game/real/38798');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
@@ -134,7 +134,7 @@ await page.goto('https://luckystake.com/game/real/40479');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 50 сек, continue...');
     }
@@ -150,53 +150,6 @@ await page.locator('iframe[title="Real game"]').contentFrame().getByText('CONTIN
             contentType: 'image/png' 
         });
 
-
-
-
-
-
-
-
-//38807
-await page.goto('https://luckystake.com/game/real/38807');
-        // screenshot before Play now button
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_38807_before_playnow`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-    // click on Play now
-        await page.getByRole('button', { name: 'Play now' }).click();
-       
-        try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
-    } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
-    }
-        await delay5Seconds();
-    await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1').click({
-    position: {
-      x: 1134,
-      y: 734
-    }
-  });
-            await delay5Seconds();
-
-  screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_38807_after_wait`, { 
-            body: screenshot, 
-            contentType: 'image/png' 
-        });
-
-
-
-
-
-
-
-
-
 //23978
 await page.goto('https://luckystake.com/game/real/23978');
         // screenshot before Play now button
@@ -210,7 +163,7 @@ await page.goto('https://luckystake.com/game/real/23978');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
@@ -247,7 +200,7 @@ await page.goto('https://luckystake.com/game/real/23969');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
@@ -285,7 +238,7 @@ await page.goto('https://luckystake.com/game/real/23969');
         await page.getByRole('button', { name: 'Play now' }).click();
        
         try {
-      await page.waitForLoadState('networkidle', { timeout: 500000 });
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
       console.warn('⏱️ Network idle is not found after 30 сек, continue...');
     }
@@ -305,5 +258,7 @@ await page.goto('https://luckystake.com/game/real/23969');
             contentType: 'image/png' 
         });
   
+   await delay5Seconds();
+
 }); 
 

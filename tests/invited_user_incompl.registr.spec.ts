@@ -29,7 +29,7 @@ const test = base.extend<{}>({
   },
 });
 
-test('Incompleted registration of invited user', async ({ context }) => {
+test('@Regress Incompleted registration of invited user', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
