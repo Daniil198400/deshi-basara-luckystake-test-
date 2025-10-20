@@ -46,7 +46,7 @@ async function playGames(page: Page) {
     const outerFrame = await outerFrameHandle?.contentFrame();
 
     if (!outerFrame) {
-      console.warn('❗ Не удалось получить внешний iframe');
+      console.warn('не удалось получить внешний iframe');
       continue;
     }
 
@@ -55,7 +55,7 @@ async function playGames(page: Page) {
     const innerFrame = await innerFrameHandle?.contentFrame();
 
     if (!innerFrame) {
-      console.warn('❗ Не удалось получить внутренний iframe');
+      console.warn('не удалось получить внутренний iframe');
       continue;
     }
 

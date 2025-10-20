@@ -1,54 +1,108 @@
-import { test, Page } from '@playwright/test';
+import { test, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../../pages/LoginPage';
 import { HomePage } from '../../../../../pages/HomePage';
 import { GamePage } from '../../../../../pages/ClickOnPlayPage';
-import { delay5Seconds, delay10Seconds } from '../../../../../utils/utils';
+import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
-async function clickFirstVisibleButtonInGameFrame(page: Page) {
-  const buttonSelectors = [
-    { type: 'name', value: 'WILD MULTIPLIER FREE SPINS' },
-    { type: 'name', value: 'Land clovers to win up to 10,' },
-    { type: 'name', value: 'COLLECT BATTERIES TO ACTIVATE' },
-    { type: 'nth', value: 3 },
-    { type: 'nth', value: 3 },
-    { type: 'name', value: 'CLIMBING WILDS AVALANCHE' },
-  ];
+// Массив ID игр
+const gameIds = [
+  "34255",
+  "28501",
+  "28503",
+  "14621",
+  "28502",
+  "28504"
+];
 
-  // получаем inner iframe
-  const outerFrameHandle = await page.locator('iframe[title="Real game"]').elementHandle();
-  const outerFrame = await outerFrameHandle?.contentFrame();
-  if (!outerFrame) {
-    console.warn('❌ Внешний iframe не найден');
-    return;
-  }
+// Основная функция запуска игр
+async function playGames(page: Page) {
+  for (const id of gameIds) {
+    const gameUrl = `https://luckystake.com/game/real/${id}`;
+    console.log(`🎮 Открываем игру ${id}: ${gameUrl}`);
 
-  const innerFrameHandle = await outerFrame.locator('#game').elementHandle();
-  const innerFrame = await innerFrameHandle?.contentFrame();
-  if (!innerFrame) {
-    console.warn('❌ Внутренний iframe #game не найден');
-    return;
-  }
+    await page.goto(gameUrl);
+    await delay5Seconds();
 
-  for (const selector of buttonSelectors) {
-    let button;
-    if (selector.type === 'name') {
-      button = innerFrame.getByRole('button', { name: selector.value, exact: true });
-    } else if (selector.type === 'nth') {
-      button = innerFrame.getByRole('button').nth(selector.value);
+    // Скриншот до кнопки Play now
+    let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_before_playnow`, { 
+      body: screenshot, 
+      contentType: 'image/png' 
+    });
+
+    // Нажимаем Play now
+    await page.getByRole('button', { name: 'Play now' }).click();
+
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 50000 });
+    } catch {
+      console.warn('⏱️ Network idle не достигнут за 30 сек, продолжаем...');
     }
 
-    if (await button.isVisible()) {
-      try {
-        await button.scrollIntoViewIfNeeded();
-        await button.click({ force: true });
-        console.log(`✅ Клик по кнопке: ${selector.type === 'name' ? `"${selector.value}"` : `nth(${selector.value})`}`);
-        break; // кликнули — выходим из цикла
-      } catch (err) {
-        console.warn(`⚠️ Ошибка при клике:`, err.message);
-      }
+    await delay10Seconds();
+
+ async function clickAllGames(page: Page) {
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'WILD MULTIPLIER FREE SPINS' }).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'WILD MULTIPLIER FREE SPINS' }).click();
     }
+
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'Land clovers to win up to 10,' }).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'Land clovers to win up to 10,' }).click();
+    }
+
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'COLLECT BATTERIES TO ACTIVATE' }).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'COLLECT BATTERIES TO ACTIVATE' }).click();
+    }
+
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
+    }
+
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
+    }
+
+    if (await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'CLIMBING WILDS AVALANCHE' }).isVisible()) {
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'CLIMBING WILDS AVALANCHE' }).click();
+    }
+}
+
+
+    await delay5Seconds();
+
+    // Скриншот после нажатия
+    screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game_${id}_after_wait`, { 
+      body: screenshot, 
+      contentType: 'image/png' 
+    });
+
+    console.log(`✅ Игра ${id} завершена`);
   }
 }
+
+await delay5Seconds();
+
+test('@ClickOnAdditionalStep Four Leaf Gaming', async ({ context }) => {
+  const page = await context.newPage();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const gamePage = new GamePage(page);
+
+  console.log('🚀 Запуск теста Four Leaf Gaming');
+
+  // Авторизация
+  await page.goto('https://luckystake.com/');
+  await homePage.closePopupIfVisible();
+  await loginPage.openLoginForm();
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  await delay5Seconds();
+
+  // Запуск игр
+  await playGames(page);
+
+  console.log('🏁 Все игры из списка завершены');
+});
 
 test('@ClickOnAdditionalStepMobile Four Leaf Gaming', async ({ context }) => {
   const page = await context.newPage();
@@ -64,15 +118,14 @@ test('@ClickOnAdditionalStepMobile Four Leaf Gaming', async ({ context }) => {
   await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
   await delay5Seconds();
 
-  // пример клика по пустой кнопке, если нужна
   const emptyButton = page.getByRole('button').filter({ hasText: /^$/ });
   if (await emptyButton.isVisible()) {
     await emptyButton.click({ force: true });
     console.log('🟢 Нажата пустая кнопка');
   }
 
-  // пример клика по SC, если есть
-  const scImage = page.getByRole('img', { name: 'SC', exact: true });
+
+ const scImage = page.getByRole('img', { name: 'SC', exact: true });
   if (await scImage.isVisible()) {
     await scImage.scrollIntoViewIfNeeded();
     await scImage.click({ force: true });
@@ -80,9 +133,8 @@ test('@ClickOnAdditionalStepMobile Four Leaf Gaming', async ({ context }) => {
   }
 
   await delay5Seconds();
+  
+  await playGames(page);
 
-  // 🕹️ Клик по первой видимой кнопке из списка в inner iframe
-  await clickFirstVisibleButtonInGameFrame(page);
 
-  console.log('🏁 Скрипт завершен');
 });
