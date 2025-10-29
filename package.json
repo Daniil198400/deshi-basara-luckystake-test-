@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
-    "play-games": "npx playwright test tests/Play_games.spec.ts"
+    "test": "npx playwright test"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +14,8 @@
     "@playwright/test": "^1.55.1",
     "@types/node": "^24.3.0",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "systeminformation": "^5.27.11"
   }
 }

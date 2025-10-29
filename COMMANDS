@@ -20,7 +20,7 @@ npx playwright test tests/Prod.Games/GC/Providers/Playson.spec.ts --headed
 
 For Dev: npx playwright test tests/Dev.Games/GC/Providers --headed
 
-Launch the test with final html report - npx playwright test "Prod.Games/mobileGamesProd/MobileProdCheckingCategories.spec.ts" --reporter=list --reporter=html --headed
+Launch the test with final html report - npx playwright test "D:/playwright_luckystakeend2end/tests/searching_games.spec.ts" --project=chromium --workers=1 --reporter=list --reporter=html --headed
 
 Start tests (all): npx playwright test
 

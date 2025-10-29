@@ -53,6 +53,12 @@ test('@Regress Registration with pay card', async ({ context }) => {
     '2002'
   );
 
+  let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`signed up`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+
   await delay5Seconds();
 
 });

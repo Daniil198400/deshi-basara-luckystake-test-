@@ -1,5 +1,5 @@
 import { test as base, Page, expect, devices } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { LoginPage } from '../pages/LoginPage'
 import { HomePage } from '../pages/HomePage';
 import { delay5Seconds } from '../utils/utils';
 import { PaymentForm } from '../pages/PaymentForm';
@@ -27,18 +27,23 @@ const paymentForm = new LoggedInPaymentForm(page);
 
 
 await page.goto('https://luckystake.dev/');
-await homePage.closePopupIfVisible();
-await loginPage.openLoginForm();
-await loginPage.login('wiztestIsabell_Borer@hotmail.com', 'password');
 
-await delay5Seconds();
-await homePage.closePopupIfVisible();
-await delay5Seconds();
 
-await page.getByTestId('shop-redeem-buttons').click();
-await delay5Seconds();
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!!');
+await page.getByTestId('submit-button-login').click();
 
+await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
 await page.getByTestId('daily-rewards-button-shop').click();
+await page.locator('div').filter({ hasText: /^1250GC\+0\.35SC$/ }).getByRole('img').click();
+await page.getByText('Day 3').click();
+await page.getByText('Day 31250GC+0.35SC').click();
+await page.getByText('Your free reward is ready152230Day 11500GC+0.2SCDay 22000GC+0.25SCDay 31250GC+0').click();
+await page.getByText('Day 3').click();
+await page.getByText('Your free reward is ready152230Day 11500GC+0.2SCDay 22000GC+0.25SCDay 31250GC+0').click();
 
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
@@ -47,44 +52,9 @@ let screenshot = await page.screenshot({ fullPage: true });
       contentType: 'image/png',
     });
 
-// Функция клика по первой доступной кнопке из списка
-async function clickFirstAvailableButton(page: Page) {
-  // Список селекторов кнопок с текстом
-  const buttons = [
-    /^Day 9450GC\+0\.25SC$/,
-    /^600GC\+0\.3SC$/,
-    /^750GC\+0\.2SC$/,
-    /^500GC\+0\.25SC$/,
-    /^700GC\+0\.35SC$/,
-    /^800GC\+0\.4SC$/
-  ];
-
-  for (const btnText of buttons) {
-    const button = page.locator('div').filter({ hasText: btnText }).getByRole('img');
-    
-    if (await button.isVisible() && await button.isEnabled()) {
-      await button.click();
-      console.log(`✅ Clicked on button with text: ${btnText}`);
-      return; 
-    }
-  }
-
-  console.warn('⚠️ No available buttons to click');
-}
-
-await clickFirstAvailableButton(page);
-
-screenshot = await page.screenshot({ fullPage: true });
-    test.info().attach(`after getting distribution`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
-
 await delay5Seconds();
 
-
 await page.getByRole('img', { name: 'close' }).click();
-
 
 await delay5Seconds();
 });

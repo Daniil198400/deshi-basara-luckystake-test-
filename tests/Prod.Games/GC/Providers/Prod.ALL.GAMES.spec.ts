@@ -199,7 +199,22 @@ test('PROD, GC ONLY, ALL GAMES', async ({ page }) => {
   await loginPage.openLoginForm();
   await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
   await delay5Seconds();
-
+  const emptyButton = page.getByRole('button').filter({ hasText: /^$/ });
+        if (await emptyButton.isVisible()) {
+          await emptyButton.click({ force: true });
+          console.log('Modal is closed');
+        }
+      
+            await delay5Seconds();
+      
+       const scImage = page.getByRole('img', { name: 'SC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
   // Take all oids
   const oids = await fetchAllOids();
 

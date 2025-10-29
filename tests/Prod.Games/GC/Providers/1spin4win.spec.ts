@@ -41,30 +41,37 @@ async function playGames(page: Page) {
         try {
         await page.waitForLoadState('networkidle', { timeout: 25000 });
       } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+        console.warn('⏱️ Network idle is not found after 25 сек, continue...');
       }
         await delay5Seconds();
         
-await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+// --- КЛИКИ ВНУТРИ IFRAME (исправлено: используем frameLocator + force: true) ---
+  const frame = page.frameLocator('iframe[title="Real game"]');
+
+  await frame.locator('#canvas').first().click({
     position: {
       x: 584,
       y: 616
-    }
+    },
+    force: true
   });
 
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+  await frame.locator('#canvas').first().click({
     position: {
       x: 580,
       y: 610
-    }
+    },
+    force: true
   });
 
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
+  await frame.locator('#canvas').first().click({
     position: {
       x: 590,
       y: 600
-    }
+    },
+    force: true
   });
+// --- конец правки ---
 
   await delay5Seconds();
   
@@ -77,19 +84,32 @@ await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas'
     }
 }
 
-test('@ClickOnAdditionalStep 1spin4win', async ({ context }) => {
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
+test('@ClickOnAdditionalStep 1spin4win', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const gamePage = new GamePage(page);
 
-    // autorization
-    await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  // Авторизация
+  await page.goto('https://luckystake.com/');
+  await homePage.closePopupIfVisible();
+  await loginPage.openLoginForm();
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+
+  await delay5Seconds();
+
+const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
+}
     await delay5Seconds();
-
+       const scImage = page.getByRole('img', { name: 'SC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+        
+          await delay5Seconds();
     // launching the games
     await playGames(page);
-}); 
+});

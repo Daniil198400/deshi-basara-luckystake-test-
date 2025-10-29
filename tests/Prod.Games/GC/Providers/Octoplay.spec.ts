@@ -157,7 +157,19 @@ test('(Should BE TESTED MANUALLY ClickOnAdditionalStep Octoplay', async ({ conte
     await loginPage.openLoginForm();
     await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
     await delay5Seconds();
-
+    const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
+}
+    await delay5Seconds();
+       const scImage = page.getByRole('img', { name: 'SC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
     // launching the games
     await playGames(page);
 }); 

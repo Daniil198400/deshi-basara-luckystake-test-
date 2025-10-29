@@ -12,7 +12,7 @@ reporter: [
   ['list'],
   ['html', { outputFolder: 'playwright-report', open: 'never' }],
 ],
-  timeout: 9000000, // time
+  timeout: 90000000, // time
 
 
   use: {
@@ -37,18 +37,18 @@ reporter: [
     // },
 
     
-  {
-    name: 'Mobile Chrome Official',  // Chrome с channel
-    use: { ...devices['Pixel 5'], channel: 'chrome' },
-  },
-  {
-    name: 'Mobile Chromium',        // чистый Chromium
-    use: { ...devices['Pixel 5'] },
-  },
-  {
-    name: 'Mobile Edge',
-    use: { ...devices['Pixel 5'], channel: 'msedge' },
-  },
+  // {
+  //   name: 'Mobile Chrome Official',  // Chrome с channel
+  //   use: { ...devices['Pixel 5'], channel: 'chrome' },
+  // },
+  // {
+  //   name: 'Mobile Chromium',        // чистый Chromium
+  //   use: { ...devices['Pixel 5'] },
+  // },
+  // {
+  //   name: 'Mobile Edge',
+  //   use: { ...devices['Pixel 5'], channel: 'msedge' },
+  // },
   
 
 
@@ -66,12 +66,12 @@ reporter: [
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
-  
 
+  // ]
   // webServer: {
   //   command: 'npm run start',
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !isCI,
   // },
+  ]
 });

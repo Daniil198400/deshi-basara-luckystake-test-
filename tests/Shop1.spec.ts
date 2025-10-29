@@ -17,9 +17,6 @@ const context = await browser.newContext({
 },
 });
 
-
-
-
 test('@Regress shop', async ({ context }) => {
   const page = await context.newPage();
 
@@ -43,9 +40,11 @@ test('@Regress shop', async ({ context }) => {
   await loginModal.getByTestId('submit-button-login').click();
 
   // Ждем немного для завершения логина
-  await delay5Seconds();
+  await delay10Seconds();
 
 await page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn').click();
+
+// await page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn').click();
 
   //Screenshot before 
     let screenshot = await page.screenshot({ fullPage: true });
@@ -58,14 +57,9 @@ await page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn').cl
   
 await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
 
-
-
-
-await delay5Seconds();
+await delay10Seconds();
 
 await page.getByTestId('go-back-button-shop').click();
-
-
   
   screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`after buying`, {

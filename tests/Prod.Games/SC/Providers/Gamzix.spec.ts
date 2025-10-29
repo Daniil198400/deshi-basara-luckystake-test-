@@ -6,22 +6,9 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // array of IDs
 const gameIds = [
-        "32510",
         "40476",
         "32479",
-        "32482",
         "32476",
-        "32483",
-        "32493",
-        "32494",
-        "35554",
-        "32495",
-        "32499",
-        "32500",
-        "32502",
-        "32504",
-        "32505",
-        "32509"
     ];
 
 // function
@@ -40,7 +27,8 @@ async function playGames(page: Page) {
 
         // click on Play now
         await page.getByRole('button', { name: 'Play now' }).click();
-       
+       await delay5Seconds();
+
         try {
       await page.waitForLoadState('networkidle', { timeout: 30000 });
     } catch {
@@ -48,8 +36,34 @@ async function playGames(page: Page) {
     }
     await delay5Seconds
     
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button').nth(3).click();
-  
+    await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+    position: {
+      x: 639,
+      y: 592
+    }
+  });
+  await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+          position: {
+            x: 635,
+            y: 530
+          }
+        });
+    
+
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+          position: {
+            x: 639,
+            y: 573
+          }
+        });
+
+// await page.locator('iframe[src="https://cdn-v2.fmk0.com/only-coins/v1.0.19/?gid=2011&host=play-game-service.fmk0.com&port=443&client=desktop&lang=en&home=https%3A%2F%2Fluckystake.com&sid=97b43870-aad2-11f0-abf3-fd736ad16f32&wss=1&assets=cdn-v2.fmk0.com&debug=false&promoVersion=v3.2.29&cid=0"]').contentFrame().locator('canvas').click({
+//           position: {
+//             x: 642,
+//             y: 519
+//           }
+//         });
+
        await delay5Seconds();
 
         // второй скриншот
@@ -62,53 +76,33 @@ async function playGames(page: Page) {
     }
 }
 
-await delay5Seconds();
-
 test('@ClickOnAdditionalStep Gamzix', async ({ context }) => {
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const gamePage = new GamePage(page);
+    const page = await context.newPage();
+    const loginPage = new LoginPage(page);
+    const homePage = new HomePage(page);
+    const gamePage = new GamePage(page);
 
-  // вспомогательная функция — ждёт кнопку и кликает, если она появилась
-async function clickCloseButtonIfExists(page: Page) {
-  const selector = '.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn';
-  try {
-    const button = await page.waitForSelector(selector, { timeout: 10000 });
-    await button.click();
-    console.log('Кнопка закрытия найдена и нажата');
-    await page.waitForTimeout(5000);
-  } catch {
-    console.log('Кнопка закрытия не найдена за 10 секунд');
-  }
+    // autorization
+    await page.goto('https://luckystake.com/');
+    await homePage.closePopupIfVisible();
+    await loginPage.openLoginForm();
+    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+    
+    await delay5Seconds();
+const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
 }
+    await delay5Seconds();
+       const scImage = page.getByRole('img', { name: 'GC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
+    // launching the games
+    await playGames(page);
+}); 
 
-// вспомогательная функция — кликает по элементу, если он существует
-async function clickIfExists(page: Page, role: string, name: string) {
-  const locator = page.getByRole(role as any, { name });
-  if (await locator.count() > 0) {
-    await locator.first().click();
-    console.log(`Нажали на элемент с role=${role}, name=${name}`);
-  } else {
-    console.log(`Элемент с role=${role}, name=${name} не найден`);
-  }
-}
-
-  // авторизация
-  await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
-
-  await delay5Seconds();
-
-  // если появится кнопка закрытия — нажать
-  await clickCloseButtonIfExists(page);
-
-  // подождать немного, потом попытаться нажать по картинке GC
-  await delay5Seconds();
-  await clickIfExists(page, 'img', 'GC');
-
-  // запуск игр
-  await playGames(page);
-});

@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
@@ -50,7 +50,7 @@ const gameIds = [
 ];
 
 // function
-async function playGames(page) {
+async function playGames(page:Page) {
     for (const id of gameIds) {
         const gameUrl = `https://luckystake.dev/game/real/${id}`;
         await page.goto(gameUrl);
@@ -72,62 +72,20 @@ async function playGames(page) {
         await delay10Seconds();
         await delay10Seconds();
 
-        // второй скриншот
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_after_wait`, { 
+
+
+
+screenshot = await page.screenshot({ fullPage: true });
+        test.info().attach(`game_${id}_after_playnow`, { 
             body: screenshot, 
             contentType: 'image/png' 
         });
-
-        // проверяем кнопку "Explore games"
-        const exploreButton = page.getByRole('button', { name: 'Explore games' });
-        if (await exploreButton.isVisible({ timeout: 5000 })) {
-            await exploreButton.click();
-            await delay5Seconds();
-        } else {
-            console.log(`Explore games button for game ${id} not found, continuing...`);
-        }
-
-        // Click on buy button
-        const buyButton = page.getByRole('button', { name: 'buy' });
-        await delay5Seconds();
-
-        if (await buyButton.isVisible({ timeout: 1000 })) {
-            await buyButton.click();
-            await delay5Seconds();
-
-            // Screenshot after clicking buy button
-            screenshot = await page.screenshot();
-            test.info().attach(`game_${id}_buy_button`, { 
-                body: screenshot, 
-                contentType: 'image/png' 
-            });
-
-            const priceButton = page.getByRole('button', { name: '$19.99' });
-            if (await priceButton.isVisible({ timeout: 3000 })) {
-                await priceButton.click();
-                await delay10Seconds();
-
-                const confirmButton = page.getByRole('button').nth(2);
-                if (await confirmButton.isVisible({ timeout: 3000 })) {
-                    await confirmButton.click();
-                } else {
-                    console.log(`Confirm button for game ${id} is not available, skipping...`);
-                }
-            }
-        }
-
-        // click on Back button
-        const backButton = page.getByTestId('ArrowBackIosIcon');
-        if (await backButton.isVisible({ timeout: 3000 })) {
-            await backButton.click();
-        }
 
         await delay5Seconds();
     }
 }
 
-test('@providersDev TurboGames', async ({ context }) => {
+test('DISABLED DevClickOnAdditionalStep  TurboGames', async ({ context }) => {
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);

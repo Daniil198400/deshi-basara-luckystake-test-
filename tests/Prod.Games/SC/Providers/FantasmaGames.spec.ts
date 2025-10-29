@@ -33,7 +33,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 40000 });
     } catch {
-      console.warn('⏱️ Network idle не достигнут за 30 сек, продолжаем...');
+      console.warn('⏱️ Network idle не достигнут за 40 сек, продолжаем...');
     }
 
     await delay10Seconds();
@@ -63,13 +63,14 @@ async function playGames(page: Page) {
     if (hasGameCanvas > 0) {
       console.log('✅ Найден #GameCanvas — кликаем несколько раз вокруг точки');
 
-      // Координаты вокруг центра (583, 585)
+
+
       const clickPositions = [
-        { x: 583, y: 585 },
-        { x: 577, y: 583 },
-        { x: 589, y: 587 },
-        { x: 580, y: 590 },
-        { x: 586, y: 580 }
+        { x: 618, y: 597 },
+        { x: 612, y: 593 },
+        { x: 619, y: 610 },
+        { x: 620, y: 600 },
+        { x: 626, y: 613 }
       ];
 
       for (const pos of clickPositions) {
@@ -102,54 +103,35 @@ async function playGames(page: Page) {
   }
 }
 
-await delay5Seconds();
-
-// основной тест
-test('@ClickOnAdditionalStep FantasmaGames', async ({ context }) => {
+// --- Основной тест ---
+test('@ClickOnAdditionalStep Fantasma Games', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  // вспомогательная функция — ждёт кнопку и кликает, если она появилась
-async function clickCloseButtonIfExists(page: Page) {
-  const selector = '.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn';
-  try {
-    const button = await page.waitForSelector(selector, { timeout: 10000 });
-    await button.click();
-    console.log('Кнопка закрытия найдена и нажата');
-    await page.waitForTimeout(5000);
-  } catch {
-    console.log('Кнопка закрытия не найдена за 10 секунд');
-  }
-}
+  console.log('🚀 Запуск теста Fantasma Games');
 
-// вспомогательная функция — кликает по элементу, если он существует
-async function clickIfExists(page: Page, role: string, name: string) {
-  const locator = page.getByRole(role as any, { name });
-  if (await locator.count() > 0) {
-    await locator.first().click();
-    console.log(`Нажали на элемент с role=${role}, name=${name}`);
-  } else {
-    console.log(`Элемент с role=${role}, name=${name} не найден`);
-  }
-}
-
-  // авторизация
+  // Авторизация
   await page.goto('https://luckystake.com/');
   await homePage.closePopupIfVisible();
   await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
-
+  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
   await delay5Seconds();
+const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
+}
+    await delay5Seconds();
+       const scImage = page.getByRole('img', { name: 'GC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
 
-  // если появится кнопка закрытия — нажать
-  await clickCloseButtonIfExists(page);
-
-  // подождать немного, потом попытаться нажать по картинке GC
-  await delay5Seconds();
-  await clickIfExists(page, 'img', 'GC');
-
-  // запуск игр
+  // Запуск игр
   await playGames(page);
 });

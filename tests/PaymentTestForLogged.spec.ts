@@ -51,6 +51,16 @@ await loggedInPaymentForm.fillSecurityCode('345');
 await loggedInPaymentForm.deposit();    
 
 
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).click();
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('311');
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().getByRole('button', { name: 'Deposit' }).click();
+
+let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`after deposit`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+
 await delay5Seconds();
 await delay5Seconds();
 });

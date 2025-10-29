@@ -4,21 +4,13 @@ import { HomePage } from '../../../../../pages/HomePage';
 import { GamePage } from '../../../../../pages/ClickOnPlayPage';
 import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
-// Массив айдишников игр
+// array of IDs
 const gameIds = [
-        "38804",
-        "38797",
-        "32643",
-        "32632",
-        "32588",
-        "40823",
-        "38812",
-        "38813",
-        "38808",
-        "40472",
-        "38806",
-        "38811"
-];
+        "28630",
+        "34163",
+        "23353"
+    ];
+
 
 // function
 async function playGames(page: Page) {
@@ -36,47 +28,37 @@ async function playGames(page: Page) {
 
         // click on Play now
         await page.getByRole('button', { name: 'Play now' }).click();
+        await delay5Seconds();
 
-        // waiting
         try {
-        await page.waitForLoadState('networkidle', { timeout: 25000 });
-      } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
-      }
+                await page.waitForLoadState('networkidle', { timeout: 25000 });
+              } catch {
+                console.warn('Network idle is not found after 25 сек, continue...');
+              }
+        await delay10Seconds();
+
+        
+        await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().locator('#game-canvas').click({
+          position: {
+            x: 185,
+            y: 409
+          }
+        });   
+
         await delay5Seconds();
         
-        await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
-    position: {
-      x: 203,
-      y: 198
-    }
-  });
-await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
-    position: {
-      x: 199,
-      y: 206
-    }
-  });
-  await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas').click({
-    position: {
-      x: 205,
-      y: 208
-    }
-  });
-
-
-  await delay5Seconds();
-  
-        // second screenshot
+        // второй скриншот
         screenshot = await page.screenshot({ fullPage: true });
         test.info().attach(`game_${id}_after_wait`, { 
             body: screenshot, 
             contentType: 'image/png' 
         });
+
+        await delay5Seconds();
     }
 }
 
-test('@ClickOnAdditionalStepMobile 1spin4win', async ({ context }) => {
+test('@ClickOnAdditionalStepMobile Trigger', async ({ context }) => {
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
@@ -87,8 +69,23 @@ test('@ClickOnAdditionalStepMobile 1spin4win', async ({ context }) => {
     await homePage.closePopupIfVisible();
     await loginPage.openLoginForm();
     await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+    await page.getByText('Social Games').click();
+    await page.getByRole('link', { name: 'Providers' }).click();
+    await page.getByRole('link', { name: 'Trigger' }).click();
     await delay5Seconds();
-
+const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
+}
+    await delay5Seconds();
+       const scImage = page.getByRole('img', { name: 'SC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
     // launching the games
     await playGames(page);
 }); 

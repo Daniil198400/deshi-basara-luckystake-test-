@@ -40,7 +40,7 @@ await homePage.closePopupIfVisible();
   // await page.getByRole('button', { name: 'Play now' }).click();
   // await delay5Seconds();
   let screenshot = await page.screenshot({ fullPage: true });
-    test.info().attach(`game_before_playNow`, {
+    test.info().attach(`game after searching`, {
       body: screenshot,
       contentType: 'image/png',
     });

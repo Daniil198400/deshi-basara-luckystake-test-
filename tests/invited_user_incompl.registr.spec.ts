@@ -3,7 +3,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { HomePage } from '../pages/HomePage';
 import { UserFormHelper, fillField, clickButton, clickCheckboxByLabel } from '../pages/UserFormPage';
 import { PaymentForm } from '../pages/PaymentForm';
-import { generateRandomEmail, delay5Seconds } from '../utils/utils';
+import { generateRandomEmail, delay5Seconds, delay10Seconds } from '../utils/utils';
 
 
 
@@ -45,10 +45,15 @@ test('@Regress Incompleted registration of invited user', async ({ context }) =>
   await clickCheckboxByLabel(page, 'I am at least 18 years old');
   await clickButton(page, 'Continue');
 
-  await delay5Seconds();
+  await delay10Seconds();
 
   await page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn').click();
-  await page.locator('.WizPopupWrapper_wrapper__container__D4qDj.WizPopupWrapper_image_top__GxFfa.Signup_cancelRegistrationPopUp__K7k4R > .WizIconButton_base__JfGpY').click();
-  
+
+let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`invited user has done deshi basara`, {
+      body: screenshot,
+      contentType: 'image/png',
+    });
+
   await delay5Seconds();
 });

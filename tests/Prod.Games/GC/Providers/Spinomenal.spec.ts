@@ -16,21 +16,19 @@ const gameIds = [
 // 🔹 Универсальная функция для кликов по canvas
 async function clickCanvasPoints(page: Page) {
   const canvasPoints = [
-    { x: 611, y: 603 },
-    { x: 618, y: 449 },
-    { x: 589, y: 587 },
-    { x: 602, y: 581 },
-    { x: 573, y: 599 },
-    { x: 580, y: 590 },
-    { x: 619, y: 590 },
-    { x: 565, y: 605 },
-    { x: 608, y: 472 },
-    { x: 595, y: 583 },
-    { x: 600, y: 570 },
-    { x: 580, y: 610 }
+    { x: 611, y: 563 },
+    { x: 608, y: 549 },
+    { x: 614, y: 517 },
+    { x: 623, y: 521 },
+    { x: 610, y: 499 },
+    { x: 620, y: 550 },
+    { x: 619, y: 510 },
+    { x: 601, y: 595 },
   ];
 
-  console.log('🎯 Поиск iframe с игрой...');
+
+
+  console.log('searching iframe with game...');
 
   // Ожидание iframe с игрой
   const outerFrameHandle = await page.waitForSelector('iframe[title="Real game"]', { timeout: 30000 });
@@ -41,7 +39,7 @@ async function clickCanvasPoints(page: Page) {
 
   const outerFrame = await outerFrameHandle.contentFrame();
   if (!outerFrame) {
-    console.warn('⚠️ Не удалось получить contentFrame внешнего iframe');
+    console.warn('Не удалось получить contentFrame внешнего iframe');
     return;
   }
 
@@ -53,9 +51,9 @@ async function clickCanvasPoints(page: Page) {
       const maybeInnerFrame = await innerHandle.contentFrame();
       if (maybeInnerFrame) {
         gameFrame = maybeInnerFrame;
-        console.log('📦 Найден вложенный iframe #game');
+        console.log('Найден вложенный iframe #game');
       } else {
-        console.log('ℹ️ #game не является iframe, кликаем внутри outerFrame');
+        console.log('ℹ#game не является iframe, кликаем внутри outerFrame');
       }
     }
   } catch {
@@ -66,21 +64,21 @@ async function clickCanvasPoints(page: Page) {
   const canvas = gameFrame.locator('canvas');
   await canvas.first().waitFor({ timeout: 20000 });
 
-  console.log('🎮 Найден canvas. Начинаем серию кликов...');
+  console.log('Найден canvas. Начинаем серию кликов...');
 
   // Кликаем по 10 точкам подряд
   for (let i = 0; i < canvasPoints.length && i < 10; i++) {
     const { x, y } = canvasPoints[i];
     try {
-      console.log(`🖱️ Клик по canvas (${x}, ${y})`);
+      console.log(`Клик по canvas (${x}, ${y})`);
       await canvas.first().click({ position: { x, y }, force: true });
       await page.waitForTimeout(1000);
     } catch (err) {
-      console.warn(`⚠️ Ошибка при клике на (${x}, ${y}): ${err}`);
+      console.warn(` Ошибка при клике на (${x}, ${y}): ${err}`);
     }
   }
 
-  console.log('✅ Завершено 10 кликов по canvas');
+  console.log('10 clicks on canvas');
 }
 
 // 🔹 Основная функция прохождения игр
@@ -128,23 +126,32 @@ async function playGames(page: Page) {
 await delay5Seconds();
 
 // Spinomenal
-test('@ClickOnAdditionalStep Spinomenal', async ({ context }) => {
+test('@ClickOnAdditionalStepMobile Spinomenal', async ({ context }) => {
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  console.log('🚀 Запуск теста Spinomenal');
-
   await page.goto('https://luckystake.com/');
   await homePage.closePopupIfVisible();
   await loginPage.openLoginForm();
   await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
+const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
+if (await closeBtn.isVisible()) {
+  await closeBtn.click();
+}
+    await delay5Seconds();
+       const scImage = page.getByRole('img', { name: 'SC', exact: true });
+        if (await scImage.isVisible()) {
+          await scImage.scrollIntoViewIfNeeded();
+          await scImage.click({ force: true });
+          console.log('Клик по SC');
+        }
+      
+        await delay5Seconds();
 
   await playGames(page);
 
-  console.log('🏁 Тест Spinomenal завершён');
 });
 
 
