@@ -6,7 +6,7 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // Массив ID игр
 const gameIds = [
-  28549, 
+  28563, 28549, 
   28609, 28568, 28534, 28563, 28555, 28551, 28550, 28547, 21067, 28616, 
   28545, 28561, 28613, 28606, 28533, 28546, 28565, 28603, 28596, 40489, 40490, 38799, 28591, 35543,
   28539, 28569, 28570, 28601, 28619, 28559, 28587, 28618, 28605, 28614,
@@ -14,7 +14,7 @@ const gameIds = [
   28554, 28542, 28584, 28536, 28586, 28580, 28576, 28532, 28600, 28564,
   28602, 28567, 28604, 28571, 28558, 28560, 28589, 28615, 28577, 28562, 
   28544, 28599, 28537, 28578, 28573, 28588, 28612, 28607, 28549, 
-  28609, 28568, 28534, 28563, 28555, 28551, 28550, 28547, 21067, 28616, 
+  28609, 28568, 28534, 28555, 28551, 28550, 28547, 21067, 28616, 
   28545, 28561, 28613, 28606, 28533
 ];
 
@@ -74,7 +74,7 @@ async function clickGameElement(page: Page) {
         const el = gameFrame.getByText(c.value, { exact: false });
         if (await el.count()) {
           await el.first().click({ force: true }); // force применён
-          console.log(`🎯 Клик по тексту: ${c.value}`);
+          console.log(` Клик по тексту: ${c.value}`);
           return;
         }
       } else if (c.type === 'selector') {
@@ -83,23 +83,23 @@ async function clickGameElement(page: Page) {
           if (c.selector.includes('canvas')) {
             const { x, y } = canvasPoints[Math.floor(Math.random() * canvasPoints.length)];
             await el.first().click({ position: { x, y }, force: true });
-            console.log(`🎯 Клик по canvas (${x}, ${y})`);
+            console.log(`Клик по canvas (${x}, ${y})`);
           } else {
             await el.first().click({ force: true });
-            console.log(`🎯 Клик по селектору: ${c.selector}`);
+            console.log(`Клик по селектору: ${c.selector}`);
           }
           return;
         }
       }
     } catch (err) {
-      console.warn(`⚠️ Ошибка при клике по ${JSON.stringify(c)}: ${err}`);
+      console.warn(`Ошибка при клике по ${JSON.stringify(c)}: ${err}`);
     }
   }
 
-  // 🔹 Фоллбек: принудительный клик по 'START'
+  // принудительный клик по 'START'
   try {
     await gameFrame.getByText('START').click({ force: true });
-    console.log(`🎯 Фоллбек клик по START`);
+    console.log(`Фоллбек клик по START`);
   } catch {}
 }
 
@@ -107,7 +107,7 @@ async function clickGameElement(page: Page) {
 async function playGames(page: Page) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
-    console.log(`🎮 Открываем игру: ${gameUrl}`);
+    console.log(`Открываем игру: ${gameUrl}`);
 
     await page.goto(gameUrl);
     await delay5Seconds();
@@ -121,7 +121,7 @@ async function playGames(page: Page) {
     try {
       await page.getByRole('button', { name: 'Play now' }).click({ force: true }); // force применён
     } catch {
-      console.warn('⚠️ Не удалось кликнуть по кнопке Play now');
+      console.warn(' Не удалось кликнуть по кнопке Play now');
     }
 
     await delay5Seconds();
@@ -129,7 +129,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 20000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил за 30 сек, продолжаем...');
+      console.warn('Network idle не наступил за 20 сек, продолжаем...');
     }
 
     await delay5Seconds();
@@ -144,7 +144,7 @@ async function playGames(page: Page) {
       contentType: 'image/png'
     });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(`Игра ${id} завершена`);
     await delay5Seconds();
   }
 }
@@ -156,7 +156,7 @@ test('@ClickOnAdditionalStep Relax', async ({ context }) => {
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  console.log('🚀 Запуск теста Relax');
+  console.log('Relax provider');
 
   await page.goto('https://luckystake.com/');
   await homePage.closePopupIfVisible();
@@ -172,13 +172,15 @@ if (await closeBtn.isVisible()) {
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();
           await scImage.click({ force: true });
-          console.log('Клик по SC');
+          console.log('click on GC');
         }
       
     await delay5Seconds();
       
         await delay5Seconds();
+
 //Playing 28593 game cause of trouble button
+
 await page.goto('https://luckystake.com/game/real/28593');
 await delay5Seconds();
 await page.getByRole('button', { name: 'Play now' }).click();
@@ -191,7 +193,7 @@ test.info().attach(`game_28593_before_click`, {
 try {
       await page.waitForLoadState('networkidle', { timeout: 20000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил за 30 сек, продолжаем...');
+      console.warn('Network idle is not reached after 20 сек, keep moving...');
     }
 await delay5Seconds();
 

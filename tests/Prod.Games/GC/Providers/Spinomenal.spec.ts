@@ -13,7 +13,7 @@ const gameIds = [
   "13513", "13512", "13511", "11554", "9980"
 ];
 
-// 🔹 Универсальная функция для кликов по canvas
+// Универсальная функция для кликов по canvas
 async function clickCanvasPoints(page: Page) {
   const canvasPoints = [
     { x: 611, y: 563 },
@@ -33,7 +33,7 @@ async function clickCanvasPoints(page: Page) {
   // Ожидание iframe с игрой
   const outerFrameHandle = await page.waitForSelector('iframe[title="Real game"]', { timeout: 30000 });
   if (!outerFrameHandle) {
-    console.warn('⚠️ Не найден iframe [title="Real game"]');
+    console.warn(' Не найден iframe [title="Real game"]');
     return;
   }
 
@@ -57,7 +57,7 @@ async function clickCanvasPoints(page: Page) {
       }
     }
   } catch {
-    console.log('⚠️ #game не найден, используем outerFrame');
+    console.log(' #game не найден, используем outerFrame');
   }
 
   // Ожидание canvas
@@ -98,13 +98,13 @@ async function playGames(page: Page) {
     try {
       await page.getByRole('button', { name: 'Play now' }).click({ force: true });
     } catch {
-      console.warn('⚠️ Не удалось кликнуть по кнопке Play now');
+      console.warn('Не удалось кликнуть по кнопке Play now');
     }
 
     try {
       await page.waitForLoadState('networkidle', { timeout: 35000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил, продолжаем...');
+      console.warn(' Network idle не наступил, продолжаем...');
     }
 
     await delay10Seconds();
@@ -118,7 +118,7 @@ async function playGames(page: Page) {
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicks`, { body: screenshot, contentType: 'image/png' });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(` Игра ${id} завершена`);
     await delay5Seconds();
   }
 }

@@ -46,7 +46,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 30000 });
     } catch {
-      console.warn('⏱️ Network idle не найден, продолжаем...');
+      console.warn('Network idle не найден, продолжаем...');
     }
 
     await delay10Seconds();
@@ -59,18 +59,18 @@ async function playGames(page: Page) {
         const iframeLocator = page.locator('iframe[title="Real game"]');
         const iframeElement = await iframeLocator.elementHandle();
         if (!iframeElement) {
-          console.warn(`⚠️ iframe не найден для игры ${id}`);
+          console.warn(`iframe не найден для игры ${id}`);
           continue;
         }
 
         // получаем контент фрейма
         const frame = await iframeElement.contentFrame();
         if (!frame) {
-          console.warn(`⚠️ contentFrame не получен для игры ${id}`);
+          console.warn(` contentFrame не получен для игры ${id}`);
           continue;
         }
 
-        console.log(`🖱️ Клик по игре ${id} (${clickData.selector}) в (${clickData.x}, ${clickData.y})`);
+        console.log(` Клик по игре ${id} (${clickData.selector}) в (${clickData.x}, ${clickData.y})`);
 
         await frame.locator(clickData.selector).click({
           position: { x: clickData.x, y: clickData.y },
@@ -79,7 +79,7 @@ async function playGames(page: Page) {
 
         await delay5Seconds();
       } catch (err) {
-        console.warn(`⚠️ Ошибка при клике по игре ${id}: ${err}`);
+        console.warn(` Ошибка при клике по игре ${id}: ${err}`);
       }
     }
 
@@ -117,7 +117,7 @@ if (await closeBtn.isVisible()) {
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();
           await scImage.click({ force: true });
-          console.log('Клик по SC');
+          console.log('click on SC');
         }
       
         await delay5Seconds();

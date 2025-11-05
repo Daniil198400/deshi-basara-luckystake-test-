@@ -128,13 +128,12 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил за 50 сек, продолжаем...');
+      console.warn('Network idle не наступил за 50 сек, продолжаем...');
     }
 
     await delay10Seconds();
     await clickGameButton(page);
     await delay5Seconds();
-
 
     // Скрин после
     screenshot = await page.screenshot({ fullPage: true });
@@ -149,20 +148,32 @@ async function playGames(page: Page) {
 
 test('@ClickOnAdditionalStep Platipus', async ({ context }) => {
   const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const gamePage = new GamePage(page);
-
-  // Авторизация
-  await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
-const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
-if (await closeBtn.isVisible()) {
-  await closeBtn.click();
+     /**
+ * Clicks the "close" button if it exists on the page.
+ * @param {import('@playwright/test').Page} page - The Playwright page object.
+ */
+async function clickCloseIfPresent(page: Page) {
+  const closeButton = page.getByRole('img', { name: 'close' });
+  if (await closeButton.count() > 0) {
+    await closeButton.first().click();
+    console.log('Close button clicked');
+  } else {
+    console.log('Close button not found, skipping click');
+  }
 }
+
+// await clickCloseIfPresent(page);
+
+  await page.goto('https://luckystake.com/');
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+  await delay5Seconds();
+
+  await clickCloseIfPresent(page);
     await delay5Seconds();
        const scImage = page.getByRole('img', { name: 'SC', exact: true });
         if (await scImage.isVisible()) {

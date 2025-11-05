@@ -65,18 +65,18 @@ async function playGames(page: Page) {
       .count();
 
     if (hasStartButton > 0) {
-      console.log('🟢 Найдена кнопка START — кликаем по ней');
+      console.log(' Найдена кнопка START — кликаем по ней');
       await innerFrame
         .getByRole('button', { name: 'START', exact: true })
         .click({ force: true });
     } else {
-      console.log('⚪ Кнопка START не найдена — пробуем третью кнопку');
+      console.log(' Кнопка START не найдена — пробуем третью кнопку');
       const allButtons = await innerFrame.getByRole('button').count();
       if (allButtons >= 4) {
         await innerFrame.getByRole('button').nth(3).click({ force: true });
-        console.log('✅ Нажата третья кнопка (nth(3))');
+        console.log(' Нажата третья кнопка (nth(3))');
       } else {
-        console.warn('❗ Недостаточно кнопок для выбора nth(3)');
+        console.warn('Недостаточно кнопок для выбора nth(3)');
       }
     }
 
@@ -89,7 +89,7 @@ async function playGames(page: Page) {
       contentType: 'image/png' 
     });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(`Игра ${id} завершена`);
   }
 }
 

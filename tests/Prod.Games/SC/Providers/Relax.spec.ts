@@ -83,23 +83,23 @@ async function clickGameElement(page: Page) {
           if (c.selector.includes('canvas')) {
             const { x, y } = canvasPoints[Math.floor(Math.random() * canvasPoints.length)];
             await el.first().click({ position: { x, y }, force: true });
-            console.log(`🎯 Клик по canvas (${x}, ${y})`);
+            console.log(`Клик по canvas (${x}, ${y})`);
           } else {
             await el.first().click({ force: true });
-            console.log(`🎯 Клик по селектору: ${c.selector}`);
+            console.log(`Клик по селектору: ${c.selector}`);
           }
           return;
         }
       }
     } catch (err) {
-      console.warn(`⚠️ Ошибка при клике по ${JSON.stringify(c)}: ${err}`);
+      console.warn(' Ошибка при клике по ${JSON.stringify(c)}: ${err}`);
     }
   }
 
   // 🔹 Фоллбек: принудительный клик по 'START'
   try {
     await gameFrame.getByText('START').click({ force: true });
-    console.log(`🎯 Фоллбек клик по START`);
+    console.log(` Фоллбек клик по START`);
   } catch {}
 }
 
@@ -107,7 +107,7 @@ async function clickGameElement(page: Page) {
 async function playGames(page: Page) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
-    console.log(`🎮 Открываем игру: ${gameUrl}`);
+    console.log(`Открываем игру: ${gameUrl}`);
 
     await page.goto(gameUrl);
     await delay5Seconds();
@@ -121,7 +121,7 @@ async function playGames(page: Page) {
     try {
       await page.getByRole('button', { name: 'Play now' }).click({ force: true }); // force применён
     } catch {
-      console.warn('⚠️ Не удалось кликнуть по кнопке Play now');
+      console.warn(' Не удалось кликнуть по кнопке Play now');
     }
 
     await delay5Seconds();
@@ -129,7 +129,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 20000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил за 30 сек, продолжаем...');
+      console.warn(' Network idle не наступил за 30 сек, продолжаем...');
     }
 
     await delay5Seconds();
@@ -144,7 +144,7 @@ async function playGames(page: Page) {
       contentType: 'image/png'
     });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(`Игра ${id} завершена`);
     await delay5Seconds();
   }
 }
@@ -156,7 +156,7 @@ test('@ClickOnAdditionalStep Relax', async ({ context }) => {
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  console.log('🚀 Запуск теста Relax');
+  console.log('Запуск теста Relax');
 
   await page.goto('https://luckystake.com/');
   await homePage.closePopupIfVisible();

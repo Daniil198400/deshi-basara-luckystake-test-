@@ -4,6 +4,8 @@ import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
 import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
+
+
 // array of IDs
 const gameIds = [
   "28457",
@@ -20,6 +22,7 @@ const gameIds = [
   "35545",
   "28456"
 ];
+
 
 // function
 async function playGames(page: Page) {
@@ -39,9 +42,9 @@ async function playGames(page: Page) {
     await page.getByRole('button', { name: 'Play now' }).click();
 
     try {
-      await page.waitForLoadState('networkidle', { timeout: 100000 });
+      await page.waitForLoadState('networkidle', { timeout: 39000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 100 сек, continue...');
+      console.warn('Network idle is not found after 39 сек, continue...');
     }
 
     await delay10Seconds();
@@ -49,13 +52,13 @@ async function playGames(page: Page) {
     // Получаем iframe и кнопку "NO" внутри
     const outerFrame = await page.locator('iframe[title="Real game"]').contentFrame();
     if (!outerFrame) {
-      console.warn('⚠️ Не найден iframe[title="Real game"]');
+      console.warn(' Не найден iframe[title="Real game"]');
       continue;
     }
 
     const gameFrame = await outerFrame.locator('#game').contentFrame();
     if (!gameFrame) {
-      console.warn('⚠️ Не найден внутренний iframe #game');
+      console.warn(' Не найден внутренний iframe #game');
       continue;
     }
 
@@ -70,14 +73,18 @@ async function playGames(page: Page) {
 
     await delay5Seconds();
 
-    // Работа с canvas внутри gameFrame
-    const canvas = gameFrame.locator('canvas').first();
+   // Работа с canvas внутри gameFrame
+const canvas = gameFrame.locator('canvas').first();
 
-    await canvas.waitFor({ state: 'visible' });
+if (await canvas.isVisible()) {
+  await canvas.click({ position: { x: 621, y: 586 } });
+  await canvas.click({ position: { x: 625, y: 596 } });
+  await canvas.click({ position: { x: 615, y: 586 } });
+  console.log(' Canvas clicked');
+} else {
+  console.log('Canvas not visible, skipping clicks');
+}
 
-    await canvas.click({ position: { x: 621, y: 586 } });
-    await canvas.click({ position: { x: 625, y: 596 } });
-    await canvas.click({ position: { x: 615, y: 586 } });
 
     await delay5Seconds();
 

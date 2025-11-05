@@ -49,8 +49,6 @@ reporter: [
   //   name: 'Mobile Edge',
   //   use: { ...devices['Pixel 5'], channel: 'msedge' },
   // },
-  
-
 
     // {
     //   name: 'Mobile Safari',

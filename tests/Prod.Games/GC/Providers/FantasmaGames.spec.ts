@@ -15,7 +15,7 @@ const gameIds = [
 async function playGames(page: Page) {
   for (const id of gameIds) {
     const gameUrl = `https://luckystake.com/game/real/${id}`;
-    console.log(`🎮 Открываем игру ${id} → ${gameUrl}`);
+    console.log(`Открываем игру ${id} → ${gameUrl}`);
 
     await page.goto(gameUrl);
     await delay5Seconds();
@@ -33,7 +33,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 40000 });
     } catch {
-      console.warn('⏱️ Network idle не достигнут за 40 сек, продолжаем...');
+      console.warn('Network idle не достигнут за 40 сек, продолжаем...');
     }
 
     await delay10Seconds();
@@ -44,7 +44,7 @@ async function playGames(page: Page) {
     const outerFrame = await outerFrameHandle?.contentFrame();
 
     if (!outerFrame) {
-      console.warn('❗ Не удалось получить внешний iframe');
+      console.warn(' Не удалось получить внешний iframe');
       continue;
     }
 
@@ -53,7 +53,7 @@ async function playGames(page: Page) {
     const innerFrame = await innerFrameHandle?.contentFrame();
 
     if (!innerFrame) {
-      console.warn('❗ Не удалось получить внутренний iframe');
+      console.warn(' Не удалось получить внутренний iframe');
       continue;
     }
 
@@ -61,8 +61,7 @@ async function playGames(page: Page) {
     const hasGameCanvas = await innerFrame.locator('#GameCanvas').count();
 
     if (hasGameCanvas > 0) {
-      console.log('✅ Найден #GameCanvas — кликаем несколько раз вокруг точки');
-
+      console.log('Найден #GameCanvas — кликаем несколько раз вокруг точки');
 
 
       const clickPositions = [
@@ -70,11 +69,12 @@ async function playGames(page: Page) {
         { x: 612, y: 593 },
         { x: 619, y: 610 },
         { x: 620, y: 600 },
-        { x: 626, y: 613 }
+        { x: 626, y: 613 },
+        { x: 652, y: 611 }
       ];
 
       for (const pos of clickPositions) {
-        console.log(`🖱️ Кликаем по x:${pos.x}, y:${pos.y}`);
+        console.log(`Кликаем по x:${pos.x}, y:${pos.y}`);
         await innerFrame.locator('#GameCanvas').click({
           position: pos,
           force: true
@@ -83,7 +83,7 @@ async function playGames(page: Page) {
       }
 
     } else {
-      console.log('⚠️ Элемент #GameCanvas не найден, пробуем canvas');
+      console.log('Элемент #GameCanvas не найден, пробуем canvas');
       await innerFrame.locator('canvas').click({
         position: { x: 617, y: 596 },
         force: true
@@ -99,7 +99,7 @@ async function playGames(page: Page) {
       contentType: 'image/png'
     });
 
-    console.log(`✅ Завершено выполнение для игры ${id}`);
+    console.log(` Завершено выполнение для игры ${id}`);
   }
 }
 
@@ -110,7 +110,7 @@ test('@ClickOnAdditionalStep Fantasma Games', async ({ context }) => {
   const homePage = new HomePage(page);
   const gamePage = new GamePage(page);
 
-  console.log('🚀 Запуск теста Fantasma Games');
+  console.log('Запуск теста Fantasma Games');
 
   // Авторизация
   await page.goto('https://luckystake.com/');

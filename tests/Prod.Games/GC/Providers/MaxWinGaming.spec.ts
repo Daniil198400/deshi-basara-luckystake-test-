@@ -36,7 +36,7 @@ async function clickOnStageOverlay(page: Page): Promise<boolean> {
     console.log(`#stageOverlay is found, starting ${clickPositions.length} positions`);
 
     for (const [index, pos] of clickPositions.entries()) {
-      console.log(`👉 Кликаем #${index + 1}: x=${pos.x}, y=${pos.y}`);
+      console.log(`Кликаем #${index + 1}: x=${pos.x}, y=${pos.y}`);
       await overlay.click({
         position: pos,
         force: true,
@@ -44,10 +44,10 @@ async function clickOnStageOverlay(page: Page): Promise<boolean> {
       await page.waitForTimeout(400); // небольшая пауза между кликами
     }
 
-    console.log('✅ all clickings #stageOverlay completed');
+    console.log('all clickings #stageOverlay completed');
     return true;
   } catch (err) {
-    console.warn('❗ error during #stageOverlay:', err);
+    console.warn('error during #stageOverlay:', err);
     return false;
   }
 }

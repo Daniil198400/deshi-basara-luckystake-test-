@@ -102,7 +102,7 @@ if (await closeBtn.isVisible()) {
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();
           await scImage.click({ force: true });
-          console.log('Клик по SC');
+          console.log('Клик по GC');
         }
       
         await delay5Seconds();

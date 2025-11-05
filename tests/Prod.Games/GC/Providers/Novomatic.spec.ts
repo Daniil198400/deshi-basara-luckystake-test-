@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../../pages/LoginPage';
 import { HomePage } from '../../../../pages/HomePage';
 import { GamePage } from '../../../../pages/ClickOnPlayPage';
@@ -7,21 +7,35 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 test('@ClickOnAdditionalStep Novomatic', async ({ context }) => {
     const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
+
+     /**
+ * Clicks the "close" button if it exists on the page.
+ * @param {import('@playwright/test').Page} page - The Playwright page object.
+ */
+async function clickCloseIfPresent(page: Page) {
+  const closeButton = page.getByRole('img', { name: 'close' });
+  if (await closeButton.count() > 0) {
+    await closeButton.first().click();
+    console.log('Close button clicked');
+  } else {
+    console.log('Close button not found, skipping click');
+  }
+}
 
     // autorization
     await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+
+    await page.getByTestId('login-header').click();
+    await page.getByTestId('email-input-login').click();
+
+    await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
+    await page.getByTestId('password-input-login').click();
+    await page.getByTestId('password-input-login').fill('Qwerty1!');
+    await page.getByTestId('submit-button-login').click();
     await delay5Seconds();
 
-const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
-if (await closeBtn.isVisible()) {
-  await closeBtn.click();
-}
+await clickCloseIfPresent(page);
+
     await delay5Seconds();
        const scImage = page.getByRole('img', { name: 'SC', exact: true });
         if (await scImage.isVisible()) {
@@ -47,7 +61,7 @@ if (await closeBtn.isVisible()) {
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('Network idle is not found after 30 сек, continue...');
     }
         await delay5Seconds();
     await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1').click({
@@ -80,7 +94,7 @@ await page.goto('https://luckystake.com/game/real/35552');
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 50 сек, continue...');
+      console.warn('Network idle is not found after 50 сек, continue...');
     }
         await delay10Seconds();
         await delay10Seconds();
@@ -112,7 +126,7 @@ await page.goto('https://luckystake.com/game/real/38798');
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('Network idle is not found after 30 сек, continue...');
     }
         await delay5Seconds();
 
@@ -178,7 +192,7 @@ await page.goto('https://luckystake.com/game/real/23978');
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('Network idle is not found after 30 сек, continue...');
     }
         await delay5Seconds();
     await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1').click({
@@ -195,10 +209,7 @@ await page.goto('https://luckystake.com/game/real/23978');
             contentType: 'image/png' 
         });
 
-
-
-
-
+        await delay5Seconds();
 
 //23969
 await page.goto('https://luckystake.com/game/real/23969');
@@ -215,7 +226,7 @@ await page.goto('https://luckystake.com/game/real/23969');
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('Network idle is not found after 30 сек, continue...');
     }
         await delay5Seconds();
     await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1').click({
@@ -253,7 +264,7 @@ await page.goto('https://luckystake.com/game/real/23969');
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+      console.warn('Network idle is not found after 30 сек, continue...');
     }
         await delay5Seconds();
     await page.locator('iframe[title="Real game"]').contentFrame().locator('#canvas1').click({

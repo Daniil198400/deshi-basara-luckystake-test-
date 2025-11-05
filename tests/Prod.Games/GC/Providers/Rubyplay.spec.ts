@@ -46,10 +46,10 @@ async function clickInsideIframe(page: Page) {
   for (const pos of clickPositions) {
     try {
       await canvas.click({ position: pos });
-      console.log(`🖱️ Клик по координатам: x=${pos.x}, y=${pos.y}`);
+      console.log(`Клик по координатам: x=${pos.x}, y=${pos.y}`);
       await page.waitForTimeout(1000 + Math.floor(Math.random() * 1000)); // пауза 1–2 секунды
     } catch (err) {
-      console.warn(`⚠️ Ошибка при клике по координатам (${pos.x}, ${pos.y}):`, err);
+      console.warn(`Ошибка при клике по координатам (${pos.x}, ${pos.y}):`, err);
     }
   }
 }
@@ -75,7 +75,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 40000 });
     } catch {
-      console.warn('⏱️ Network idle did not appeared after 50 sec, continue...');
+      console.warn(' Network idle did not appeared after 50 sec, continue...');
     }
 
     await delay10Seconds();
@@ -120,7 +120,7 @@ if (await closeBtn.isVisible()) {
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();
           await scImage.click({ force: true });
-          console.log('Клик по SC');
+          console.log('click on GC');
         }
       
     await delay5Seconds();
