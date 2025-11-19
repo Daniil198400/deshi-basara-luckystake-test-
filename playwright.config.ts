@@ -41,10 +41,10 @@ reporter: [
   //   name: 'Mobile Chrome Official',  // Chrome с channel
   //   use: { ...devices['Pixel 5'], channel: 'chrome' },
   // },
-  // {
-  //   name: 'Mobile Chromium',        // чистый Chromium
-  //   use: { ...devices['Pixel 5'] },
-  // },
+//   {
+//     name: 'Mobile Chromium',        // чистый Chromium
+//     use: { ...devices['Pixel 5'] },
+//  },
   // {
   //   name: 'Mobile Edge',
   //   use: { ...devices['Pixel 5'], channel: 'msedge' },
@@ -60,10 +60,10 @@ reporter: [
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    //{
+     // name: 'Google Chrome',
+     //  use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    //},
 
   // ]
   // webServer: {

@@ -143,9 +143,9 @@ async function playGames(page: Page) {
     console.log(` Игра ${id} завершена`);
     await delay5Seconds();
   }
+      await delay5Seconds();
 }
 
-await delay5Seconds();
 
 
 test('@providersDev Spinomenal', async ({ page }) => {

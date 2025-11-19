@@ -6,14 +6,14 @@ import { delay10Seconds, delay5Seconds } from '../../../../../utils/utils';
 
 // Массив ID игр
 const gameIds = [ 
-28568, 28534, 28563, 28550, 28547, 21067, 28616, 
+ 28534, 28563, 28550, 28547, 21067, 28616, 
   28545, 28561, 28613, 28606, 28565, 28603, 28596, 40489, 40490, 38799, 35543,
   28539, 28569, 28570, 28601, 28619, 28559, 28587, 28618, 28605, 28614,
   28620, 28617, 28590, 28574, 28543, 28611, 28583, 28535, 28621, 28579,
   28554, 28542, 28584, 28536, 28586, 28580, 28576, 28532, 28600, 28564,
   28602, 28567, 28604, 28571, 28558, 28560, 28589, 28615, 28577, 28562, 
   28544, 28599, 28537, 28578, 28573, 28588, 28612, 28607, 28549, 
-  28609, 28568, 28534, 28563, 28555, 28551, 28550, 
+  28609, 28568,  
 ];
 
 
@@ -705,6 +705,191 @@ test.info().attach(`game_28547_after_click`, {
   contentType: 'image/png'
 });
 await delay5Seconds();
+
+
+
+//28568
+
+await page.goto('https://luckystake.com/game/real/28568');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28568_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('Click to continue').click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28568_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+//28550
+
+await page.goto('https://luckystake.com/game/real/28550');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28550_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('PlaceHolder').click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28550_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+
+//28551
+
+await page.goto('https://luckystake.com/game/real/28551');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28551_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'START' }).click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28551_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+
+
+//28555
+
+await page.goto('https://luckystake.com/game/real/28555');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28555_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByRole('button', { name: 'TWO WAYS TO WIN FREE SPINS!' }).click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28555_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+//28563
+
+await page.goto('https://luckystake.com/game/real/28563');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28563_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('CLICK TO CONTINUE').click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28563_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+
+
+
+//28534
+
+await page.goto('https://luckystake.com/game/real/28534');
+await delay5Seconds();
+await page.getByRole('button', { name: 'Play now' }).click();
+await delay10Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28534_before_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+try {
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+    } catch {
+      console.warn('Network idle не наступил за 30 сек, продолжаем...');
+    }
+await delay5Seconds();
+
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#game').contentFrame().getByText('Click to continue').click();
+
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+test.info().attach(`game_28534_after_click`, {
+  body: screenshot,
+  contentType: 'image/png'
+});
+await delay5Seconds();
+
+
+
+
+
 
 await playGames(page);
 

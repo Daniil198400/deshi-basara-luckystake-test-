@@ -156,7 +156,7 @@
   
 
 
-// test('@providersDev Should BE TESTED MANUALLY Octoplay', async ({ page }) => {
+// test('@providersDev NO GAMES FOUND Octoplay', async ({ page }) => {
 //      /**
 //  * Clicks the "close" button if it exists on the page.
 //  * @param {import('@playwright/test').Page} page - The Playwright page object.
@@ -183,6 +183,8 @@
 //   await delay5Seconds();
 // await clickCloseIfPresent(page); 
 // await delay5Seconds();
+//   await page.goto('https://luckystake.dev/store');
+//     await page.goto('https://luckystake.dev/');
 //   const scImage = page.getByRole('img', { name: 'SC', exact: true });
 //         if (await scImage.isVisible()) {
 //           await scImage.scrollIntoViewIfNeeded();
