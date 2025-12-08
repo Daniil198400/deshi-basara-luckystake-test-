@@ -55,14 +55,14 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake payment test', async ({ page }) => {
+test('@Regress luckystake shop test', async ({ page }) => {
 
 
 await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -75,4 +75,33 @@ let screenshot = await page.screenshot({ fullPage: true });
 
 await delay5Seconds();
 
+await page.goto('https://luckystake.dev/store');
+
+
+await page.getByTestId('daily-rewards-button-shop').click();
+await page.getByRole('button', { name: 'Claim', exact: true }).click();
+await delay5Seconds();
+screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`daily reward`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
+    await delay5Seconds();
+
+await page.getByRole('img', { name: 'close' }).click();
+
+await page.getByRole('button', { name: '$4.99' }).click();
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^Credit Card$/ }).first().click();
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).click();
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('333');
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().getByRole('button', { name: 'Deposit' }).click();
+
+screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`purchase is succesful`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
+
+await delay5Seconds();
+  
 });

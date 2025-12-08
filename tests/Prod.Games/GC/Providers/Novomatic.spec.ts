@@ -28,7 +28,7 @@ async function clickCloseIfPresent(page: Page) {
     await page.getByTestId('login-header').click();
     await page.getByTestId('email-input-login').click();
 
-    await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
+    await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
     await page.getByTestId('password-input-login').click();
     await page.getByTestId('password-input-login').fill('Qwerty1!');
     await page.getByTestId('submit-button-login').click();
@@ -37,6 +37,8 @@ async function clickCloseIfPresent(page: Page) {
 await clickCloseIfPresent(page);
 
     await delay5Seconds();
+        await page.goto('https://luckystake.com/');
+
        const scImage = page.getByRole('img', { name: 'SC', exact: true });
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();

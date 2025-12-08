@@ -24,21 +24,25 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
 
   // --- открываем сайт ---
   await page.goto('https://luckystake.dev/');
-  await homePage.closePopupIfVisible();
 
-  let screenshot = await page.screenshot({ fullPage: true });
- 
-  // --- логин ---
-  await loginPage.openLoginForm();
-  await loginPage.login('dksld1@gmail.com', 'Qwerty1!!');
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
+
+await delay5Seconds();
+await page.getByRole('img', { name: 'close' }).click();
+await delay5Seconds();
 
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+        console.warn(' Network idle is not found after 30 сек, continue...');
       }
       await delay5Seconds();
-      screenshot = await page.screenshot({ fullPage: true });
+     let  screenshot = await page.screenshot({ fullPage: true });
       test.info().attach(`after_login`, {
         body: screenshot,
         contentType: 'image/png',
@@ -235,25 +239,25 @@ try {
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
   
-  await page.locator('div:nth-child(2) > a:nth-child(4)').click();
-  try {
-        await page.waitForLoadState('networkidle', { timeout: 10000 });
-      } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
-      }
-      await delay5Seconds();
-      screenshot = await page.screenshot({ fullPage: true });
-      test.info().attach(`Live Games`, {
-        body: screenshot,
-        contentType: 'image/png',
-      }); 
-  await page.getByRole('button').filter({ hasText: /^$/ }).click();
+  // await page.locator('div:nth-child(2) > a:nth-child(4)').click();
+  // try {
+  //       await page.waitForLoadState('networkidle', { timeout: 10000 });
+  //     } catch {
+  //       console.warn('Network idle is not found after 30 сек, continue...');
+  //     }
+  //     await delay5Seconds();
+  //     screenshot = await page.screenshot({ fullPage: true });
+  //     test.info().attach(`Live Games`, {
+  //       body: screenshot,
+  //       contentType: 'image/png',
+  //     }); 
+  // await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
   await page.locator('a:nth-child(5)').click();
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+        console.warn(' Network idle is not found after 30 сек, continue...');
       }
       await delay5Seconds();
       screenshot = await page.screenshot({ fullPage: true });

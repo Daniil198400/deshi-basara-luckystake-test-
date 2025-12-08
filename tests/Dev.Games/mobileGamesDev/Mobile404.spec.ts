@@ -40,13 +40,6 @@ async function playGames(page: Page) {
 
         await delay5Seconds();
 
-        // click on Play now
-        await page.getByRole('button', { name: 'Play now' }).click();
-        await delay5Seconds();
-
-        // waiting
-        await delay10Seconds();
-
         // второй скриншот
         screenshot = await page.screenshot({ fullPage: true });
         test.info().attach(`game_${id}_after_wait`, { 
@@ -63,41 +56,6 @@ async function playGames(page: Page) {
             console.log(`Explore games button for game ${id} not found, continuing...`);
         }
 
-        // Click on buy button
-        const buyButton = page.getByRole('button', { name: 'buy' });
-        await delay5Seconds();
-
-        if (await buyButton.isVisible({ timeout: 1000 })) {
-            await buyButton.click();
-            await delay5Seconds();
-
-            // Screenshot after clicking buy button
-            screenshot = await page.screenshot();
-            test.info().attach(`game_${id}_buy_button`, { 
-                body: screenshot, 
-                contentType: 'image/png' 
-            });
-
-            const priceButton = page.getByRole('button', { name: '$19.99' });
-            if (await priceButton.isVisible({ timeout: 3000 })) {
-                await priceButton.click();
-                await delay10Seconds();
-
-                const confirmButton = page.getByRole('button').nth(2);
-                if (await confirmButton.isVisible({ timeout: 3000 })) {
-                    await confirmButton.click();
-                } else {
-                    console.log(`Confirm button for game ${id} is not available, skipping...`);
-                }
-            }
-        }
-
-        // click on Back button
-        const backButton = page.getByTestId('ArrowBackIosIcon');
-        if (await backButton.isVisible({ timeout: 3000 })) {
-            await backButton.click();
-        }
-
         await delay5Seconds();
     }
 }
@@ -108,13 +66,18 @@ test('wrong ID', async ({ context }) => {
     const homePage = new HomePage(page);
     const gamePage = new GamePage(page);
 
-    // authorization
-    await page.goto('https://luckystake.dev/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('dksld@gmail.com', 'Qwerty1!!');
-    
-    await delay5Seconds();
+  await page.goto('https://luckystake.dev/');
+
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
+
+await delay5Seconds();
+await page.getByRole('img', { name: 'close' }).click();
+await delay5Seconds();
 
     // launching the games
     await playGames(page);

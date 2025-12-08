@@ -7,7 +7,7 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: isCI,
   retries: 0,
-  workers: 4,
+  workers: 1,
 reporter: [
   ['list'],
   ['html', { outputFolder: 'playwright-report', open: 'never' }],
@@ -60,10 +60,10 @@ reporter: [
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    //{
-     // name: 'Google Chrome',
-     //  use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    //},
+    // {
+    //  name: 'Google Chrome',
+    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    // },
 
   // ]
   // webServer: {

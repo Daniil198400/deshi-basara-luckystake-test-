@@ -51,20 +51,20 @@ async function clickCanvasPoints(page: Page) {
       const maybeInnerFrame = await innerHandle.contentFrame();
       if (maybeInnerFrame) {
         gameFrame = maybeInnerFrame;
-        console.log('📦 Найден вложенный iframe #game');
+        console.log(' Найден вложенный iframe #game');
       } else {
-        console.log('ℹ️ #game не является iframe, кликаем внутри outerFrame');
+        console.log(' #game is not found');
       }
     }
   } catch {
-    console.log('⚠️ #game не найден, используем outerFrame');
+    console.log(' #game не найден, используем outerFrame');
   }
 
   // Ожидание canvas
   const canvas = gameFrame.locator('canvas');
   await canvas.first().waitFor({ timeout: 20000 });
 
-  console.log('🎮 Найден canvas. Начинаем серию кликов...');
+  console.log('Найден canvas. Начинаем серию кликов...');
 
   // Кликаем по 10 точкам подряд
   for (let i = 0; i < canvasPoints.length && i < 10; i++) {
@@ -104,7 +104,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 35000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил, продолжаем...');
+      console.warn(' Network idle не наступил, продолжаем...');
     }
 
     await delay10Seconds();
@@ -118,31 +118,26 @@ async function playGames(page: Page) {
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicks`, { body: screenshot, contentType: 'image/png' });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(` Игра ${id} завершена`);
     await delay5Seconds();
   }
 }
 
-await delay5Seconds();
 
 // Spinomenal
-test('@ClickOnAdditionalStepMobile Spinomenal', async ({ context }) => {
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const gamePage = new GamePage(page);
+test('@ClickOnAdditionalStepMobile Spinomenal', async ({ page }) => {
+ await page.goto('https://luckystake.com/');
 
-  console.log('🚀 Запуск теста Spinomenal');
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+
+    await delay5Seconds();
 
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
-if (await closeBtn.isVisible()) {
-  await closeBtn.click();
-}
-    await delay5Seconds();
        const scImage = page.getByRole('img', { name: 'SC', exact: true });
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();

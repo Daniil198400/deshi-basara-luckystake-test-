@@ -30,7 +30,7 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
  
   // --- логин ---
   await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
 
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });

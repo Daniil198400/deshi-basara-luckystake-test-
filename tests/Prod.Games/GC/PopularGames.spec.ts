@@ -87,17 +87,19 @@
 //     }
 // }
 
-// test('@popular Popular games', async ({ context }) => {
-//     const page = await context.newPage();
-//     const loginPage = new LoginPage(page);
-//     const homePage = new HomePage(page);
-//     const gamePage = new GamePage(page);
+// test('@popular Popular games', async ({ page }) => {
+//  await page.goto('https://luckystake.com/');
 
-//     // autorization
-//     await page.goto('https://luckystake.com/');
-//     await homePage.closePopupIfVisible();
-//     await loginPage.openLoginForm();
-//     await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+//   await page.getByTestId('login-header').click();
+//   await page.getByTestId('email-input-login').click();
+//   await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+//   await page.getByTestId('password-input-login').click();
+//   await page.getByTestId('password-input-login').fill('Qwerty1!');
+//   await page.getByTestId('submit-button-login').click();
+
+//     await delay5Seconds();
+
+//   await page.goto('https://luckystake.com/');
 //     await page.getByText('Social Games').click();
 //     await page.getByRole('link', { name: 'Popular' }).click();
 //     await delay5Seconds();

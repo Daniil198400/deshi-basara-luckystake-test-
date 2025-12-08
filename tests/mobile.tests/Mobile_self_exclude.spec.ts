@@ -100,6 +100,8 @@ test('@Regress Full Registration with pay card', async ({ page }) => {
 //   await page.getByTestId('state-select-complete-profile').click();
 //   await page.getByText('Arizona').click();
 
+await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+
 await delay5Seconds();
 await page.getByTestId('state-select-complete-profile').click();
 await delay5Seconds();
@@ -123,34 +125,15 @@ await delay5Seconds();
   });
   await delay5Seconds();
 
+  await page.goto('https://luckystake.com/');
 
-  
-  await page.getByRole('img', { name: 'close' }).click();
-  await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
-  
+await page.getByRole('button', { name: 'Account' }).click();
+await page.getByText('Player Safety').nth(2).click();
+await page.getByRole('link', { name: 'Take a Break' }).click();
+await page.locator('div').filter({ hasText: /^30 Days$/ }).getByRole('button').click();
+await page.getByRole('button', { name: 'Submit' }).click();
+await page.getByRole('button', { name: 'Submit' }).click();
 
-  await page.locator('#scrollBait__scrollable_layout').getByRole('link', { name: 'Player Safety' }).click();
-  await delay5Seconds();
-  await page.getByRole('link', { name: 'Take a Break' }).click();
-  await delay5Seconds();
-
-  
-
-
-
-  await page.locator('div').filter({ hasText: /^30 Days$/ }).getByRole('button').click();
-  await delay5Seconds();
-  await page.getByRole('button', { name: 'Submit' }).click();
-    await delay5Seconds();
-  await page.getByRole('button', { name: 'Submit' }).click();
-
-  await delay5Seconds();
-  screenshot = await page.screenshot({ fullPage: true });
-  test.info().attach(`after submit button`, {
-    body: screenshot,
-    contentType: 'image/png',
-  });
-    await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });
   test.info().attach(`user is self-excluded`, {
     body: screenshot,

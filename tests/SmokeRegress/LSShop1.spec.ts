@@ -22,7 +22,6 @@ test('@Regress shop', async ({ context }) => {
 
   await page.goto('https://luckystake.dev/');
 
-
   await page.getByTestId('login-header').click();
   await page.getByTestId('email-input-login').click();
   await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
@@ -36,6 +35,7 @@ test('@Regress shop', async ({ context }) => {
 
   await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
 await delay5Seconds();
+  await page.goto('https://luckystake.dev/');
 
   await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
   await delay5Seconds();

@@ -61,6 +61,14 @@ await page.getByTestId('daily-rewards-button-shop').click();
 await delay5Seconds();
 
 await page.getByRole('button', { name: 'Claim', exact: true }).click();
+await delay5Seconds();
+let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`claim`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
+await delay5Seconds();
+
 await page.getByRole('img', { name: 'close' }).click();
 await delay5Seconds();
 });

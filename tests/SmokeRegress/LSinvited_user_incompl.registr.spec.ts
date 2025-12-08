@@ -89,7 +89,7 @@ test('@Regress Incompleted registration of invited user', async ({ page }) => {
       });
   
   await delay5Seconds();
-
+  await page.goto('https://luckystake.dev/');
 
   await page.getByRole('button', { name: 'Log out' }).click();
   await page.getByRole('button', { name: 'Log out' }).nth(1).click();
@@ -105,23 +105,8 @@ await page.getByTestId('email-input-signup').fill(generateEmail());
   await page.getByTestId('password-input-signup').fill('Qwerty1!');
   await page.locator('label').filter({ hasText: 'I am at least 18 years old' }).locator('span').click();
   await page.getByTestId('submit-button-signup').click();
-  await page.getByTestId('first-name-input-complete-profile').click();
-  await page.getByTestId('first-name-input-complete-profile').fill('upce');
-  await page.getByTestId('last-name-input-complete-profile').click();
-  await page.getByTestId('last-name-input-complete-profile').fill('ff');
-  await delay5Seconds();
-  await page.getByTestId('state-select-complete-profile').click();
-  await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
-  await delay5Seconds();
-  await page.getByTestId('month-select-complete-profile').click();
-  await page.getByRole('listitem').filter({ hasText: 'February' }).click();
-  await page.getByTestId('day-input-complete-profile').click();
-  await page.getByTestId('day-input-complete-profile').fill('22');
-  await page.getByTestId('year-input-complete-profile').click();
-  await page.getByTestId('year-input-complete-profile').fill('1999');
-  await page.getByTestId('submit-button-complete-profile').click();
   
-  await delay10Seconds();
+  await delay5Seconds();
 
   await handleAllPopups(page, 4, 1000);
 
@@ -138,3 +123,5 @@ screenshot = await page.screenshot({ fullPage: true });
 
   
 });
+
+

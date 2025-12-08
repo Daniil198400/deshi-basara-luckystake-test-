@@ -41,7 +41,7 @@ async function playGames(page: Page) {
     try {
       await page.waitForLoadState('networkidle', { timeout: 100000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 100 сек, continue...');
+      console.warn('Network idle is not found after 100 сек, continue...');
     }
 
     await delay10Seconds();
@@ -49,13 +49,13 @@ async function playGames(page: Page) {
     // Получаем iframe и кнопку "NO" внутри
     const outerFrame = await page.locator('iframe[title="Real game"]').contentFrame();
     if (!outerFrame) {
-      console.warn('⚠️ Не найден iframe[title="Real game"]');
+      console.warn(' Не найден iframe[title="Real game"]');
       continue;
     }
 
     const gameFrame = await outerFrame.locator('#game').contentFrame();
     if (!gameFrame) {
-      console.warn('⚠️ Не найден внутренний iframe #game');
+      console.warn(' Не найден внутренний iframe #game');
       continue;
     }
 
@@ -90,23 +90,19 @@ async function playGames(page: Page) {
   }
 }
 
-test('@ClickOnAdditionalStepMobile 4ThePlayer', async ({ context }) => {
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const gamePage = new GamePage(page);
+test('@ClickOnAdditionalStepMobile 4ThePlayer', async ({ page }) => {
+   await page.goto('https://luckystake.com/');
 
-  // authorization
-  await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
-const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
-if (await closeBtn.isVisible()) {
-  await closeBtn.click();
-}
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+
     await delay5Seconds();
+
+  await page.goto('https://luckystake.com/');
        const scImage = page.getByRole('img', { name: 'GC', exact: true });
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();

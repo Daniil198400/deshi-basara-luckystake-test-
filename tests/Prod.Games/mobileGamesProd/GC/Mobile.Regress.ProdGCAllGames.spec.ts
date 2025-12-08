@@ -222,14 +222,18 @@ test.info().attach(`game_${id}_after_price_and_bullets`, {
 // -----------------
 // Main Test
 test('MOBILE PROD, GC ONLY, ALL GAMES', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
+ await page.goto('https://luckystake.com/');
+
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+
+    await delay5Seconds();
 
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
   
   const oids = await fetchAllOids();
   if (oids.length === 0) {

@@ -64,7 +64,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress Full Registration with pay card', async ({ page }) => {
+test('@Regress cool off', async ({ page }) => {
   // ---------- Генерим и запоминаем e-mail текущего прогона ----------
   const registeredEmail = generateEmail();
   const registeredPassword = 'Qwerty1!';
@@ -93,28 +93,18 @@ test('@Regress Full Registration with pay card', async ({ page }) => {
 
   await page.getByTestId('submit-button-signup').click();
 
-  await page.getByTestId('first-name-input-complete-profile').click();
-  await page.getByTestId('first-name-input-complete-profile').fill('up');
-  await page.getByTestId('last-name-input-complete-profile').click();
-  await page.getByTestId('last-name-input-complete-profile').fill('ce');
-//   await page.getByTestId('state-select-complete-profile').click();
-//   await page.getByText('Arizona').click();
+//   await page.getByTestId('first-name-input-complete-profile').click();
+//   await page.getByTestId('first-name-input-complete-profile').fill('up');
+//   await page.getByTestId('last-name-input-complete-profile').click();
+//   await page.getByTestId('last-name-input-complete-profile').fill('ce');
+// //   await page.getByTestId('state-select-complete-profile').click();
+// //   await page.getByText('Arizona').click();
 
-await delay5Seconds();
-await page.getByTestId('state-select-complete-profile').click();
-await delay5Seconds();
-await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
-await delay5Seconds();
-
-
-  await page.getByTestId('month-select-complete-profile').click();
-  await page.getByRole('listitem').filter({ hasText: 'February' }).click();
-  await page.getByTestId('day-input-complete-profile').click();
-  await page.getByTestId('day-input-complete-profile').fill('22');
-  await page.getByTestId('year-input-complete-profile').click();
-  await page.getByTestId('year-input-complete-profile').fill('1999');
-  await page.getByTestId('submit-button-complete-profile').click();
-  await delay5Seconds();
+// await delay5Seconds();
+// await page.getByTestId('state-select-complete-profile').click();
+// await delay5Seconds();
+// await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
+// await delay5Seconds();
 
   screenshot = await page.screenshot({ fullPage: true });
   test.info().attach(`registration is completed`, {
@@ -123,10 +113,10 @@ await delay5Seconds();
   });
   await delay5Seconds();
 
-
+  await page.goto('https://luckystake.com/');
   
-  await page.getByRole('img', { name: 'close' }).click();
-  await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+  // await page.getByRole('img', { name: 'close' }).click();
+  // await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
   
 
   await page.locator('#scrollBait__scrollable_layout').getByRole('link', { name: 'Player Safety' }).click();
@@ -189,5 +179,7 @@ await delay5Seconds();
 //   await page.getByRole('img', { name: 'close' }).click().catch(() => {});
 //   await delay5Seconds();
 });
+
+
 
 

@@ -62,7 +62,7 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld111@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();

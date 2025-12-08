@@ -39,7 +39,7 @@ async function safeClick(locator: import('@playwright/test').Locator) {
   try {
     if (await locator.count() > 0 && await locator.first().isVisible()) {
       await locator.first().click({ timeout: 2000 }).catch(() => {});
-      console.log(`✅ Clicked: ${await locator.first().toString()}`);
+      console.log(`Clicked: ${await locator.first().toString()}`);
       return true;
     }
   } catch {}
@@ -49,7 +49,7 @@ async function safeClick(locator: import('@playwright/test').Locator) {
 // Функция, которая пытается закрыть все окна до 4 раз подряд
 export async function handleAllPopups(page: import('@playwright/test').Page, attempts = 4, delayMs = 1000) {
   for (let i = 0; i < attempts; i++) {
-    console.log(`🌀 Попытка ${i + 1} закрыть модалки...`);
+    console.log(`Попытка ${i + 1} закрыть модалки...`);
 
     // 1️⃣ close icon
     await safeClick(page.getByRole('img', { name: /close/i }));
@@ -68,13 +68,13 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
     await page.waitForTimeout(delayMs);
   }
 
-  console.log('✅ Все попытки закрытия окон завершены');
+  console.log(' все попытки закрытия окон завершены');
 }
 
 
 
 
-test('@Regress Full Registration with pay card', async ({ page }) => {
+test('@Regress Full Registration', async ({ page }) => {
 
 
 await page.goto('https://luckystake.dev/');
@@ -86,6 +86,13 @@ await page.getByTestId('password-input-signup').click();
 await page.getByTestId('password-input-signup').fill('Qwerty1!');
 await page.locator('label').filter({ hasText: 'I am at least 18 years old' }).locator('span').click();
 await page.getByTestId('submit-button-signup').click();
+await delay10Seconds(); 
+await handleAllPopups(page, 4, 1000);
+await delay5Seconds(); 
+
+await page.goto('https://luckystake.dev/');
+
+await page.locator('.WizNavbarContent_grid__IMRrU > div > .WizGameCard_container_gameImage__cFsR9').first().click();
 
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('up');

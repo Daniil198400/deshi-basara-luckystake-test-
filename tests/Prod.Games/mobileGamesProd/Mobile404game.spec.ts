@@ -95,7 +95,7 @@ test('wrong ID', async ({ context }) => {
     await page.goto('https://luckystake.com/');
     await homePage.closePopupIfVisible();
     await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
+    await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
     
     await delay5Seconds();
 

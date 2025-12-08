@@ -30,40 +30,31 @@ const test = base.extend<{}>({
   },
 });
 
-test('@mobile Full Registration with pay card', async ({ context }) => {
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const randomEmail = generateRandomEmail();
-  const userForm = new UserFormHelper(page);
-  const paymentPage = new PaymentForm(page);
+test('@Regress searching popular', async ({ page }) => {
 
-//FILLING FIRST USER FORM
+
+await page.goto('https://luckystake.dev/');
+
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
+await delay5Seconds();
+let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`login is completed`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
+
+await delay5Seconds();
+
     await page.goto('https://luckystake.dev/');
-    await homePage.closePopupIfVisible();
-    await clickButton(page, 'JOIN NOW');
-    await fillField(page, 'Email', randomEmail);
-    await fillField(page, 'Password', 'password1');
-    await clickCheckboxByLabel(page, 'I am at least 18 years old');
-    await clickButton(page, 'Continue');
-  
-//FILLING SECOND USER FORM
-  await userForm.fillUserForm(
-    'Ffss',
-    'fldsl',
-    'Colorado',
-    'March',
-    '20',
-    '2002'
-  );
 
+  await page.getByRole('button').filter({ hasText: 'Search' }).click();
+  await page.getByRole('button', { name: 'Providers 21' }).click();
   await delay5Seconds();
-
-
-await page.getByRole('img', { name: 'Extra Gems' }).first().click();
-await page.getByRole('button', { name: 'Play now' }).click();
-await delay5Seconds();
-await delay5Seconds();
-await page.screenshot({ path: 'screenshots/login_searching.png', fullPage: true });
-await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
+  await page.getByRole('button', { name: 'Categories' }).click();
+  await delay5Seconds();
 });

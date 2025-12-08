@@ -70,15 +70,15 @@ async function clickCanvasPoints(page: Page) {
   for (let i = 0; i < canvasPoints.length && i < 10; i++) {
     const { x, y } = canvasPoints[i];
     try {
-      console.log(`🖱️ Клик по canvas (${x}, ${y})`);
+      console.log(` Клик по canvas (${x}, ${y})`);
       await canvas.first().click({ position: { x, y }, force: true });
       await page.waitForTimeout(1000);
     } catch (err) {
-      console.warn(`⚠️ Ошибка при клике на (${x}, ${y}): ${err}`);
+      console.warn(`Ошибка при клике на (${x}, ${y}): ${err}`);
     }
   }
 
-  console.log('✅ Завершено 10 кликов по canvas');
+  console.log(' Завершено 10 кликов по canvas');
 }
 
 // 🔹 Основная функция прохождения игр
@@ -98,13 +98,13 @@ async function playGames(page: Page) {
     try {
       await page.getByRole('button', { name: 'Play now' }).click({ force: true });
     } catch {
-      console.warn('⚠️ Не удалось кликнуть по кнопке Play now');
+      console.warn('Не удалось кликнуть по кнопке Play now');
     }
 
     try {
       await page.waitForLoadState('networkidle', { timeout: 35000 });
     } catch {
-      console.warn('⏱️ Network idle не наступил, продолжаем...');
+      console.warn('Network idle не наступил, продолжаем...');
     }
 
     await delay10Seconds();
@@ -118,31 +118,26 @@ async function playGames(page: Page) {
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_clicks`, { body: screenshot, contentType: 'image/png' });
 
-    console.log(`✅ Игра ${id} завершена`);
+    console.log(` Игра ${id} завершена`);
     await delay5Seconds();
   }
 }
 
-await delay5Seconds();
 
 // Spinomenal
-test('@ClickOnAdditionalStepMobile Spinomenal', async ({ context }) => {
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const gamePage = new GamePage(page);
+test('@ClickOnAdditionalStepMobile Spinomenal', async ({ page }) => {
+  await page.goto('https://luckystake.com/');
 
-  console.log('🚀 Запуск теста Spinomenal');
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+
+    await delay5Seconds();
 
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
-if (await closeBtn.isVisible()) {
-  await closeBtn.click();
-}
-    await delay5Seconds();
        const scImage = page.getByRole('img', { name: 'GC', exact: true });
         if (await scImage.isVisible()) {
           await scImage.scrollIntoViewIfNeeded();

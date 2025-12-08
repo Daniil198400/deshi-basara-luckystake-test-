@@ -87,18 +87,18 @@ async function playGames(page: Page) {
 
 test('wrong ID', async ({ context }) => {
     const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
+
+
 
     // autorization
     await page.goto('https://luckystake.com/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-    await page.getByText('Social Games').click();
-    await page.getByRole('link', { name: 'Providers' }).click();
-    await page.getByRole('link', { name: '4ThePlayer' }).click();
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
+
     await delay5Seconds();
 
     // launching the games

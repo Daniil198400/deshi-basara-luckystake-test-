@@ -13,25 +13,21 @@ const test = base.extend<{}>({
 
 test('@CheckPresenceOfGames Prod Checking All Games Sections', async ({ context }) => {
   const page = await context.newPage();
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-
-  // --- открываем сайт ---
+  
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
+
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
 
   let screenshot = await page.screenshot({ fullPage: true });
- 
-  // --- логин ---
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
-
-  screenshot = await page.screenshot({ fullPage: true });
   test.info().attach('after_login', {
     body: screenshot,
     contentType: 'image/png',
   });
+
+    await page.goto('https://luckystake.com/');
 
   // --- Social Games -> Popular ---
   await page.getByText('Social Games').click();

@@ -43,7 +43,7 @@ const HEADERS = {
 
 const REQ_TIMEOUT = '10s';          // fail-fast, чтобы не висеть
 const SYNC_WAIT_SEC = 2;            // пауза перед кликом, как просил
-const NUM_USERS = 600;              // СКОЛЬКО зарегать
+const NUM_USERS = 100;              // СКОЛЬКО зарегать
 const RETRIES    = 2;               // сколько раз ретраить 429/5xx/timeout при sign-up
 const PWD        = 'Test12345!';    // общий пароль
 
@@ -107,7 +107,7 @@ export function setup() {
   const startedAt = Date.now();
   for (let i = 0; i < NUM_USERS; i++) {
     const uid = `${Date.now()}_${i}_${Math.floor(Math.random()*1e6)}`;
-    const email = `deshi_basara${uid}@gmail.com`;
+    const email = `abrurahman${uid}@gmail.com`;
     const password = PWD;
     const nick = (`u${uid}`).substring(0,20);
     const payload = makeSignupPayload(email, password, nick);

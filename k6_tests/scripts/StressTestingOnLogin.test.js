@@ -14,15 +14,14 @@ const PASSWORD = 'Qwerty1!';
 const LOGIN_URL = 'https://api.luckystake.com/player/crm/login';
 const GAME_URL = 'https://api.luckystake.com/games/link/35816?platform=2&locale=en&country_code=US&currency=GC&c=Popular&p=2';
 
-// Настройте под ваш запуск: должен совпадать с options.vus
 const TARGET_TOKENS = 50;
 
 export const options = {
   vus: 30,
   duration: '1m30s',
-  // можно заменить на stages и thresholds по вкусу
 };
 
+// ------------ LOGIN ONE ACCOUNT ------------
 function loginOnce(account) {
   const payload = JSON.stringify({ email: account, password: PASSWORD });
   const headers = {
@@ -34,12 +33,14 @@ function loginOnce(account) {
   return http.post(LOGIN_URL, payload, { headers });
 }
 
+// ------------ SETUP: CREATE TOKENS ------------
 export function setup() {
   const tokens = [];
   let accountIndex = 0;
   const maxAttemptsPerToken = 3;
 
-  // Создаём токены выбранного количества TARGET_TOKENS
+  console.log(`\n===== SETUP STARTED: Trying to create ${TARGET_TOKENS} tokens =====`);
+
   while (tokens.length < TARGET_TOKENS) {
     const account = ACCOUNTS[accountIndex % ACCOUNTS.length];
     let attempt = 0;
@@ -50,65 +51,53 @@ export function setup() {
       const res = loginOnce(account);
 
       if (res.status === 200 || res.status === 201) {
-        // Попытка достать токен (проверь реальное имя поля)
         let token = null;
         try {
-          token = res.json('token') || res.json('accessToken') || null;
-        } catch (e) {
-          token = null;
-        }
+          const json = res.json();
+          token = json.token || json.accessToken || null;
+        } catch (_) {}
 
         if (token) {
           tokens.push(token);
           success = true;
-          // лог для диагностики
-          console.log(`SETUP: token ${tokens.length} created for account ${account} (attempt ${attempt})`);
+
+          console.log(`✔️ SETUP: LOGIN OK → ${account} (attempt ${attempt}) -> Token #${tokens.length}`);
         } else {
-          console.log(`SETUP WARN: login succeeded but token not found for ${account} (attempt ${attempt})`);
+          console.log(`⚠️ SETUP WARN: login OK but NO TOKEN → ${account} (attempt ${attempt})`);
         }
+
       } else {
-        console.log(`SETUP WARN: login failed for ${account} status=${res.status} (attempt ${attempt})`);
+        console.log(`❌ SETUP LOGIN FAIL → ${account} | status=${res.status} (attempt ${attempt})`);
       }
 
-      // небольшая пауза между ретраями, чтобы не спамить авторизацию
-      if (!success) {
-        // sleep здесь в setup() допустим
-        sleep(0.2);
-      }
+      if (!success) sleep(0.2);
     }
 
-    // Если не удалось получить токен для текущего аккаунта за maxAttemptsPerToken,
-    // просто переходим к следующему аккаунту (чтобы не застрять на одном аккаунте)
     accountIndex++;
 
-    // Безопасный выход при недостатке аккаунтов: если цикл долго не может набрать токены,
-    // избегаем бесконечного цикла — после попытки по всем аккаунтам выходим.
-    if (accountIndex >= ACCOUNTS.length && tokens.length === 0) {
-      console.log('SETUP ERROR: no tokens could be created from any account. Exiting setup with empty tokens.');
-      break;
-    }
-    // Если прошли полный круг и токенов всё ещё слишком мало, попробуем ещё один круг:
-    if (accountIndex >= ACCOUNTS.length * 5) { // лимит кругов (измените при необходимости)
-      console.log(`SETUP: stopped after ${accountIndex} attempts, tokens created: ${tokens.length}`);
+    if (accountIndex >= ACCOUNTS.length * 5) {
+      console.log(`⚠️ SETUP STOPPED: too many attempts. Tokens: ${tokens.length}`);
       break;
     }
   }
 
-  console.log(`SETUP finished. tokens created: ${tokens.length}`);
+  console.log(`===== SETUP FINISHED: Created tokens: ${tokens.length} =====\n`);
   return { tokens };
 }
 
+// ------------ MAIN LOAD PHASE ------------
 export default function (data) {
   const tokens = data.tokens || [];
   if (tokens.length === 0) {
-    // нет токенов — ничего не делаем
-    console.log(`VU=${__VU} no tokens available, skipping`);
+    console.log(`VU ${__VU}: ❌ NO TOKENS AVAILABLE → skipping`);
     return;
   }
 
-  // Привязываем VU к токену: если токенов >= VU => уникален, иначе токены будут переиспользоваться равномерно
+  // Привязка VU → Token
   const tokenIndex = (__VU - 1) % tokens.length;
   const token = tokens[tokenIndex];
+
+  console.log(`VU ${__VU}: 🎫 USING TOKEN #${tokenIndex + 1}`);
 
   const gameHeaders = {
     'Accept': 'application/json, text/plain, */*',
@@ -117,10 +106,19 @@ export default function (data) {
     'x-site-id': '1a2a9023-dd0c-4052-93ef-b5e696daeb32',
   };
 
-  // Пример: делаем серию запросов к игре в течение 30 секунд
   const endTime = Date.now() + 30000;
+
   while (Date.now() < endTime) {
+    console.log(`VU ${__VU} →  CLICKING GAME...`);
+
     const res = http.get(GAME_URL, { headers: gameHeaders });
+
+    if (res.status === 200) {
+      console.log(`VU ${__VU}: GAME OK (status 200)`);
+    } else {
+      console.log(`VU ${__VU}: GAME ERROR: status=${res.status} body=${String(res.body).slice(0, 120)}`);
+    }
+
     check(res, { 'game status 200': (r) => r.status === 200 });
 
     sleep(Math.random() * 2 + 1);

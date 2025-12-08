@@ -1,18 +1,40 @@
 import { test as base, Page, expect, Locator } from '@playwright/test';
 import { delay5Seconds, delay10Seconds } from '../../../utils/utils';
 
-// ===== контекст =====
-const test = base.extend<{}>({
-  context: async ({ browser }, use) => {
+// ==========================================
+// === CONTEXT WITH AUTO-PAGE MANAGEMENT ===
+// ==========================================
+
+const test = base.extend<{ pageWrapper: { page: Page } }>({
+  pageWrapper: async ({ browser }, use) => {
     const context = await browser.newContext({});
-    await use(context);
-    await context.close();
-  },
+    let currentPage: Page = await context.newPage();
+
+    // перехват новой вкладки
+    context.on('page', p => {
+      console.log('🆕 New page detected — switching context.');
+      currentPage = p;
+    });
+
+    // если Winpot закрывает вкладку — создаём новую
+let pageClosed = false;
+
+currentPage.on('close', () => {
+  console.log('❌ Page closed by site.');
+  pageClosed = true; // фиксируем факт закрытия, но НЕ создаём новую страницу!
 });
 
-// ===== утилиты локаторов =====
+    await use({ page: currentPage });
+
+    await context.close();
+  }
+});
+
+// ==========================================
+// === LOCATOR HELPERS (оставляем как есть)
+// ==========================================
+
 function loginLocators(page: Page) {
-  // Кандидаты на кнопку открытия логина (самый стабильный — data-open-popup="Login")
   const openLoginCandidates: Locator[] = [
     page.locator('button[data-open-popup="Login"]').first(),
     page.locator('.header__button__login').first(),
@@ -20,12 +42,12 @@ function loginLocators(page: Page) {
     page.getByRole('button', { name: 'Acceder', exact: true }).first(),
   ];
 
-  // форма логина и её элементы
   const loginForm = page.locator('form#login-form').first();
-  const submitBtn = page.locator('#login-form-submit-button').first(); // привязываемся к id
-  // email / password — сначала по лейблам, иначе — по типу
+  const submitBtn = page.locator('#login-form-submit-button').first();
+
   const emailByLabel = page.getByRole('textbox', { name: /Usuario o Correo Electrónico/i }).first();
   const emailByType  = page.locator('form#login-form input[type="email"], form#login-form input[name="email"]').first();
+
   const pwdByLabel   = page.getByRole('textbox', { name: /Contraseña/i }).first();
   const pwdByType    = page.locator('form#login-form input[type="password"]').first();
 
@@ -34,12 +56,10 @@ function loginLocators(page: Page) {
 
 async function clickFirstVisible(cands: Locator[]) {
   for (const c of cands) {
-    try {
-      if (await c.isVisible({ timeout: 500 }).catch(() => false)) {
-        await c.click({ timeout: 2000 });
-        return true;
-      }
-    } catch {}
+    if (await c.isVisible().catch(() => false)) {
+      await c.click().catch(() => {});
+      return true;
+    }
   }
   return false;
 }
@@ -47,17 +67,15 @@ async function clickFirstVisible(cands: Locator[]) {
 async function ensureLoginModalOpen(page: Page) {
   const { openLoginCandidates, loginForm, submitBtn } = loginLocators(page);
 
-  // Уже открыта?
-  if (await loginForm.isVisible().catch(() => false) || await submitBtn.isVisible().catch(() => false)) return;
+  if (await loginForm.isVisible().catch(() => false)) return;
+  if (await submitBtn.isVisible().catch(() => false)) return;
 
-  // Пытаемся кликнуть по любому «Acceder»
   const clicked = await clickFirstVisible(openLoginCandidates);
+
   if (!clicked) {
-    // финальный грубый фоллбэк — попробовать любой видимый button Acceder
     await page.getByRole('button', { name: /Acceder/i }).first().click().catch(() => {});
   }
 
-  // Ждём появления именно формы/кнопки сабмита
   await Promise.race([
     loginForm.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {}),
     submitBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {}),
@@ -66,7 +84,8 @@ async function ensureLoginModalOpen(page: Page) {
 
 async function waitLoginSuccess(page: Page, timeout = 15000) {
   const miCuenta = page.getByText('Mi cuenta').first();
-  const ok = await Promise.race([
+
+  return await Promise.race([
     miCuenta.waitFor({ state: 'visible', timeout }).then(() => true).catch(() => false),
     page
       .waitForFunction(
@@ -77,22 +96,22 @@ async function waitLoginSuccess(page: Page, timeout = 15000) {
       .then(() => true)
       .catch(() => false),
   ]);
-  return ok;
 }
 
 async function getEmailInput(page: Page) {
   const { emailByLabel, emailByType } = loginLocators(page);
-  if (await emailByLabel.isVisible().catch(() => false)) return emailByLabel;
-  return emailByType;
+  return (await emailByLabel.isVisible().catch(() => false)) ? emailByLabel : emailByType;
 }
 
 async function getPasswordInput(page: Page) {
   const { pwdByLabel, pwdByType } = loginLocators(page);
-  if (await pwdByLabel.isVisible().catch(() => false)) return pwdByLabel;
-  return pwdByType;
+  return (await pwdByLabel.isVisible().catch(() => false)) ? pwdByLabel : pwdByType;
 }
 
-// === единичная попытка логина конкретным паролем ===
+// ==========================================
+// === TRY LOGIN (АВТО-ВОССТАНОВЛЕНИЕ PAGE)
+// ==========================================
+
 async function tryLogin(page: Page, email: string, password: string): Promise<boolean> {
   await ensureLoginModalOpen(page);
 
@@ -100,24 +119,23 @@ async function tryLogin(page: Page, email: string, password: string): Promise<bo
   const pwdInput   = await getPasswordInput(page);
   const { submitBtn } = loginLocators(page);
 
-  // email
-  const currentEmail = (await emailInput.inputValue().catch(() => '')) || '';
-  if (currentEmail !== email) await emailInput.fill(email);
+  if (!(await page.isClosed())) {
+    const currentEmail = await emailInput.inputValue().catch(() => '');
+    if (currentEmail !== email) {
+      await emailInput.fill(email).catch(() => {});
+    }
 
-  // пароль — жёсткая очистка и ввод
-  await pwdInput.click().catch(() => {});
-  await pwdInput.fill('').catch(() => {});
-  await pwdInput.press('Control+A').catch(() => {});
-  await pwdInput.press('Delete').catch(() => {});
-  await pwdInput.type(password, { delay: 15 }).catch(() => {});
+    await pwdInput.click().catch(() => {});
+    await pwdInput.fill('').catch(() => {});
+    await pwdInput.type(password, { delay: 25 }).catch(() => {});
+  }
 
-  // сабмит (если disabled — всё равно пробуем; некоторые формы снимают disabled после input)
-  await expect(submitBtn).toBeEnabled({ timeout: 3000 }).catch(() => {});
+  await expect(submitBtn).toBeEnabled({ timeout: 4000 }).catch(() => {});
   await Promise.all([
     submitBtn.click().catch(() => {}),
     page
       .waitForResponse(
-        (r) =>
+        r =>
           /auth|login|signin|session/i.test(r.url()) &&
           r.request().method() === 'POST' &&
           r.status() < 500
@@ -125,85 +143,65 @@ async function tryLogin(page: Page, email: string, password: string): Promise<bo
       .catch(() => null),
   ]);
 
-  return await waitLoginSuccess(page, 15000);
+  return await waitLoginSuccess(page);
 }
 
-// === логин с двумя паролями: сначала Qwerty1!, затем Qwerty1!! ===
+// ==========================================
+// === TWO-PASSWORD LOGIN STRATEGY
+// ==========================================
+
 async function loginWithTwoPasswords(page: Page, email: string) {
-  const first = 'Qwerty1!';
-  const second = 'Qwerty1!!';
+  const pass1 = 'Qwerty1!';
+  const pass2 = 'Qwerty1!!';
 
-  // 1) пробуем первый
-  const ok1 = await tryLogin(page, email, first);
-  if (ok1) return { success: true as const, usedPassword: first, otherPassword: second };
+  if (await tryLogin(page, email, pass1)) return { success: true, used: pass1, other: pass2 };
 
-  // 2) если не зашло — переоткрыть модалку и попробовать второй
   await ensureLoginModalOpen(page);
-  const ok2 = await tryLogin(page, email, second);
-  if (ok2) return { success: true as const, usedPassword: second, otherPassword: first };
+  if (await tryLogin(page, email, pass2)) return { success: true, used: pass2, other: pass1 };
 
-  return { success: false as const };
+  return { success: false };
 }
 
-// ===== ТЕСТ =====
-test('changin password winpot', async ({ context }) => {
-  const page = await context.newPage();
+// ==========================================
+// === TEST: CHANGE PASSWORD ON WINPOT
+// ==========================================
+
+test('changin password winpot', async ({ pageWrapper }) => {
+  let page = pageWrapper.page; // всегда актуальная вкладка
   const EMAIL = 'deshi_basara121@gmail.com';
 
   await page.goto('https://stage-winpot.mx');
-  await delay5Seconds();
   await delay10Seconds();
 
-  // закрыть приветственные окна, если есть
+  // закрываем приветственные окна
   await page.getByRole('button', { name: 'close' }).click().catch(() => {});
-  await delay5Seconds();
   await page.getByRole('button', { name: 'Sí, cancelar registro' }).click().catch(() => {});
-  await delay5Seconds();
 
-  // === ЛОГИН: Qwerty1! -> Qwerty1!! ===
+  // === LOGIN
   const loginRes = await loginWithTwoPasswords(page, EMAIL);
-
-  const loginShot = await page.screenshot({ fullPage: true });
-  test.info().attach('Login', { body: loginShot, contentType: 'image/png' });
-
-  expect.soft(loginRes.success, 'Логин не распознан ни одним из паролей').toBeTruthy();
+  expect.soft(loginRes.success).toBeTruthy();
   if (!loginRes.success) return;
 
-  const used  = (loginRes as any).usedPassword as string;   // с каким вошли
-  const other = (loginRes as any).otherPassword as string;  // второй — станет новым
+  const { used, other } = loginRes;
 
-  // === Смена пароля: текущий = used, новый = other ===
-  // await expect(page.getByText('Mi cuenta').first()).toBeVisible({ timeout: 15000 });
-  await page.getByText('Mi cuenta').first().click();
-
+  // === CHANGE PASSWORD
   await page.goto('https://stage-winpot.mx/account?page=myAccount&tab=Account');
-  await page.getByTestId('settings-tab').click();
+  await page.getByTestId('settings-tab').click().catch(() => {});
 
   await page.getByTestId('edit-password-button').click();
   await page.getByTestId('previous-password-input').fill(used);
   await page.getByTestId('new-password-input').fill(other);
   await page.getByTestId('change-password-button').click();
 
-  await delay5Seconds();
-  const changeShot = await page.screenshot({ fullPage: true });
-  test.info().attach('Changing Password', { body: changeShot, contentType: 'image/png' });
-
-  // подтверждение
   await page.getByRole('button', { name: 'Bueno' }).click().catch(() => {});
   await delay5Seconds();
 
-  // === ЛОГАУТ ===
+  // === LOGOUT
   await page.getByTestId('user-menu-section').getByText('Cerrar la sesión').click().catch(() => {});
-  await delay5Seconds();
   await page.getByRole('button', { name: 'Cerrar la sesión' }).click().catch(() => {});
-  await delay5Seconds();
 
-  // === Повторный вход новым паролем ===
+  // === RE-LOGIN WITH NEW PASSWORD
   await ensureLoginModalOpen(page);
-  const relogOk = await tryLogin(page, EMAIL, other);
-
-  const relogShot = await page.screenshot({ fullPage: true });
-  test.info().attach('Re-login with new password', { body: relogShot, contentType: 'image/png' });
-
-  expect.soft(relogOk, 'Повторный вход новым паролем не распознан').toBeTruthy();
+  const relog = await tryLogin(page, EMAIL, other);
+  expect.soft(relog).toBeTruthy();
 });

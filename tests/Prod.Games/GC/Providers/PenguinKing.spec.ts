@@ -126,9 +126,11 @@ async function playGames(page: Page) {
         try {
       await page.waitForLoadState('networkidle', { timeout: 50000 });
     } catch {
-      console.warn('⏱️ Network idle is not found after 50 сек, continue...');
+      console.warn(' Network idle is not found after 50 сек, continue...');
     }
-        await delay10Seconds();
+        await delay5Seconds();
+
+        
         await delay10Seconds();
 
 
@@ -145,20 +147,20 @@ async function playGames(page: Page) {
     }
 }
 
-test('ClickOnAdditionalStep Octoplay', async ({ page }) => {
+test('ClickOnAdditionalStep (AVAILABLE ONLY IN CHROME) Penguin King', async ({ page }) => {
 
     // autorization
-await page.goto('https://luckystake.com/');
-await page.getByTestId('login-header').click();
-await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
-await page.getByTestId('password-input-login').click();
-await page.getByTestId('password-input-login').fill('Qwerty1!');
-        await delay5Seconds();
+  await page.goto('https://luckystake.com/');
+  
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
 
-await page.getByTestId('submit-button-login').click();
-        await delay5Seconds();
 await delay5Seconds();
+  await page.goto('https://luckystake.com/');
 
        const scImage = page.getByRole('img', { name: 'SC', exact: true });
         if (await scImage.isVisible()) {

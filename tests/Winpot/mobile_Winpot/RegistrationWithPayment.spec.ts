@@ -54,7 +54,7 @@ function generateMexPhone({ withCountryCode = false, separator = '' } = {}) {
 
 
 
-test('Registration winpot', async ({ context }) => {
+test('Registration winpot With payment', async ({ context }) => {
  const page = await context.newPage();
 
   const email = generateEmail('deshi basara'); // => deshibasara1234@gmail.com

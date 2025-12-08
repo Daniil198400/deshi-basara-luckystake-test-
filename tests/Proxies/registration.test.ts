@@ -1,7 +1,6 @@
 import axios from "axios";
 const HttpsProxyAgent = require("https-proxy-agent");
 
-// Функция генерации случайного email
 function randomEmail() {
   const randomPart = Math.random().toString(36).substring(2, 10);
   return `robin_test_${randomPart}@gmail.com`;
@@ -11,11 +10,9 @@ describe("API Sign-Up via Proxy", () => {
 
   it("should create a new player (201 Created)", async () => {
 
-    // ТВОЙ рабочий прокси
-const proxyUrl = "http://eakpnvxn-US:0u5tgdyktk1e@173.239.219.78:5987";
+    const proxyUrl = "http://eakpnvxn-US:0u5tgdyktk1e@136.0.194.76:6813";
     const agent = new HttpsProxyAgent(proxyUrl);
 
-    // генерируем рандомный email
     const email = randomEmail();
     console.log("Generated email:", email);
 
@@ -25,7 +22,7 @@ const proxyUrl = "http://eakpnvxn-US:0u5tgdyktk1e@173.239.219.78:5987";
       citizenship: "US",
       language: "ru",
       gender: "other",
-      email: email,                 // <---- RANDOM EMAIL
+      email: email,
       password: "Qwerty1!",
       currency: "GC",
       isUserAgreement: true,
@@ -51,8 +48,19 @@ const proxyUrl = "http://eakpnvxn-US:0u5tgdyktk1e@173.239.219.78:5987";
           "x-platform": "web",
           "x-site-id": "5138631f-8d60-4327-b46c-8a4e41d68c93",
           "origin": "https://luckystake.dev",
-          "accept": "application/json",
-          "content-type": "application/json"
+          "referer": "https://luckystake.dev/",
+          "content-type": "application/json",
+          "accept": "application/json, text/plain, */*",
+
+          // === КРИТИЧЕСКИЕ browser-like headers ===
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/120.0.0.0 Safari/537.36",
+
+          "sec-ch-ua": "\"Chromium\";v=\"120\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "sec-ch-ua-mobile": "?0"
         }
       }
     );

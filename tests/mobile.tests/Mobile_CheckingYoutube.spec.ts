@@ -62,7 +62,7 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -71,9 +71,11 @@ await delay5Seconds();
 await page.getByRole('img', { name: 'close' }).click();
 await delay5Seconds();
 
-const page7Promise = page.waitForEvent('popup');
-  await page.locator('.SocialMediaIcons_container__links__TcalL > a:nth-child(4)').first().click();
-  const page7 = await page7Promise;
+
+await page.getByRole('button', { name: 'Account' }).click();
+const page2Promise = page.waitForEvent('popup');
+  await page.locator('.Support_wrapper__pJAps > .SocialMediaIcons_container__links__TcalL > a:nth-child(4)').click();
+  const page2 = await page2Promise;
 
       await delay10Seconds();
 let screenshot = await page.screenshot({ fullPage: true });

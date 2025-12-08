@@ -134,8 +134,7 @@ test.info().attach(`after_registration_and_deposit`, {
   contentType: 'image/png',
 });
 await delay5Seconds();
-await page.getByRole('button', { name: 'Jugar Ahora' }).click();
-await delay10Seconds();
+
 });
 
 

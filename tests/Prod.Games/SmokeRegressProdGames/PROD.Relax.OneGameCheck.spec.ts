@@ -29,16 +29,16 @@ async function clickIfVisible(locator: any, timeout = 5000) {
 
 test('Relax', async ({ page }) => {
   await page.goto('https://luckystake.com/');
-
-  await page.getByTestId('login-header').click();
-  await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
-  await page.getByTestId('password-input-login').fill('Qwerty1!');
-  await page.getByTestId('submit-button-login').click();
-
-  await page.getByText('Social Games').click();
-  await page.getByRole('link', { name: 'Providers' }).click();
-  await page.getByRole('link', { name: 'Relax' }).click();
 await delay5Seconds();
+  await page.getByTestId('login-header').click();
+  await delay5Seconds();
+  await page.getByTestId('email-input-login').fill('dksld122@gmail.com');
+  await delay5Seconds();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await delay5Seconds();
+  await page.getByTestId('submit-button-login').click();
+await delay10Seconds();
+
 
   await page.goto('https://luckystake.com/game/real/28551');
 await delay10Seconds();
