@@ -55,7 +55,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake payment test', async ({ page }) => {
+test('@Regress luckystake youtube test', async ({ page }) => {
 
 
 await page.goto('https://luckystake.dev/');

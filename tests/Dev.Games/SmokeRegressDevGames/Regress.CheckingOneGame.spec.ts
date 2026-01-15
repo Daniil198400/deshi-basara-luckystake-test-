@@ -61,7 +61,7 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
 await page.getByTestId('password-input-login').click();
 await tryLoginWithFallback(page);
 

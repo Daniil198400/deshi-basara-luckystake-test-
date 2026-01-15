@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { HomePage } from '../../pages/HomePage';
 import { GamePage } from '../../pages/ClickOnPlayPage';
@@ -25,7 +25,7 @@ const gameIds = [
 ];
 
 // function
-async function playGames(page) {
+async function playGames(page: Page) {
     for (const id of gameIds) {
         const gameUrl = `https://luckystake.dev/game/real/${id}`;
         await page.goto(gameUrl);
@@ -100,21 +100,21 @@ async function playGames(page) {
     }
 }
 
-test('wrong ID', async ({ context }) => {
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const gamePage = new GamePage(page);
-
-    // autorization
-    await page.goto('https://luckystake.dev/');
-    await homePage.closePopupIfVisible();
-    await loginPage.openLoginForm();
-    await loginPage.login('dksld@gmail.com', 'Qwerty1!!');
-    await page.getByText('Social Games').click();
-    await page.getByRole('link', { name: 'Providers' }).click();
-    await page.getByRole('link', { name: '4ThePlayer' }).click();
-    await delay5Seconds();
+test('wrong ID', async ({ page }) => {
+ await page.goto('https://luckystake.dev/');
+ 
+ await page.getByTestId('login-header').click();
+ await page.getByTestId('email-input-login').click();
+ await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+ await page.getByTestId('password-input-login').click();
+ await page.getByTestId('password-input-login').fill('Qwerty1!');
+ await page.getByTestId('submit-button-login').click();
+ await delay5Seconds();
+ let screenshot = await page.screenshot({ fullPage: true });
+     test.info().attach(`login is completed`, {
+       body: screenshot,
+       contentType: 'image/png', 
+     });
 
     // launching the games
     await playGames(page);

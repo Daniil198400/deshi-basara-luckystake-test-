@@ -55,14 +55,14 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake payment test', async ({ page }) => {
+test('@Regress login logout', async ({ page }) => {
 
 
-await page.goto('https://luckystake.dev/');
+await page.goto('https://luckystake.com/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -72,12 +72,12 @@ let screenshot = await page.screenshot({ fullPage: true });
       body: screenshot,
       contentType: 'image/png', 
     });
-await page.goto('https://luckystake.dev/');
+await page.goto('https://luckystake.com/');
 await page.getByRole('button', { name: 'Log out' }).click();
 await page.getByRole('button', { name: 'Log out' }).nth(1).click();
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld111@gmail.com');
+await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();

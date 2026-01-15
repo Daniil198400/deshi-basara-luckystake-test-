@@ -24,13 +24,17 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
 
   // --- открываем сайт ---
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
 
-  let screenshot = await page.screenshot({ fullPage: true });
- 
-  // --- логин ---
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+  await delay10Seconds();
+
+
+  await page.getByRole('img', { name: 'close' }).click();
 
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
@@ -38,7 +42,7 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
         console.warn(' Network idle is not found after 10 сек, continue...');
       }
       await delay5Seconds();
-      screenshot = await page.screenshot({ fullPage: true });
+  let    screenshot = await page.screenshot({ fullPage: true });
       test.info().attach(`after_login`, {
         body: screenshot,
         contentType: 'image/png',
@@ -46,7 +50,11 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
 
 await page.getByRole('button').filter({ hasText: 'Search' }).click();
   await page.getByRole('button', { name: 'Categories' }).click();
-  await page.locator('.CategoryItem_link__HgTQG').first().click();
+
+
+  await page.locator('.SearchGames_search_games__cards_wrapper__CRmvI > a:nth-child(2)').click();
+
+
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
@@ -72,7 +80,6 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
         contentType: 'image/png',
       });
 
-  await page.getByText('/ 72').click();
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
@@ -87,7 +94,8 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  await page.locator('div:nth-child(2) > a:nth-child(3)').first().click();
+await page.locator('.WizPageWrap_container_inner__cQPOm > div:nth-child(2) > a:nth-child(3)').click();
+
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
@@ -304,8 +312,8 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
         body: screenshot,
         contentType: 'image/png',
       });
-  await page.getByText('/ 717').click();
-  try {
+
+      try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('⏱️ Network idle is not found after 10 сек, continue...');
@@ -317,10 +325,15 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
         contentType: 'image/png',
       });
 
-  await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  await page.locator('.CategoryItem_link__HgTQG').first().click();
-  try {
+      await page.getByRole('contentinfo').click();
+
+
+      await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+      await page.locator('.CategoryLinkCard_link__1tEIH').first().click();
+
+      try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('⏱️ Network idle is not found after 10 сек, continue...');
@@ -355,8 +368,8 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
         body: screenshot,
         contentType: 'image/png',
       });
-  await page.getByText('/ 95').click();
-  try {
+
+      try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('⏱️ Network idle is not found after 10 сек, continue...');
@@ -380,6 +393,24 @@ await page.getByRole('button').filter({ hasText: 'Search' }).click();
         body: screenshot,
         contentType: 'image/png',
       });
+
+
+      await page.locator('.WizPageWrap_container_inner__cQPOm > div:nth-child(2) > a:nth-child(4)').click();
+      await page.getByRole('button', { name: 'Load More' }).click();
+
+  try {
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
+      } catch {
+        console.warn('⏱️ Network idle is not found after 10 сек, continue...');
+      }
+      await delay5Seconds();
+      screenshot = await page.screenshot({ fullPage: true });
+      test.info().attach(`for you`, {
+        body: screenshot,
+        contentType: 'image/png',
+      });
+      await delay5Seconds();
+
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });

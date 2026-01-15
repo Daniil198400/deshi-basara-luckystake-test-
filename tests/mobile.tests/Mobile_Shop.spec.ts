@@ -62,9 +62,9 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
 await page.getByTestId('password-input-login').click();
-await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('password-input-login').fill('Qwerty1!!');
 await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
@@ -90,7 +90,8 @@ screenshot = await page.screenshot({ fullPage: true });
 
 await page.getByRole('img', { name: 'close' }).click();
 
-await page.getByRole('button', { name: '$4.99' }).click();
+
+await page.locator('div').filter({ hasText: /^10k\+ free 5\$4\.99$/ }).getByTestId('bundle-buy-button-shop').click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^Credit Card$/ }).first().click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-frmCCCVC"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('333');

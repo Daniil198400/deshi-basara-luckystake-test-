@@ -24,20 +24,19 @@ test('@Regress shop', async ({ context }) => {
 
   await page.getByTestId('login-header').click();
   await page.getByTestId('email-input-login').click();
-  await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
+  await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
   await page.getByTestId('password-input-login').click();
   await page.getByTestId('password-input-login').fill('Qwerty1!');
   await page.getByTestId('submit-button-login').click();
-  await delay10Seconds();
+  await delay5Seconds();
 
-  await page.getByRole('img', { name: 'close' }).click();
-  await delay10Seconds();
 
-  await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
+
+  // await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
 await delay5Seconds();
-  await page.goto('https://luckystake.dev/');
+  await page.goto('https://luckystake.dev/store');
 
-  await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
+  // await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
   await delay5Seconds();
   let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`store`, {

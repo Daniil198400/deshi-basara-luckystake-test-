@@ -62,7 +62,7 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld111@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -77,20 +77,20 @@ await delay5Seconds();
 await page.goto('https://luckystake.dev/store');
 
 await page.locator('div').filter({ hasText: /^10k\+ free 5\$4\.99$/ }).getByTestId('bundle-buy-button-shop').click();
-await page.getByRole('textbox', { name: 'Billing Address' }).click();
-await page.getByRole('textbox', { name: 'Billing Address' }).fill('jhgfd');
-await page.getByRole('textbox', { name: 'City' }).click();
-await page.getByRole('textbox', { name: 'City' }).fill('jhgf');
-await page.getByRole('textbox', { name: 'Post Code' }).click();
-await page.getByRole('textbox', { name: 'Post Code' }).fill('23456');
-await page.getByRole('button', { name: 'Continue the payment' }).click();
+// await page.getByRole('textbox', { name: 'Billing Address' }).click();
+// await page.getByRole('textbox', { name: 'Billing Address' }).fill('jhgfd');
+// await page.getByRole('textbox', { name: 'City' }).click();
+// await page.getByRole('textbox', { name: 'City' }).fill('jhgf');
+// await page.getByRole('textbox', { name: 'Post Code' }).click();
+// await page.getByRole('textbox', { name: 'Post Code' }).fill('23456');
+// await page.getByRole('button', { name: 'Continue the payment' }).click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^Credit Card$/ }).first().click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('.dropdown-selected').click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('div').filter({ hasText: /^New account$/ }).nth(1).click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Name' }).click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Name' }).fill('jodrdano ');
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Card number' }).click();
-await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Card number' }).fill('5223450000000007');
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Card number' }).fill('4012001037141112');
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: '•• / ••' }).fill('02 / 29');
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('422');
 

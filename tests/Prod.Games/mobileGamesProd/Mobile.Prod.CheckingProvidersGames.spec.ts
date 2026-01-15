@@ -1,7 +1,7 @@
 import { test as base, Page, expect } from '@playwright/test';
 import { LoginPage } from '../../../pages/LoginPage';
 import { HomePage } from '../../../pages/HomePage';
-import { delay5Seconds } from '../../../utils/utils';
+import { delay5Seconds, delay10Seconds } from '../../../utils/utils';
 
 // --- утилиты ---
 async function waitAndScreenshot(page: Page, name: string) {
@@ -55,12 +55,18 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
 
   // --- открываем сайт ---
   await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await waitAndScreenshot(page, 'start');
 
-  // --- логин ---
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
+  await page.getByTestId('login-header').click();
+  await page.getByTestId('email-input-login').click();
+  await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+  await page.getByTestId('password-input-login').click();
+  await page.getByTestId('password-input-login').fill('Qwerty1!');
+  await page.getByTestId('submit-button-login').click();
+  await delay10Seconds();
+
+
+  await page.getByRole('img', { name: 'close' }).click();
+
   await waitAndScreenshot(page, 'after_login');
 
   // --- поиск и все провайдеры ---
@@ -68,76 +74,189 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
   await page.getByRole('button', { name: 'Providers 22' }).click();
   await waitAndScreenshot(page, 'All 22 Providers');
 
-  // --- Platipus ---
-  await page.locator('.SearchGames_search_games__cards_wrapper__8c4ac > a').first().click();
-  await waitAndScreenshot(page, 'Platipus 1');
-  await page.getByRole('button', { name: 'Load More' }).click();
-  await waitAndScreenshot(page, 'Platipus 2');
-  await page.getByRole('button', { name: 'Load More' }).click();
-  await waitAndScreenshot(page, 'Platipus 3');
-  await page.getByText('Load More109 /').click();
-  await waitAndScreenshot(page, 'Platipus 4');
 
-  // --- Novomatic ---
-  await openProvider(page, 'Novomatic', ['Novomatic', 'Novomatic 2', 'Novomatic 3', 'Novomatic 4'], 2, '/ 91');
+  //rubyplay
+  await page.locator('.SearchGames_search_games__cards_wrapper__CRmvI > a').first().click();
 
-  // --- Relax ---
-  await openProvider(page, 'Relax', ['Relax', 'Relax 2', 'Relax 3'], 1, '/ 75');
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  // --- RubyPlay ---
-  await openProvider(page, 'Rubyplay', ['RubyPlay', 'RubyPlay 2', 'RubyPlay 3', 'RubyPlay 4'], 2, '/ 120');
 
-  // --- Slotmill ---
-  await openProvider(page, 'Slotmill', ['SLotmill', 'SLotmill 2', 'SLotmill 3'], 1, '/ 44');
 
-  // --- RedRake ---
-  await openProvider(page, 'RedRake', ['RedRake', 'RedRake 2', 'RedRake 3'], 1, '/ 57');
+//relax
+await page.getByRole('link', { name: 'Relax' }).click();
 
-  // --- 1spin4win ---
-  await openProvider(page, '1spin4win', ['1spin4win']);
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  // --- Four7 ---
-  await openProvider(page, 'Four7', ['Four7']);
 
-  // --- Max Win Gaming ---
-  await openProvider(page, 'Max Win Gaming', ['Max Win Gaming']);
 
-  // --- Four Leaf Gaming ---
-  await openProvider(page, 'Four Leaf Gaming', ['Four Leaf Gaming']);
+//penguin king
+await page.getByRole('link', { name: 'Penguin King' }).click();
 
-  // --- Storm Gaming ---
-  await openProvider(page, 'Storm Gaming', ['Storm Gaming']);
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  // --- Gamzix ---
-  await openProvider(page, 'Gamzix', ['Gamzix']);
 
-  // --- Print Studios ---
-  await openProvider(page, 'Print Studios', ['Print Studios']);
+//platipus
+await page.getByRole('link', { name: 'Platipus' }).click();
 
-  // --- 4ThePlayer ---
-  await openProvider(page, '4ThePlayer', ['4ThePlayer']);
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  // --- Fantasma Games ---
-  await openProvider(page, 'Fantasma Games', ['Fantasma Games']);
 
-  // --- Peter & Sons ---
-  await openProvider(page, 'Peter & Sons', ['Peter & Sons']);
 
-  // --- Octoplay ---
-  await openProvider(page, 'Octoplay', ['Octoplay', 'Octoplay 2', 'Octoplay 3', 'Octoplay 4'], 2, '/ 98');
+//spinomenal
+await page.getByRole('link', { name: 'Spinomenal' }).click();
 
-  // --- Trigger ---
-  await openProvider(page, 'Trigger', ['Trigger']);
 
-  // --- Microgaming ---
-  await openProvider(page, 'Microgaming', ['Microgaming']);
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
 
-  // --- Playson ---
-  await openProvider(page, 'Playson', ['Playson']);
 
-  // --- Spinomenal ---
-  await openProvider(page, 'Spinomenal', ['Spinomenal']);
+// slotmill
 
-  // --- Iconic21 ---
-  await openProvider(page, 'Iconic21', ['Iconic21']);
+await page.getByRole('link', { name: 'Slotmill' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+// Playgenx
+
+await page.getByRole('link', { name: 'Playgenx' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+await page.getByRole('link', { name: 'RedRake' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+
+await page.getByRole('link', { name: 'Playson' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+
+await page.getByRole('link', { name: 'Iconic21' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+
+//
+
+await page.getByRole('link', { name: 'Novomatic' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+
+//
+
+await page.getByRole('link', { name: '4ThePlayer' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+await page.getByRole('link', { name: 'Microgaming' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+await page.getByRole('link', { name: 'Gamzix' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+
+//
+
+await page.getByRole('link', { name: 'Print Studios' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+await page.getByRole('link', { name: 'Fantasma Games' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+//
+
+
+await page.getByRole('link', { name: 'Max Win Gaming' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+//
+
+
+await page.getByRole('link', { name: 'Peter & Sons' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+
+await page.getByRole('link', { name: 'Trigger' }).click();
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+//
+await page.getByRole('link', { name: 'Four Leaf Gaming' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+
+
+//
+
+await page.getByRole('link', { name: 'Storm Gaming' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+//
+
+await page.getByRole('link', { name: 'Four7' }).click();
+
+
+  await page.getByText('At luckystake.com it is').click();
+await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
 });

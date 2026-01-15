@@ -40,7 +40,7 @@ test('Microgaming', async ({ page }) => {
   await page.getByTestId('password-input-login').fill('Qwerty1!');
   await page.getByTestId('submit-button-login').click();
 
-await delay5Seconds();
+await delay10Seconds();
 
   await page.goto('https://luckystake.com/game/real/35189');
 await delay10Seconds();

@@ -49,7 +49,7 @@ async function safeClick(locator: import('@playwright/test').Locator) {
 // Функция, которая пытается закрыть все окна до 4 раз подряд
 export async function handleAllPopups(page: import('@playwright/test').Page, attempts = 4, delayMs = 1000) {
   for (let i = 0; i < attempts; i++) {
-    console.log(`Попытка ${i + 1} закрыть модалки...`);
+    console.log(`🌀 Попытка ${i + 1} закрыть модалки...`);
 
     // 1️⃣ close icon
     await safeClick(page.getByRole('img', { name: /close/i }));
@@ -68,7 +68,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
     await page.waitForTimeout(delayMs);
   }
 
-  console.log(' все попытки закрытия окон завершены');
+  console.log(' Все попытки закрытия окон завершены');
 }
 
 
@@ -77,7 +77,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
 test('@Regress Full Registration', async ({ page }) => {
 
 
-await page.goto('https://luckystake.dev/');
+await page.goto('https://luckystake.com/');
 await page.getByTestId('signup-header').click();
 
 await page.getByTestId('email-input-signup').click();
@@ -86,23 +86,25 @@ await page.getByTestId('password-input-signup').click();
 await page.getByTestId('password-input-signup').fill('Qwerty1!');
 await page.locator('label').filter({ hasText: 'I am at least 18 years old' }).locator('span').click();
 await page.getByTestId('submit-button-signup').click();
-await delay10Seconds(); 
-await handleAllPopups(page, 4, 1000);
-await delay5Seconds(); 
+await delay10Seconds();
 
-await page.goto('https://luckystake.dev/');
+// await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
 
-await page.locator('.WizNavbarContent_grid__IMRrU > div > .WizGameCard_container_gameImage__cFsR9').first().click();
+await delay5Seconds();
 
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('up');
 await page.getByTestId('last-name-input-complete-profile').click();
 await page.getByTestId('last-name-input-complete-profile').fill('ce');
 await delay5Seconds();
+
 await page.getByTestId('state-select-complete-profile').click();
 await delay5Seconds();
-await page.getByText('Arizona').click();
+
+await page.getByText('Alaska').click();
+
 await delay5Seconds();
+
 await page.getByTestId('month-select-complete-profile').click();
 await page.getByRole('listitem').filter({ hasText: 'February' }).click();
 await page.getByTestId('day-input-complete-profile').click();
@@ -115,17 +117,8 @@ let screenshot = await page.screenshot({ fullPage: true });
       body: screenshot,
       contentType: 'image/png',
     });
-await delay5Seconds();
-
-await handleAllPopups(page, 4, 1000);
 
 await delay5Seconds();
 
-screenshot = await page.screenshot({ fullPage: true });
-    test.info().attach(`registration is completed 2`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+});
 
-await delay5Seconds();
-  });

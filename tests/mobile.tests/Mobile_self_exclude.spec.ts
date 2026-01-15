@@ -64,7 +64,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress Full Registration with pay card', async ({ page }) => {
+test('@Regress self exclude', async ({ page }) => {
   // ---------- Генерим и запоминаем e-mail текущего прогона ----------
   const registeredEmail = generateEmail();
   const registeredPassword = 'Qwerty1!';
@@ -100,7 +100,7 @@ test('@Regress Full Registration with pay card', async ({ page }) => {
 //   await page.getByTestId('state-select-complete-profile').click();
 //   await page.getByText('Arizona').click();
 
-await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+// await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
 
 await delay5Seconds();
 await page.getByTestId('state-select-complete-profile').click();

@@ -57,13 +57,13 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake payment test', async ({ page }) => {
+test('@Regress insta', async ({ page }) => {
 
 await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld111@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -71,10 +71,11 @@ await delay5Seconds();
 await page.getByRole('img', { name: 'close' }).click();
 await delay5Seconds();
 
+
 const page5Promise = page.waitForEvent('popup');
   await page.locator('.SocialMediaIcons_container__links__TcalL > a:nth-child(2)').first().click();
   const page5 = await page5Promise;
-await delay5Seconds();
+  await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`instagram`, {
       body: screenshot,

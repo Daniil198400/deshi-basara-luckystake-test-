@@ -1,9 +1,9 @@
-import { test as base, expect, devices, chromium } from '@playwright/test';
+import { test as base, expect, devices, chromium, Page } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { HomePage } from '../../pages/HomePage';
 import { UserFormHelper, fillField, clickButton, clickCheckboxByLabel } from '../../pages/UserFormPage';
 import { PaymentForm } from '../../pages/PaymentForm';
-import { generateRandomEmail, delay5Seconds } from '../../utils/utils';
+import { generateRandomEmail, delay5Seconds, delay10Seconds } from '../../utils/utils';
 
 
 
@@ -34,8 +34,16 @@ export function generateWizEmail() {
 }
 
 test('@mobile Full Registration with pay card', async ({ page }) => {
+async function clickStartPlaying(page: Page) {
+  // await page
+  //   .locator('iframe')
+  //   .first()
+  //   .contentFrame()
+  //   .getByRole('link', { name: 'START PLAYING' })
+  //   .click();
+}
 
-  await page.goto('https://luckystake.dev/');
+  await page.goto('https://luckystake.com/');
   await page.getByTestId('signup-header').click();
   
   const randomEmail = generateWizEmail();
@@ -48,8 +56,13 @@ test('@mobile Full Registration with pay card', async ({ page }) => {
 await page.locator('label').filter({ hasText: 'I am at least 18 years old' }).locator('span').click();
 
 await page.getByTestId('submit-button-signup').click();
-await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
-await page.locator('iframe').nth(2).contentFrame().getByRole('link', { name: '' }).click();
+
+// await delay10Seconds();
+
+// await clickStartPlaying(page);
+
+await delay5Seconds();
+
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('hygf');
 await page.getByTestId('last-name-input-complete-profile').click();

@@ -19,7 +19,7 @@ const context = await browser.newContext({
 },
 });
 
-test('@Regress luckystake payment test', async ({ context }) => {
+test('@Regress daily reward test', async ({ context }) => {
 const page = await context.newPage();
 const loginPage = new LoginPage(page);
 const homePage = new HomePage(page);
@@ -49,18 +49,17 @@ await page.getByTestId('login-header').click();
 await delay5Seconds();
 
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
 await delay10Seconds();
 await clickCloseIfVisible(page);
 await page.goto('https://luckystake.dev/store');
-await delay5Seconds();
-await page.getByTestId('daily-rewards-button-shop').click();
-await delay5Seconds();
 
+await page.getByTestId('daily-rewards-button-shop').click();
 await page.getByRole('button', { name: 'Claim', exact: true }).click();
+
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`claim`, {

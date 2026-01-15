@@ -87,12 +87,18 @@ await page.getByTestId('password-input-signup').fill('Qwerty1!');
 await page.locator('label').filter({ hasText: 'I am at least 18 years old' }).locator('span').click();
 await page.getByTestId('submit-button-signup').click();
 
+await delay10Seconds();
+
+await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+
+// await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+
+await delay5Seconds();
+
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('up');
 await page.getByTestId('last-name-input-complete-profile').click();
 await page.getByTestId('last-name-input-complete-profile').fill('ce');
-
-await delay5Seconds();
 
 await page.getByTestId('state-select-complete-profile').click();
 await delay5Seconds();
@@ -115,14 +121,14 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
 await delay5Seconds();
 
-await handleAllPopups(page, 4, 1000);
-await delay10Seconds();
-await delay5Seconds();
-await page.goto('https://luckystake.dev/store');
+// await handleAllPopups(page, 4, 1000);
+// await delay10Seconds();
+// await delay5Seconds();
+// await page.goto('https://luckystake.dev/store');
 
 // await page.locator('.HeaderContent_plusButtonWrapper_inner__PU_d1').click();
 
-// await page.getByRole('button', { name: '$1.99' }).click();
+// await page.getByRole('button', { name: '$4.99' }).click();
 // await page.getByRole('textbox', { name: 'Billing Address' }).click();
 // await page.getByRole('textbox', { name: 'Billing Address' }).fill('kanzas');
 // await page.getByRole('textbox', { name: 'City' }).click();
@@ -139,16 +145,16 @@ await page.goto('https://luckystake.dev/store');
 // await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: '•• / ••' }).fill('02 / 35');
 // await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('411');
 // await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().getByRole('button', { name: 'Deposit' }).click();
-await delay5Seconds();
-screenshot = await page.screenshot({ fullPage: true });
-    test.info().attach(`success`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+// await delay5Seconds();
+// screenshot = await page.screenshot({ fullPage: true });
+//     test.info().attach(`success`, {
+//       body: screenshot,
+//       contentType: 'image/png',
+//     });
 
-await delay5Seconds();
+// await delay5Seconds();
 
-await page.getByRole('button', { name: 'Close' }).click();
+// await page.getByRole('button', { name: 'Close' }).click();
 
 
 

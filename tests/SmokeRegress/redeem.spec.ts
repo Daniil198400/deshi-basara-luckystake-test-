@@ -57,14 +57,13 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
 
 test('@Regress redeem', async ({ page }) => {
 
-
 await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
 await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
 await page.getByTestId('password-input-login').click();
-await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('password-input-login').fill('Qwerty1!!');
 await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
@@ -84,17 +83,31 @@ await page.getByTestId('cash-prize-button-redeem').click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^AIRWALLEX50SC - 500000SC$/ }).first().click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().getByPlaceholder(' ').fill('SC 57');
 await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Redeem' }).click();
-await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Submit' }).click();
-await delay10Seconds();
+await delay5Seconds();;
 
+await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'New' }).click();
+await delay5Seconds();;
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#routingNumber').click();
+await delay5Seconds();;
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#routingNumber').fill('011000015');
+await delay5Seconds();;
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#iban').click();
+await delay5Seconds();;
+
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#iban').fill('8454797666');
+await delay5Seconds();;
+await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Submit' }).click();
+
+await delay10Seconds();
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`Redeem is deshi basara`, {
       body: screenshot,
       contentType: 'image/png', 
     });
 await delay5Seconds();
+await page.getByRole('button', { name: 'Close' }).click();
+await delay5Seconds();
 
 });
-
 
 

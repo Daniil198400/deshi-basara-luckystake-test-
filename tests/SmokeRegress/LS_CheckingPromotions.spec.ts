@@ -17,7 +17,7 @@ const context = await browser.newContext({
 },
 });
 
-test('@Regress shop', async ({ context }) => {
+test('@Regress promotions', async ({ context }) => {
   const page = await context.newPage();
 
   await page.goto('https://luckystake.com/');
@@ -30,15 +30,18 @@ test('@Regress shop', async ({ context }) => {
   await page.getByTestId('submit-button-login').click();
   await delay10Seconds();
 
-  await page.goto('https://luckystake.com/');
+  await page.goto('https://luckystake.com/promotions#')
 
-  await page.getByRole('link', { name: 'Promotions', exact: true }).click();
-await delay5Seconds();
+  await delay5Seconds();
+
 let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`promotion page`, {
       body: screenshot,
       contentType: 'image/png',
     });
+  await delay5Seconds();
+
+
 
 
   await page.locator('.PromotionCardGeneral_image__e83RA').first().click();
@@ -52,7 +55,6 @@ let screenshot = await page.screenshot({ fullPage: true });
 
   await page.getByTestId('close-button-promotion').click();
 
-
   await page.locator('div:nth-child(2) > div > .PromotionCardGeneral_image__e83RA').click();
     await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });
@@ -62,6 +64,7 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
     await delay5Seconds();
   await page.getByTestId('close-button-promotion').click();
+
 
   await page.locator('div:nth-child(3) > div > .PromotionCardGeneral_image__e83RA').click();
   await delay5Seconds();
@@ -73,6 +76,8 @@ let screenshot = await page.screenshot({ fullPage: true });
     await delay5Seconds();
   await page.getByTestId('close-button-promotion').click();
 
+
+
   await page.locator('div:nth-child(4) > div > .PromotionCardGeneral_image__e83RA').click();
     await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });
@@ -82,7 +87,9 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
     await delay5Seconds();
   await page.getByTestId('close-button-promotion').click();
-  
+
+
+
   await page.getByRole('button', { name: 'CLAIM' }).click();
       await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });

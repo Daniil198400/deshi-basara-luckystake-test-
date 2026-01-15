@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { delay5Seconds, delay10Seconds } from '../../../utils/utils';
 
-// контекст без httpCredentials (как у тебя)
+// контекст без httpCredentials 
 const test = base.extend<{}>({
   context: async ({ browser }, use) => {
     const context = await browser.newContext({});

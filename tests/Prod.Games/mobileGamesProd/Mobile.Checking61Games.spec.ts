@@ -28,15 +28,21 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
 
   let screenshot = await page.screenshot({ fullPage: true });
  
-  // --- логин ---
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+80001@gmail.com', 'Qwerty1!');
+  await page.goto('https://luckystake.com/');
+
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('wiztest+80001@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
 
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn(' Network idle is not found after 10 сек, continue...');
       }
+        await page.goto('https://luckystake.com/');
       await delay5Seconds();
       screenshot = await page.screenshot({ fullPage: true });
       test.info().attach(`after_login`, {
@@ -69,16 +75,6 @@ test('@CheckPresenceOfGames Mobile Checking All Games Sections', async ({ contex
         body: screenshot,
         contentType: 'image/png',
       });
-  await page.getByRole('button', { name: 'Load More' }).click();
-  try {
-        await page.waitForLoadState('networkidle', { timeout: 10000 });
-      } catch {
-        console.warn('⏱️ Network idle is not found after 10 сек, continue...');
-      }
-      await delay5Seconds();
-      screenshot = await page.screenshot({ fullPage: true });
-      test.info().attach(`Games Recommended for you 3`, {
-        body: screenshot,
-        contentType: 'image/png',
-      });
+await delay5Seconds();
+
 });

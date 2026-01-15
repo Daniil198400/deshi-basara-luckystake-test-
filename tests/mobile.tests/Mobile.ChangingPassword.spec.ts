@@ -173,7 +173,7 @@ async function changePasswordSmart(
 // ===== ТЕСТ =====
 test('@Regress login, change password and logout, login', async ({ page }) => {
   const PASSWORDS = ['Qwerty1!', 'Qwerty1!!'];
-  const EMAIL = 'dksld144@gmail.com';
+  const EMAIL = 'dksld123@gmail.com';
 
   // для наглядности и чтобы «не выбивало» сразу — включим артефакты
   test.info().setTimeout(test.info().timeout + 15_000);

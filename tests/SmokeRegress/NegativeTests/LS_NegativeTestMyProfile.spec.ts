@@ -1,25 +1,27 @@
 import { test as base, Page, expect, devices, chromium } from '@playwright/test';
-import { LoginPage } from '../../../pages/LoginPage';
-import { HomePage } from '../../../pages/HomePage';
-import { UserFormHelper, fillField, clickButton, clickCheckboxByLabel } from '../../../pages/UserFormPage';
-import { PaymentForm } from '../../../pages/PaymentForm';
 import { generateRandomEmail, delay5Seconds, delay10Seconds } from '../../../utils/utils';
 
 
 
-const test = base.extend<{}>({
+const test = base.extend({
   context: async ({}, use) => {
+
     const browser = await chromium.launch({
-    //   headless: false,
-    //   args: ['--start-maximized'], 
+      headless: false,
+      args: ['--start-maximized']
     });
 
     const context = await browser.newContext({
-    //   viewport: { width: 1920, height: 1080 }, // apparently set window size explicitly
+      viewport: null,
       httpCredentials: {
         username: 'luckystake',
-        password: 'luckystake1!',
-      },
+        password: 'luckystake1!'
+      }
+    });
+
+    // Автоматический zoom для всех страниц
+    context.addInitScript(() => {
+      document.documentElement.style.zoom = "0.8";
     });
 
     await use(context);
@@ -27,7 +29,18 @@ const test = base.extend<{}>({
     await context.close();
     await browser.close();
   },
+
+  page: async ({ context }, use) => {
+    const page = await context.newPage();
+
+    await page.addInitScript(() => {
+      document.documentElement.style.zoom = "0.8";
+    });
+
+    await use(page);
+  }
 });
+
 
 function generateEmail() {
   const unique = Date.now(); // можно заменить на Math.floor(Math.random() * 100000)
@@ -71,7 +84,23 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log(' все попытки закрытия окон завершены');
 }
 
-test('@Regress Full Registration', async ({ page }) => {
+test('@Regress Negative test on profile page', async ({ page }) => {
+async function clickStartPlayingIfExists(page: Page) {
+  try {
+    const frame = await page.locator('iframe').first().contentFrame();
+    if (!frame) return false;
+
+    const btn = frame.getByRole('link', { name: 'START PLAYING' });
+
+    if (await btn.isVisible().catch(() => false)) {
+      await btn.click().catch(() => {});
+      console.log('▶ START PLAYING clicked');
+      return true;
+    }
+  } catch {}
+
+  return false;
+}
 
 await page.goto('https://luckystake.dev/');
 await page.getByTestId('signup-header').click();
@@ -91,13 +120,13 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
 
 await delay5Seconds();
-await page.goto('https://luckystake.dev/');
+await page.goto('http://luckystake.dev/account/details');
 
-await page.getByRole('link', { name: 'Profile' }).click();
-await delay5Seconds();  
+await delay10Seconds();  
 
-// await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+await clickStartPlayingIfExists(page); 
 
+await delay10Seconds();
 
 await page.getByRole('textbox', { name: 'First Name' }).click();
 await page.getByRole('textbox', { name: 'First Name' }).fill('пааппп');
@@ -207,6 +236,9 @@ screenshot = await page.screenshot({ fullPage: true }); test.info().attach(`no l
 await delay5Seconds();
 
 
+
+
+
 await page.getByRole('textbox', { name: 'City' }).click();
 await page.getByRole('textbox', { name: 'City' }).fill(' gfdsddd ');
 await delay5Seconds();
@@ -253,8 +285,6 @@ await page.getByRole('textbox', { name: 'ZIP' }).fill('рпавыаа');
 await delay5Seconds();
 screenshot = await page.screenshot({ fullPage: true }); test.info().attach(`zip can not content no latin or no numbers`, {   body: screenshot,   contentType: 'image/png', });
 await delay5Seconds();
-
-
 
 await page.getByRole('textbox', { name: 'Current password' }).click();
 await page.getByRole('textbox', { name: 'Current password' }).fill('Qwerty1!');

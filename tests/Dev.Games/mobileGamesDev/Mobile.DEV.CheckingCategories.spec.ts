@@ -73,7 +73,7 @@ await delay5Seconds();
   try {
         await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
-        console.warn('⏱️ Network idle is not found after 30 сек, continue...');
+        console.warn('Network idle is not found after 30 сек, continue...');
       }
       await delay5Seconds();
       screenshot = await page.screenshot({ fullPage: true });

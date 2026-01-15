@@ -55,14 +55,14 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake payment test', async ({ page }) => {
+test('@Regress luckystake random game', async ({ page }) => {
 
 
 await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -75,7 +75,8 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 await page.goto('https://luckystake.dev/');
 
-    await page.getByRole('link', { name: 'Favorite Games' }).click();
+await page.getByRole('button', { name: 'Favorite Games' }).click();
+
 await delay5Seconds();
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`favorite games are checked`, {
@@ -86,9 +87,8 @@ await delay5Seconds();
 
 // список игр
 const games = [
-  'http://luckystake.dev/game/real/3765',
-  'http://luckystake.dev/game/real/3792',
-  'http://luckystake.dev/game/real/3774',
+  'https://luckystake.dev/game/real/3792',
+  'http://luckystake.dev/game/real/3796',
 ];
 
 // выбираем случайную игру
@@ -116,24 +116,20 @@ const frame = await page
 await delay5Seconds();
 
 // кликаем spin внутри игры
-await frame.locator('#spinBtn').click();
+// await frame.locator('#spinBtn').click();
+
+await page.locator('iframe[title="Real game"]').contentFrame().locator('#spinBtn').click();
 
 
-// await page.goto('http://luckystake.dev/game/real/3765');
-// await page.locator('iframe[title="Real game"]').contentFrame().locator('#spinBtn').click();
-
-// await page.goto('http://luckystake.dev/game/real/3792');
-// await page.locator('iframe[title="Real game"]').contentFrame().locator('#spinBtn').click();
-
-// await page.goto('http://luckystake.dev/game/real/3774');
-// await page.locator('iframe[title="Real game"]').contentFrame().locator('#spinBtn').click();
 
 
 await delay5Seconds();
 
 await page.goto('https://luckystake.dev/');
 
-await page.getByRole('link', { name: 'Recently Played' }).click();
+
+
+await page.getByRole('button', { name: 'Recently played' }).click();
 await delay5Seconds();
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`Recently games are checked`, {

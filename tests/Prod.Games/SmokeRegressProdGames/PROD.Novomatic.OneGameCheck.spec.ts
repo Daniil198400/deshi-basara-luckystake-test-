@@ -81,7 +81,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
       await searchButton.first().click();
 
       try {
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('Network idle is not found after 30 sec, keep going...');
       }
@@ -100,7 +100,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
   const buyButton = page.getByRole('button', { name: 'buy' });
   if (await clickIfVisible(buyButton, 10000)) {
     try {
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
+      await page.waitForLoadState('networkidle', { timeout: 10000 });
     } catch {
       console.warn('Network idle is not found after 30 sec, keep going...');
     }
@@ -117,18 +117,17 @@ await page.getByRole('button', { name: 'Play now' }).click();
       console.log(`Click on price button: ${randomPrice}`);
 
       try {
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
-        console.warn('Network idle is not found after 30 sec, keep going...');
+        console.warn('Network idle is not found after 10 sec, keep going...');
       }
-      await delay10Seconds();
+      await delay5Seconds();
 
       const afterPrice = await page.screenshot({ fullPage: true });
       test.info().attach('game_card_proposition_after_clicking_on_random_price', {
         body: afterPrice,
         contentType: 'image/png',
       });
-
       
       // await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^Credit Card$/ }).first().click();
 
@@ -144,7 +143,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
     }
   }
 
-  await delay10Seconds();
+  await delay5Seconds();
 
   screenshot = await page.screenshot({ fullPage: true });
   test.info().attach('game_after_wait', { body: screenshot, contentType: 'image/png' });

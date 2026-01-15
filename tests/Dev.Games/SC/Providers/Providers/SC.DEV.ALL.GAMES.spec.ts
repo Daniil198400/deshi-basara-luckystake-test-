@@ -195,9 +195,13 @@ test('DEV, SC ONLY, ALL GAMES', async ({ page }) => {
   const homePage = new HomePage(page);
 
   await page.goto('https://luckystake.dev/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('dksld2@gmail.com', 'Qwerty1!!');
+
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld2@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!!');
+await page.getByTestId('submit-button-login').click();
   await delay5Seconds();
   async function clickIfExists(page: Page, role: any, name: string) {
   const locator = page.getByRole(role, { name });

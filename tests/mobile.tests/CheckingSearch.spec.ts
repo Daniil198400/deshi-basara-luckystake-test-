@@ -4,7 +4,7 @@ import { LoginPage } from '../../pages/LoginPage';
 import { HomePage } from '../../pages/HomePage';
 import { UserFormHelper, fillField, clickButton, clickCheckboxByLabel } from '../../pages/UserFormPage';
 import { PaymentForm } from '../../pages/PaymentForm';
-import { generateRandomEmail, delay5Seconds } from '../../utils/utils';
+import { generateRandomEmail, delay5Seconds, delay10Seconds } from '../../utils/utils';
 
 
 
@@ -33,11 +33,11 @@ const test = base.extend<{}>({
 test('@Regress searching popular', async ({ page }) => {
 
 
-await page.goto('https://luckystake.dev/');
+await page.goto('https://luckystake.com/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld123@gmail.com');
+await page.getByTestId('email-input-login').fill('wiztest+70001@gmail.com');
 await page.getByTestId('password-input-login').click();
 await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
@@ -50,11 +50,19 @@ let screenshot = await page.screenshot({ fullPage: true });
 
 await delay5Seconds();
 
-    await page.goto('https://luckystake.dev/');
+    await page.goto('https://luckystake.com/');
 
   await page.getByRole('button').filter({ hasText: 'Search' }).click();
-  await page.getByRole('button', { name: 'Providers 21' }).click();
+  await page.getByRole('textbox', { name: 'Search' }).fill('extra');
+ 
+  await delay5Seconds();  
+screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
   await delay5Seconds();
-  await page.getByRole('button', { name: 'Categories' }).click();
-  await delay5Seconds();
+
 });
+
+
