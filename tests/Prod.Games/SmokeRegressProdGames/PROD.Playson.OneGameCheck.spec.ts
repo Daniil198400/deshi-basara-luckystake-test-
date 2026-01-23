@@ -135,7 +135,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
 
 
       const confirmButton = page.getByRole('button').nth(2);
-      if (await visible(confirmButton, 30000)) {
+      if (await visible(confirmButton, 10000)) {
         await confirmButton.click();
       } else {
         console.log(`Confirm button для ${randomPrice} не найден, пропускаем...`);

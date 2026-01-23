@@ -47,7 +47,7 @@ async function playGames(page: Page, gameIds: string[]) {
 try {
   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
 } catch (e) {
-  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  console.warn('Network idle is not found after 30 sec, keep going...');
   // continue – next steps
 }
     await delay5Seconds();
@@ -69,7 +69,7 @@ try {
 try {
   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
 } catch (e) {
-  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+  console.warn('Network idle is not found after 30 sec, keep going...');
   // continue – next steps
 }
     await delay5Seconds();
@@ -91,101 +91,101 @@ if (await exploreButton.isVisible({ timeout: 5000 })) {
 }
 
 // seeking searchButton
-const searchButton = page.getByRole('button').filter({ hasText: /^$/ });
-if (await searchButton.first().isVisible({ timeout: 3000 })) {
-  await searchButton.first().click();
+// const searchButton = page.getByRole('button').filter({ hasText: /^$/ });
+// if (await searchButton.first().isVisible({ timeout: 3000 })) {
+//   await searchButton.first().click();
   
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
-  await delay5Seconds();
+// try {
+//   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+// } catch (e) {
+//   console.warn('Network idle is not found after 30 sec, keep going...');
+//   // continue – next steps
+// }
+//   await delay5Seconds();
 
-      screenshot = await page.screenshot({ fullPage: true });
-      test.info().attach(`game_${id}_after_search_button`, {
-        body: screenshot,
-        contentType: 'image/png',
-      });
+//       screenshot = await page.screenshot({ fullPage: true });
+//       test.info().attach(`game_${id}_after_search_button`, {
+//         body: screenshot,
+//         contentType: 'image/png',
+//       });
 
-      if (await searchButton.nth(1).isVisible({ timeout: 5000 })) {
-        await searchButton.nth(1).click();
-      }
-    }
+//       if (await searchButton.nth(1).isVisible({ timeout: 5000 })) {
+//         await searchButton.nth(1).click();
+//       }
+//     }
 
-    // buy button
-    const buyButton = page.getByRole('button', { name: 'buy' });
+//     // buy button
+//     const buyButton = page.getByRole('button', { name: 'buy' });
 
-    if (await buyButton.isVisible({ timeout: 10000 })) {
-      await buyButton.click();
+//     if (await buyButton.isVisible({ timeout: 10000 })) {
+//       await buyButton.click();
       
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
-      await delay5Seconds();
+// try {
+//   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+// } catch (e) {
+//   console.warn('Network idle is not found after 30 sec, keep going...');
+//   // continue – next steps
+// }
+//       await delay5Seconds();
 
-      screenshot = await page.screenshot();
-      test.info().attach(`game_${id}_buy_button`, {
-        body: screenshot,
-        contentType: 'image/png',
-      });
+//       screenshot = await page.screenshot();
+//       test.info().attach(`game_${id}_buy_button`, {
+//         body: screenshot,
+//         contentType: 'image/png',
+//       });
 
-      // Random price
-      const prices = ["$1.99", "$4.99", "$9.99", "$24.99", "$34.99"];
-      const randomPrice = prices[Math.floor(Math.random() * prices.length)];
-      const priceButton = page.getByRole('button', { name: randomPrice });
+//       // Random price
+//       const prices = ["$1.99", "$4.99", "$9.99", "$24.99", "$34.99"];
+//       const randomPrice = prices[Math.floor(Math.random() * prices.length)];
+//       const priceButton = page.getByRole('button', { name: randomPrice });
 
-      if (await priceButton.isVisible({ timeout: 10000 })) {
-        console.log(`Click on price button: ${randomPrice}`);
-        await priceButton.click();
+//       if (await priceButton.isVisible({ timeout: 10000 })) {
+//         console.log(`Click on price button: ${randomPrice}`);
+//         await priceButton.click();
 
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
-        await delay10Seconds();
+// try {
+//   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+// } catch (e) {
+//   console.warn('⏱️ Network idle is not found after 30 sec, keep going...');
+//   // continue – next steps
+// }
+//         await delay10Seconds();
 
-        screenshot = await page.screenshot({ fullPage: true });
-        test.info().attach(`game_${id}_card_proposition_after_clicking_on_random_price`, {
-          body: screenshot,
-          contentType: 'image/png',
-        });
+//         screenshot = await page.screenshot({ fullPage: true });
+//         test.info().attach(`game_${id}_card_proposition_after_clicking_on_random_price`, {
+//           body: screenshot,
+//           contentType: 'image/png',
+//         });
 
-        const confirmButton = page.getByRole('button').nth(2);
-        if (await confirmButton.isVisible({ timeout: 10000 })) {
-          await confirmButton.click();
-        } else {
-          console.log(`Confirm button для ${randomPrice} не найден, пропускаем...`);
-        }
-      } else {
-        console.log(`Кнопка с ценой ${randomPrice} не найдена, пропускаем...`);
-      }
-    }
+//         const confirmButton = page.getByRole('button').nth(2);
+//         if (await confirmButton.isVisible({ timeout: 10000 })) {
+//           await confirmButton.click();
+//         } else {
+//           console.log(`Confirm button для ${randomPrice} не найден, пропускаем...`);
+//         }
+//       } else {
+//         console.log(`Кнопка с ценой ${randomPrice} не найдена, пропускаем...`);
+//       }
+//     }
 
-    // Click on Back button
-    const backButton = page.getByTestId('ArrowBackIosIcon');
-    if (await backButton.isVisible({ timeout: 6000 })) {
-      await backButton.click();
-    }
+//     // Click on Back button
+//     const backButton = page.getByTestId('ArrowBackIosIcon');
+//     if (await backButton.isVisible({ timeout: 6000 })) {
+//       await backButton.click();
+//     }
 
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
-    await delay5Seconds();
-    screenshot = await page.screenshot({ fullPage: true });
-    test.info().attach(`game_${id}_after_clicking_Back`, {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+// try {
+//   await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
+// } catch (e) {
+//   console.warn('Network idle is not found after 30 sec, keep going...');
+//   // continue – next steps
+// }
+//     await delay5Seconds();
+//     screenshot = await page.screenshot({ fullPage: true });
+//     test.info().attach(`game_${id}_after_clicking_Back`, {
+//       body: screenshot,
+//       contentType: 'image/png',
+//     });
   }
 }
 

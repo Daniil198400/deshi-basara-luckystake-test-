@@ -12,7 +12,7 @@ const test = base.extend({
     });
 
     const context = await browser.newContext({
-      viewport: null,
+      viewport: { width: 1920, height: 1080 },
       httpCredentials: {
         username: 'luckystake',
         password: 'luckystake1!'

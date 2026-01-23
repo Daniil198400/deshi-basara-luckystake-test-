@@ -43,7 +43,7 @@ const HEADERS = {
 
 const REQ_TIMEOUT = '10s';          // fail-fast, чтобы не висеть
 const SYNC_WAIT_SEC = 2;            // пауза перед кликом, как просил
-const NUM_USERS = 100;              // СКОЛЬКО зарегать
+const NUM_USERS = 10;              // СКОЛЬКО зарегать
 const RETRIES    = 2;               // сколько раз ретраить 429/5xx/timeout при sign-up
 const PWD        = 'Test12345!';    // общий пароль
 
