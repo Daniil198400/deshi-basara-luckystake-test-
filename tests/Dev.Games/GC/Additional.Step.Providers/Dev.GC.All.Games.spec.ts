@@ -17,26 +17,45 @@ const test = base.extend<{}>({
   },
 });
 
-// function for working on all oid
+// =======================
+// CHANGED PART — ONLY THIS
+// =======================
 async function fetchAllOids(): Promise<string[]> {
-  const url = "https://wiztechgroup-cdn.com/stage/games_pack/5138631f-8d60-4327-b46c-8a4e41d68c93.json";
+  const url =
+    "https://wiztechgroup-cdn.com/stage/vendors_pack/5138631f-8d60-4327-b46c-8a4e41d68c93.json";
+
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Не удалось скачать JSON: ${response.status} ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data: any = await response.json();
 
-  if (!data.games || !Array.isArray(data.games)) {
-    console.warn("Поле games не найдено или не массив");
+  if (!data.vendors || !Array.isArray(data.vendors)) {
+    console.warn("Поле vendors не найдено или не массив");
     return [];
   }
 
-  // All oids in an array
-  const allOids = data.games.map((g: any) => g.oid);
-  console.log(`Всего oid для проверки: ${allOids.length}`);
-  return allOids;
+  const allGameIds: string[] = [];
+
+  for (const v of data.vendors) {
+    if (!v?.games || !Array.isArray(v.games)) {
+      console.warn(`Vendor ${v?.name ?? v?.id ?? "unknown"}: поле games не найдено или не массив`);
+      continue;
+    }
+
+    for (const g of v.games) {
+      if (g === null || g === undefined) continue;
+      allGameIds.push(String(g));
+    }
+  }
+
+  const unique = [...new Set(allGameIds)];
+  console.log(`Всего game ids для проверки: ${unique.length}`);
+  return unique;
 }
+// =======================
+
 
 // The main function to play games by their IDs
 async function playGames(page: Page, gameIds: string[]) {
@@ -44,53 +63,50 @@ async function playGames(page: Page, gameIds: string[]) {
     const gameUrl = `https://luckystake.dev/game/real/${id}`;
     console.log(`Открываю игру ${id}: ${gameUrl}`);
     await page.goto(gameUrl);
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
+
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 40000 });
+    } catch (e) {
+      console.warn('Network idle is not found after 40 sec, keep going...');
+    }
+
     await delay5Seconds();
 
-    // Screenshot before Play now
     let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_before_playNow`, {
       body: screenshot,
       contentType: 'image/png',
     });
 
-    // Click on Play now
     const playNowButton = page.getByRole('button', { name: 'Play now' });
     if (await playNowButton.isVisible({ timeout: 5000 })) {
       await playNowButton.click();
     }
 
-    // Waiting
-try {
-  await page.waitForLoadState('networkidle', { timeout: 30000 }); // 30 секунд
-} catch (e) {
-  console.warn('Network idle is not found after 30 sec, keep going...');
-  // continue – next steps
-}
-    await delay5Seconds();
+    try {
+      await page.waitForLoadState('networkidle', { timeout: 45000 });
+    } catch (e) {
+      console.warn('Network idle is not found after 45 sec, keep going...');
+    }
 
-    // Screenshot after wait
+    await delay10Seconds();
+
     screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`game_${id}_after_wait`, {
       body: screenshot,
       contentType: 'image/png',
     });
 
-    // checking "Explore games" button  
-const exploreButton = page.getByRole('button', { name: 'Explore games' });
-if (await exploreButton.isVisible({ timeout: 5000 })) {
-  await exploreButton.click();
-  await delay5Seconds();
-  console.log(`Explore games button for game ${id} found and clicked, пропускаем поиск searchButton.`);
-  continue; // going to the next oid
-}
+    const exploreButton = page.getByRole('button', { name: 'Explore games' });
+    if (await exploreButton.isVisible({ timeout: 5000 })) {
+      await exploreButton.click();
+      await delay5Seconds();
+      console.log(`Explore games button for game ${id} found and clicked`);
+      continue;
+    }
 
-// seeking searchButton
+
+// // seeking searchButton
 // const searchButton = page.getByRole('button').filter({ hasText: /^$/ });
 // if (await searchButton.first().isVisible({ timeout: 3000 })) {
 //   await searchButton.first().click();

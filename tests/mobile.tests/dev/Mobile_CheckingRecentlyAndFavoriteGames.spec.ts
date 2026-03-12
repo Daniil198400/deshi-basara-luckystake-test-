@@ -140,6 +140,7 @@ await delay5Seconds();
 
 
 await delay5Seconds();
+await delay5Seconds();
 
 await page.goto('https://luckystake.dev/');
 

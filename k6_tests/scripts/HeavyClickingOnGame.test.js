@@ -14,46 +14,74 @@ const PASSWORD = 'Qwerty1!';
 const LOGIN_URL = 'https://api.luckystake.com/player/crm/login';
 const GAME_URL = 'https://api.luckystake.com/games/link/35816?platform=2&locale=en&country_code=US&currency=GC&c=Popular&p=2';
 
-// Сколько ждать после логина, чтобы "ударить" по игре почти одновременно
-const SYNC_WAIT_SEC = 5;
+// Логин “лесенкой”: каждый следующий VU стартует на STEP_SEC позже.
+// 30 VU * 0.3s = ~9s растяжки — обычно хватает, чтобы не поймать WAF.
+const LOGIN_STEP_SEC = 0.3;
+
+// После того как ПОСЛЕДНИЙ VU начнёт логиниться (лесенка), даём буфер
+// и назначаем общий момент клика.
+const AFTER_LAST_LOGIN_START_BUFFER_SEC = 8;
 
 export const options = {
   scenarios: {
     one_round_per_vu: {
       executor: 'per-vu-iterations',
-      vus: ACCOUNTS.length,   // 30 VU
-      iterations: 1,          // 1 iteration for every VU
-      maxDuration: '2m',      // timeout
+      vus: ACCOUNTS.length,
+      iterations: 1,
+      maxDuration: '3m',
     },
   },
   thresholds: {
-    http_req_failed: ['rate<0.05'],     //  5% of errors is allowed
-    http_req_duration: ['p(95)<1500'],  // streshold
+    http_req_failed: ['rate<0.05'],
+    http_req_duration: ['p(95)<1500'],
   },
 };
 
-export default function () {
-  // Назначаем аккаунт по __VU (1..30)
+const loginHeaders = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json, text/plain, */*',
+  'x-platform': 'web',
+  'x-site-id': '1a2a9023-dd0c-4052-93ef-b5e696daeb32',
+  'Referer': 'https://luckystake.com/',
+  'User-Agent': 'k6loadtest/1.0 (+https://k6.io/)',
+};
+
+const gameHeadersBase = {
+  'Accept': 'application/json, text/plain, */*',
+  'Origin': 'https://luckystake.com',
+  'Referer': 'https://luckystake.com/',
+  'x-platform': 'web',
+  'x-site-id': '1a2a9023-dd0c-4052-93ef-b5e696daeb32',
+  'User-Agent': 'k6loadtest/1.0 (+https://k6.io/)',
+};
+
+export function setup() {
+  const totalSpread = (ACCOUNTS.length - 1) * LOGIN_STEP_SEC; // сколько растянется старт логинов
+  const sync_at = Date.now() + (totalSpread + AFTER_LAST_LOGIN_START_BUFFER_SEC) * 1000;
+
+  console.log(
+    `SETUP: login spread ~${totalSpread.toFixed(2)}s, sync_at=${sync_at} (click after buffer ${AFTER_LAST_LOGIN_START_BUFFER_SEC}s)`
+  );
+
+  return { sync_at };
+}
+
+export default function (data) {
   const vuIndex = (__VU - 1) % ACCOUNTS.length;
   const account = ACCOUNTS[vuIndex];
 
+  // === РАСТЯГИВАЕМ СТАРТ ЛОГИНА ===
+  const loginDelay = vuIndex * LOGIN_STEP_SEC;
+  if (loginDelay > 0) sleep(loginDelay);
+
   // === LOGIN ===
-  console.log(`VU=${__VU} account=${account} ACTION=login START`);
+  console.log(`VU=${__VU} account=${account} ACTION=login START delay=${loginDelay.toFixed(2)}s`);
   const loginPayload = JSON.stringify({ email: account, password: PASSWORD });
-  const loginHeaders = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json, text/plain, */*',
-    'x-platform': 'web',
-    'x-site-id': '1a2a9023-dd0c-4052-93ef-b5e696daeb32',
-    'Referer': 'https://luckystake.com/',
-    'User-Agent': 'k6loadtest/1.0 (+https://k6.io/)',
-  };
 
   const loginRes = http.post(LOGIN_URL, loginPayload, { headers: loginHeaders });
   const loginOk = check(loginRes, { 'login status 200/201': (r) => r.status === 200 || r.status === 201 });
   console.log(`VU=${__VU} account=${account} ACTION=login END status=${loginRes.status} ok=${loginOk}`);
 
-  // Попробуем получить токен — скорректируй путь, если поле в ответе другое
   let token = null;
   try {
     token = loginRes.json('token') || loginRes.json('accessToken') || null;
@@ -63,23 +91,15 @@ export default function () {
 
   if (!token) {
     console.log(`VU=${__VU} account=${account} WARNING=no token -> skipping game click`);
-    return; // итерация завершается — VU больше не делает ничего (per-vu-iterations = 1)
+    return;
   }
 
-  // === СИНХРОНИЗАЦИЯ ===
-  console.log(`VU=${__VU} account=${account} ACTION=wait_before_click wait=${SYNC_WAIT_SEC}s`);
-  sleep(SYNC_WAIT_SEC);
+  // === ЖДЁМ ОБЩИЙ МОМЕНТ КЛИКА ===
+  const msLeft = (data.sync_at || Date.now()) - Date.now();
+  if (msLeft > 0) sleep(msLeft / 1000);
 
-  // === ONE GAME CLICK ===
-  const gameHeaders = {
-    'Accept': 'application/json, text/plain, */*',
-    'Authorization': `Bearer ${token}`,
-    'Origin': 'https://luckystake.com',
-    'Referer': 'https://luckystake.com/',
-    'x-platform': 'web',
-    'x-site-id': '1a2a9023-dd0c-4052-93ef-b5e696daeb32',
-    'User-Agent': 'k6loadtest/1.0 (+https://k6.io/)',
-  };
+  // === GAME CLICK (СИНХРОННО) ===
+  const gameHeaders = { ...gameHeadersBase, Authorization: `Bearer ${token}` };
 
   console.log(`VU=${__VU} account=${account} ACTION=game_click START`);
   const gameRes = http.get(GAME_URL, { headers: gameHeaders });

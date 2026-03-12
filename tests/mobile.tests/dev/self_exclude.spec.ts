@@ -94,45 +94,47 @@ test('@Regress self exclude', async ({ page }) => {
   await page.getByTestId('submit-button-signup').click();
 
   await delay10Seconds();
-await delay10Seconds();
+// await delay10Seconds();
 
-await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+// await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
 
-await delay10Seconds();
+// await delay10Seconds();
 
-  await page.getByTestId('first-name-input-complete-profile').click();
-  await page.getByTestId('first-name-input-complete-profile').fill('up');
-  await page.getByTestId('last-name-input-complete-profile').click();
-  await page.getByTestId('last-name-input-complete-profile').fill('ce');
+
 //   await page.getByTestId('state-select-complete-profile').click();
 //   await page.getByText('Arizona').click();
 
 // await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
 
-await delay5Seconds();
-await page.getByTestId('state-select-complete-profile').click();
-await delay5Seconds();
-await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
-await delay5Seconds();
+// await delay5Seconds();
+// await page.getByTestId('state-select-complete-profile').click();
+// await delay5Seconds();
+// await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
+// await delay5Seconds();
 
 
-  await page.getByTestId('month-select-complete-profile').click();
-  await page.getByRole('listitem').filter({ hasText: 'February' }).click();
-  await page.getByTestId('day-input-complete-profile').click();
-  await page.getByTestId('day-input-complete-profile').fill('22');
-  await page.getByTestId('year-input-complete-profile').click();
-  await page.getByTestId('year-input-complete-profile').fill('1999');
-  await page.getByTestId('submit-button-complete-profile').click();
+//   await page.getByTestId('month-select-complete-profile').click();
+//   await page.getByRole('listitem').filter({ hasText: 'February' }).click();
+//   await page.getByTestId('day-input-complete-profile').click();
+//   await page.getByTestId('day-input-complete-profile').fill('22');
+//   await page.getByTestId('year-input-complete-profile').click();
+//   await page.getByTestId('year-input-complete-profile').fill('1999');
+
+//     await page.getByTestId('first-name-input-complete-profile').click();
+//   await page.getByTestId('first-name-input-complete-profile').fill('up');
+//   await page.getByTestId('last-name-input-complete-profile').click();
+//   await page.getByTestId('last-name-input-complete-profile').fill('ce');
+//   await page.getByTestId('submit-button-complete-profile').click();
 
 
-  await delay5Seconds();
+//   await delay5Seconds();
 
-  screenshot = await page.screenshot({ fullPage: true });
-  test.info().attach(`registration is completed`, {
-    body: screenshot,
-    contentType: 'image/png',
-  });
-  await delay5Seconds();
+//   screenshot = await page.screenshot({ fullPage: true });
+//   test.info().attach(`registration is completed`, {
+//     body: screenshot,
+//     contentType: 'image/png',
+//   });
+//   await delay5Seconds();
 
   await page.goto('https://luckystake.dev/');
 

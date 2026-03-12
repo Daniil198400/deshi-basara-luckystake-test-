@@ -70,6 +70,7 @@ await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 await page.getByRole('img', { name: 'close' }).click();
 await delay5Seconds();
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
 
 
 const page5Promise = page.waitForEvent('popup');

@@ -34,6 +34,11 @@ test('@Regress promotions', async ({ context }) => {
 
   await delay5Seconds();
 
+    await page.goto('http://luckystake.dev/promotions')
+
+
+
+
 let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`promotion page`, {
       body: screenshot,
@@ -41,6 +46,10 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
   await delay5Seconds();
 
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
+   
+
+await page.goto('http://luckystake.dev/promotions')
 
 
 
@@ -118,3 +127,6 @@ let screenshot = await page.screenshot({ fullPage: true });
     });
     await delay5Seconds();
 });
+
+
+

@@ -87,9 +87,9 @@ await delay5Seconds();
 
 // список игр
 const games = [ 
-  'https://luckystake.com/game/real/3792',
+  'https://luckystake.com/game/real/3765',
   'http://luckystake.com/game/real/3796',
-  'https://luckystake.com/game/real/3726'
+  'https://luckystake.com/game/real/45892'
 ];
 
 // выбираем случайную игру
@@ -103,10 +103,16 @@ await page.goto(randomGame);
 await delay10Seconds();
 await page.getByRole('button', { name: 'Play now' }).click();
 
+
+  await page.locator('iframe[title="Real game"]').contentFrame().getByText('YES').click();
+
+  await page.locator('iframe[title="Real game"]').contentFrame().getByText('NO').click();
+
+  
 // ждём iframe
-const frame = await page
-  .locator('iframe[title="Real game"]')
-  .contentFrame();
+// const frame = await page
+//   .locator('iframe[title="Real game"]')
+//   .contentFrame();
 
   await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });

@@ -24,8 +24,6 @@ test('Registration winpot', async ({ context }) => {
 
 
   await page.getByRole('button', { name: 'Acceder', exact: true }).click();
-
-  await page.getByRole('button', { name: 'Acceder', exact: true }).click();
   await page.getByRole('textbox', { name: 'Usuario o Correo Electrónico' }).click();
   await page.getByRole('textbox', { name: 'Usuario o Correo Electrónico' }).fill('deshi_basara121@gmail.com');
   await page.getByRole('textbox', { name: 'Contraseña Contraseña' }).click();

@@ -103,11 +103,15 @@ test('@ClickOnAdditionalStep Microgaming', async ({ context }) => {
   const gamePage = new GamePage(page);
 
   // авторизация
-  await page.goto('https://luckystake.com/');
-  await homePage.closePopupIfVisible();
-  await loginPage.openLoginForm();
-  await loginPage.login('wiztest+70001@gmail.com', 'Qwerty1!');
-  await delay5Seconds();
+await page.goto('https://luckystake.com/');
+
+await page.getByTestId('login-header').click();
+await page.getByTestId('email-input-login').click();
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
+await page.getByTestId('password-input-login').click();
+await page.getByTestId('password-input-login').fill('Qwerty1!');
+await page.getByTestId('submit-button-login').click();
+await delay5Seconds();
 const closeBtn = page.locator('.WizIconButton_base__JfGpY.WizPopupWrapper_close__hKtRn');
 if (await closeBtn.isVisible()) {
   await closeBtn.click();

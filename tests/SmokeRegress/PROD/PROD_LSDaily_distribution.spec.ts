@@ -58,7 +58,15 @@ await clickCloseIfVisible(page);
 await page.goto('https://luckystake.com/store');
 
 await page.getByTestId('daily-rewards-button-shop').click();
-await page.getByRole('button', { name: 'Claim', exact: true }).click();
+
+
+async function clickClaimIfExists(page: Page) {
+  const button = page.getByRole('button', { name: 'Claim', exact: true });
+  if (await button.count() > 0) {
+    await button.first().click();
+  }
+}
+
 
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });

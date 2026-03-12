@@ -93,10 +93,7 @@ test('@Regress self exclude', async ({ page }) => {
 
   await page.getByTestId('submit-button-signup').click();
 
-  await page.getByTestId('first-name-input-complete-profile').click();
-  await page.getByTestId('first-name-input-complete-profile').fill('up');
-  await page.getByTestId('last-name-input-complete-profile').click();
-  await page.getByTestId('last-name-input-complete-profile').fill('ce');
+
 //   await page.getByTestId('state-select-complete-profile').click();
 //   await page.getByText('Arizona').click();
 
@@ -115,9 +112,15 @@ await delay5Seconds();
   await page.getByTestId('day-input-complete-profile').fill('22');
   await page.getByTestId('year-input-complete-profile').click();
   await page.getByTestId('year-input-complete-profile').fill('1999');
-  await page.getByTestId('submit-button-complete-profile').click();
   await delay5Seconds();
+  await page.getByTestId('first-name-input-complete-profile').click();
+  await page.getByTestId('first-name-input-complete-profile').fill('up');
+  await page.getByTestId('last-name-input-complete-profile').click();
+  await page.getByTestId('last-name-input-complete-profile').fill('ce');
 
+    await page.getByTestId('submit-button-complete-profile').click();
+
+    
   screenshot = await page.screenshot({ fullPage: true });
   test.info().attach(`registration is completed`, {
     body: screenshot,

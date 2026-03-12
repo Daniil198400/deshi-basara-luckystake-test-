@@ -63,6 +63,51 @@ await page.getByTestId('submit-button-signup').click();
 
 await delay5Seconds();
 
+
+
+
+
+
+
+const closeBtn = page.locator('iframe').first().contentFrame()
+  .getByRole('link', { name: '×' });
+
+if (await closeBtn.isVisible().catch(() => false)) {
+  await closeBtn.click();
+}
+
+const claimPromo = page.locator('[id="__btgPromo7341673e-a543-4106-83c3-89aaed7beb5d"]')
+  .contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimPromo.isVisible().catch(() => false)) {
+  await claimPromo.click();
+}
+
+const claimBtn = page.locator('iframe').nth(3).contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimBtn.isVisible().catch(() => false)) {
+  await claimBtn.click();
+}
+
+
+const lobbyClose = page.getByTestId('close-button-lobbywidget');
+
+if (await lobbyClose.isVisible().catch(() => false)) {
+  await lobbyClose.click();
+}
+
+const closeImg = page.getByRole('img', { name: 'close' });
+
+if (await closeImg.isVisible().catch(() => false)) {
+  await closeImg.click();
+}
+
+
+await delay5Seconds();
+
+
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('hygf');
 await page.getByTestId('last-name-input-complete-profile').click();

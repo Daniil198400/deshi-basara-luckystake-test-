@@ -6,50 +6,54 @@ import { delay10Seconds, delay5Seconds } from '../../../../utils/utils';
 
 // Array of IDs
 const gameIds = [
-        "35816",
-        "35818",
-        "35819",
-        "35820",
-        "35821",
-        "35822",
-        "35823",
-        "35824",
-        "35825",
-        "35826",
-        "35827",
-        "35828",
+        "46065",
+        "46048",
+        "46047",
+        "46046",
         "35829",
-        "38805",
-        "35798",
-        "35799",
-        "35800",
-        "35801",
-        "35802",
-        "35803",
-        "35804",
-        "35806",
-        "35807",
-        "35808",
-        "35809",
-        "35810",
-        "35811",
-        "35812",
-        "35813",
-        "35814",
+        "35828",
+        "35827",
+        "35826",
+        "35825",
+        "35824",
+        "35823",
+        "35822",
+        "35821",
+        "35820",
+        "35819",
+        "35818",
         "35815",
-        "35817",
-        "35786",
-        "35787",
-        "35788",
-        "35789",
-        "35790",
-        "35791",
-        "35792",
-        "35793",
-        "35794",
-        "35795",
-        "35796",
-        "35797"
+        "35814",
+        "35813",
+        "35812",
+        "35811",
+        "35810",
+        "35809",
+        "35808",
+        "35807",
+        "35806",
+        "35802",
+        "46049",
+        "46045",
+        "46050",
+        "46044",
+        "46042",
+        "46051",
+        "46052",
+        "46053",
+        "46054",
+        "46055",
+        "46056",
+        "46057",
+        "46058",
+        "46059",
+        "46060",
+        "46061",
+        "46062",
+        "46063",
+        "46064",
+        "46043",
+        "44815"
 ];
 
 // function
@@ -70,24 +74,24 @@ async function playGames(page: Page) {
         await page.getByRole('button', { name: 'Play now' }).click();
         
         try {
-                await page.waitForLoadState('networkidle', { timeout: 50000 });
+                await page.waitForLoadState('networkidle', { timeout: 40000 });
               } catch {
-                console.warn('⏱️ Network idle is not found after 50 сек, continue...');
+                console.warn('Network idle is not found after 40 сек, continue...');
               }
                 await delay10Seconds();
 
-        await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
-                  position: {
-                    x: 595,
-                    y: 559
+     //   await page.locator('iframe[title="Real game"]').contentFrame().locator('canvas').click({
+            //      position: {
+             //       x: 595,
+         //           y: 559
                   }
-                });
+         //       });
 
  
-        await delay5Seconds();
+      //  await delay5Seconds();
 
         // второй скриншот
-        screenshot = await page.screenshot({ fullPage: true });
+       let screenshot = await page.screenshot({ fullPage: true });
         test.info().attach(`game_${id}_after_wait`, { 
             body: screenshot, 
             contentType: 'image/png' 
@@ -95,7 +99,7 @@ async function playGames(page: Page) {
 
         await delay5Seconds();
     }
-}
+
 
 test('@ClickOnAdditionalStep Slotmill', async ({ context }) => {
     const page = await context.newPage();

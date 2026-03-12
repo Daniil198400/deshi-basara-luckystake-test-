@@ -92,6 +92,8 @@ await delay10Seconds();
 
 await delay5Seconds();
 
+await page.locator('iframe').first().contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
+
 await page.getByTestId('first-name-input-complete-profile').click();
 await page.getByTestId('first-name-input-complete-profile').fill('up');
 await page.getByTestId('last-name-input-complete-profile').click();

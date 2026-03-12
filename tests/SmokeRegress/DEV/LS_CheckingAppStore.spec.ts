@@ -76,6 +76,7 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 
 await page.goto('https://luckystake.dev/');
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
 
 
   await page.locator('div').filter({ hasText: /^Download and Play on iPhone$/ }).click();

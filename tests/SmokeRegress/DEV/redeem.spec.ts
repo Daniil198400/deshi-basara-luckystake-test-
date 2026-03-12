@@ -61,9 +61,9 @@ await page.goto('https://luckystake.dev/');
 
 await page.getByTestId('login-header').click();
 await page.getByTestId('email-input-login').click();
-await page.getByTestId('email-input-login').fill('dksld144@gmail.com');
+await page.getByTestId('email-input-login').fill('dksld1@gmail.com');
 await page.getByTestId('password-input-login').click();
-await page.getByTestId('password-input-login').fill('Qwerty1!!');
+await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 let screenshot = await page.screenshot({ fullPage: true });
@@ -75,12 +75,16 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 
 await page.goto('https://luckystake.dev/');
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
 
 await page.getByTestId('redeem-redeem-buttons').click();
 
 
 await page.getByTestId('cash-prize-button-redeem').click();
-await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^AIRWALLEX50SC - 500000SC$/ }).first().click();
+
+await page.locator('iframe[title="WizCashier"]').contentFrame().locator('svg').click();
+
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^AIRWALLEX50SC - 500000SC$/ }).first().click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().getByPlaceholder(' ').fill('SC 57');
 await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Redeem' }).click();
 await delay5Seconds();;

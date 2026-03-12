@@ -72,7 +72,7 @@ async function waitLoginSignals(page: import('@playwright/test').Page) {
   return result === true; // true — успех; false — либо ошибка, либо таймаут вернул false
 }
 
-// ===== ХЕЛПЕР: логин с fallback-паролями (ОБНОВЛЕНО, НЕ ВЫБИВАЕТ) =====
+// ===== ХЕЛПЕР: логин с fallback-паролями =====
 async function loginWithFallback(
   page: import('@playwright/test').Page,
   email: string,
@@ -92,6 +92,10 @@ async function loginWithFallback(
   for (const pwd of passwords) {
     console.log(`Пробуем пароль: ${pwd}`);
     await page.getByTestId('password-input-login').fill(pwd);
+
+    await delay5Seconds();
+    let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`trying password ${pwd}`, { body: screenshot, contentType: 'image/png' });
 
     // ждем клик + возможный ответ логина (если есть такой эндпоинт — подставь свой паттерн)
     await Promise.all([
@@ -119,6 +123,8 @@ async function loginWithFallback(
   return { success: false, tried: passwords };
 }
 
+
+
 // ===== ХЕЛПЕР: закрыть попапы, если есть =====
 async function closePopupsIfPresent(page: import('@playwright/test').Page) {
   try {
@@ -142,10 +148,8 @@ async function changePasswordSmart(
   await delay5Seconds();
 
   // Переходим в Account → My Profile
-  await page.getByRole('button', { name: 'Account' }).click();
-  await page.locator('.AccountModal_myProfileButton__FIkO4 > svg').click();
-
-  await delay5Seconds();
+ 
+  await page.goto('https://luckystake.com/account/details');
 
   // Заполняем поля смены пароля
   await page.getByRole('textbox', { name: 'Current password' }).click();
@@ -185,6 +189,15 @@ test('@Regress login, change password and logout, login', async ({ page }) => {
   // Первый логин
   const firstLogin = await loginWithFallback(page, EMAIL, PASSWORDS);
 
+  await delay5Seconds();
+ let screenshot = await page.screenshot({ fullPage: true });
+    test.info().attach(`game`, {
+      body: screenshot,
+      contentType: 'image/png', 
+    });
+
+
+
   // НЕ бросаем throw — сохраняем браузер и открываем инспектор при фейле
   expect.soft(firstLogin.success, `Не удалось войти ни с одним паролем: ${firstLogin.tried?.join(', ')}`).toBeTruthy();
   if (!firstLogin.success) {
@@ -220,12 +233,16 @@ await page.goto('https://luckystake.com/');
   await page.getByTestId('login-header').click();
   await page.getByTestId('email-input-login').fill(EMAIL);
   await page.getByTestId('password-input-login').fill(newPassword);
+await delay5Seconds();
+  screenshot = await page.screenshot({ fullPage: true });
+  test.info().attach(`reloging with new password`, { body: screenshot, contentType: 'image/png' });
+await delay5Seconds();
   await page.getByTestId('submit-button-login').click();
 
   // await page.getByRole('img', { name: 'close' }).click();
 
   await delay5Seconds();
-  let screenshot = await page.screenshot({ fullPage: true });
+  screenshot = await page.screenshot({ fullPage: true });
   test.info().attach(`re-login with new password`, { body: screenshot, contentType: 'image/png' });
 
   await page.context().tracing.stop({ path: 'trace.zip' });

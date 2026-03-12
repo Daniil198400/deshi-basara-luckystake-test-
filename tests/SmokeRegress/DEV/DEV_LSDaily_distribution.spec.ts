@@ -45,6 +45,35 @@ async function clickCloseIfVisible(page: import('@playwright/test').Page) {
 await page.goto('https://luckystake.dev/');
 await delay5Seconds();
 
+
+
+
+
+const claimFrame = page.locator('iframe').first().contentFrame();
+const claimButton = claimFrame.getByRole('button', { name: 'Claim' });
+
+if (await claimButton.isVisible().catch(() => false)) {
+  await claimButton.click();
+}
+
+
+const closeImageButton = page.getByRole('img', { name: 'close' });
+
+if (await closeImageButton.isVisible().catch(() => false)) {
+  await closeImageButton.click();
+}
+
+
+const lobbyCloseButton = page.getByTestId('close-button-lobbywidget');
+
+if (await lobbyCloseButton.isVisible().catch(() => false)) {
+  await lobbyCloseButton.click();
+}
+
+
+
+
+
 await page.getByTestId('login-header').click();
 await delay5Seconds();
 
@@ -56,6 +85,8 @@ await page.getByTestId('submit-button-login').click();
 await delay10Seconds();
 await clickCloseIfVisible(page);
 await page.goto('https://luckystake.dev/store');
+
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
 
 await page.getByTestId('daily-rewards-button-shop').click();
 await page.getByRole('button', { name: 'Claim', exact: true }).click();

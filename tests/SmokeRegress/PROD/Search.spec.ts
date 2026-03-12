@@ -54,7 +54,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress luckystake DEV searching', async ({ page }) => {
+test('@Regress luckystake PROD searching', async ({ page }) => {
 
 await page.goto('https://luckystake.com/');
 
@@ -66,8 +66,19 @@ await page.getByTestId('password-input-login').fill('Qwerty1!');
 await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 await handleAllPopups(page, 4, 1000);
-await delay5Seconds();
-  await page.getByRole('button', { name: 'Search' }).click();
+
+
+
+
+//await page.locator('iframe').nth(1).contentFrame().getByRole('link', { name: '×' }).click();
+//await page.getByRole('img', { name: 'close' }).click();
+//await page.getByTestId('close-button-lobbywidget').click();
+//await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
+
+
+await page.goto('https://luckystake.com/');
+
+await page.getByRole('button', { name: 'Search' }).click();
 await delay5Seconds();  
 let screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`games`, {

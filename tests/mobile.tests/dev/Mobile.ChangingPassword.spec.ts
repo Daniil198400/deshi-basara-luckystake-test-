@@ -142,10 +142,10 @@ async function changePasswordSmart(
   await delay5Seconds();
 
   // Переходим в Account → My Profile
-  await page.getByRole('button', { name: 'Account' }).click();
-  await page.locator('.AccountModal_myProfileButton__FIkO4 > svg').click();
+  // await page.getByRole('button', { name: 'Account' }).click();
+  // await page.locator('.AccountModal_myProfileButton__FIkO4 > svg').click();
 
-  await delay5Seconds();
+  // await delay5Seconds();
 
   // Заполняем поля смены пароля
   await page.getByRole('textbox', { name: 'Current password' }).click();
@@ -199,7 +199,11 @@ test('@Regress login, change password and logout, login', async ({ page }) => {
 
   const usedPassword = firstLogin.passwordUsed!;
   await delay5Seconds();
-  await page.getByRole('img', { name: 'close' }).click();
+  // await page.getByRole('img', { name: 'close' }).click();
+
+
+
+  await page.goto('https://luckystake.dev/account/details');
 
   // Меняем пароль
   const newPassword = await changePasswordSmart(page, usedPassword, PASSWORDS);

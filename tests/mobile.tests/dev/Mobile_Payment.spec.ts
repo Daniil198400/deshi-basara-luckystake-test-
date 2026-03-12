@@ -76,6 +76,42 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 await page.goto('https://luckystake.dev/store');
 
+
+const closeBtn = page.locator('iframe').first().contentFrame()
+  .getByRole('link', { name: '×' });
+
+if (await closeBtn.isVisible().catch(() => false)) {
+  await closeBtn.click();
+}
+
+const claimPromo = page.locator('[id="__btgPromo7341673e-a543-4106-83c3-89aaed7beb5d"]')
+  .contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimPromo.isVisible().catch(() => false)) {
+  await claimPromo.click();
+}
+
+const claimBtn = page.locator('iframe').nth(3).contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimBtn.isVisible().catch(() => false)) {
+  await claimBtn.click();
+}
+
+
+const lobbyClose = page.getByTestId('close-button-lobbywidget');
+
+if (await lobbyClose.isVisible().catch(() => false)) {
+  await lobbyClose.click();
+}
+
+const closeImg = page.getByRole('img', { name: 'close' });
+
+if (await closeImg.isVisible().catch(() => false)) {
+  await closeImg.click();
+}
+
 await page.locator('div').filter({ hasText: /^10k\+ free 5\$4\.99$/ }).getByTestId('bundle-buy-button-shop').click();
 await page.getByRole('textbox', { name: 'Billing Address' }).click();
 await page.getByRole('textbox', { name: 'Billing Address' }).fill('jhgfd');
@@ -92,6 +128,7 @@ await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashie
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Card number' }).click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Card number' }).fill('5223450000000007');
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: '•• / ••' }).fill('02 / 29');
+await delay5Seconds();
 await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#cashierIframe').contentFrame().locator('iframe[name="hosted-field-single-iframe"]').contentFrame().getByRole('textbox', { name: 'Security Code' }).fill('422');
 
 

@@ -147,7 +147,7 @@ async function changePasswordSmart(
 await page.goto('https://luckystake.dev/account/details');
   await delay10Seconds();
 await delay5Seconds();
-  // await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
+  await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
 
   await page.getByRole('textbox', { name: 'Current password' }).fill(currentPassword);
   await page.getByRole('textbox', { name: 'New password', exact: true }).fill(newPassword);
@@ -192,8 +192,16 @@ test('@Regress login, change password and logout, login', async ({ page }) => {
   const usedPassword = firstLogin.passwordUsed!;
   await delay5Seconds();
 
-// await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
+
+
 await page.goto('https://luckystake.dev/account/details');
+
+
+
+
+
+
+
   // Меняем пароль
   const newPassword = await changePasswordSmart(page, usedPassword, PASSWORDS);
 

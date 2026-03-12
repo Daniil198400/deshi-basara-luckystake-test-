@@ -82,19 +82,68 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 
 
-await page.getByRole('img', { name: 'close' }).click();
+
+
+const closeBtn = page.locator('iframe').first().contentFrame()
+  .getByRole('link', { name: '×' });
+
+if (await closeBtn.isVisible().catch(() => false)) {
+  await closeBtn.click();
+}
+
+const claimPromo = page.locator('[id="__btgPromo7341673e-a543-4106-83c3-89aaed7beb5d"]')
+  .contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimPromo.isVisible().catch(() => false)) {
+  await claimPromo.click();
+}
+
+const claimBtn = page.locator('iframe').nth(3).contentFrame()
+  .getByRole('button', { name: 'Claim' });
+
+if (await claimBtn.isVisible().catch(() => false)) {
+  await claimBtn.click();
+}
+
+
+const lobbyClose = page.getByTestId('close-button-lobbywidget');
+
+if (await lobbyClose.isVisible().catch(() => false)) {
+  await lobbyClose.click();
+}
+
+const closeImg = page.getByRole('img', { name: 'close' });
+
+if (await closeImg.isVisible().catch(() => false)) {
+  await closeImg.click();
+}
 
 await page.getByRole('button', { name: 'Redeem' }).click();
+await delay10Seconds();
 
-await page.getByTestId('cash-prize-button-redeem').click();
-await page.locator('iframe[title="WizCashier"]').contentFrame().locator('div').filter({ hasText: /^AIRWALLEX50SC - 500000SC$/ }).first().click();
-await page.locator('iframe[title="WizCashier"]').contentFrame().getByPlaceholder(' ').fill('SC 57');
+
+await page.getByTestId('payout-card-button-redeem').click();
 await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Redeem' }).click();
 
-
-await page.locator('iframe[title="WizCashier"]').contentFrame().locator('#user_options').click();
-
 await delay10Seconds();
+
+
+// await page.getByTestId('gift-cards-button-redeem').click();
+// await delay10Seconds();
+
+// await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('button', { name: 'Redeem' }).click();
+// await delay10Seconds();
+
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('iframe').contentFrame().locator('.clear-image-overlay').first().click();
+// await delay10Seconds();
+
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('iframe').contentFrame().getByRole('button', { name: 'Select Gift Card' }).click();
+// await delay10Seconds();
+
+// await page.locator('iframe[title="WizCashier"]').contentFrame().locator('iframe').contentFrame().getByRole('button', { name: 'Confirm purchase' }).click();
+
+// await delay10Seconds();
 
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`Redeem is deshi basara`, {

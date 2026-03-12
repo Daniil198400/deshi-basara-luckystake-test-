@@ -67,6 +67,9 @@ await page.getByTestId('submit-button-login').click();
 await delay5Seconds();
 await handleAllPopups(page, 4, 1000);
 await delay5Seconds();
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
+  await page.goto('https://luckystake.dev/');
+
   await page.getByRole('button', { name: 'Search' }).click();
 await delay5Seconds();  
 let screenshot = await page.screenshot({ fullPage: true });

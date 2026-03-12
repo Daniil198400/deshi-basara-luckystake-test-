@@ -35,6 +35,10 @@ test('@Regress shop', async ({ context }) => {
   // await page.locator('iframe[name="chat-widget-minimized"]').contentFrame().getByRole('button', { name: 'Hide greeting' }).click();
 await delay5Seconds();
   await page.goto('https://luckystake.dev/store');
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
+
+
+  await page.goto('https://luckystake.dev/store');
 
   // await page.getByRole('navigation').getByRole('link', { name: 'Store' }).click();
   await delay5Seconds();

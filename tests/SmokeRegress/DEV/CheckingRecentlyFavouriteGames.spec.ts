@@ -75,6 +75,9 @@ let screenshot = await page.screenshot({ fullPage: true });
 await delay5Seconds();
 await page.goto('https://luckystake.dev/');
 
+await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
+
+
 await page.getByRole('button', { name: 'Favorite Games' }).click();
 
 await delay5Seconds();
@@ -89,6 +92,7 @@ await delay5Seconds();
 const games = [
   'https://luckystake.dev/game/real/3796',
   'https://luckystake.dev/game/real/3792',
+  'https://luckystake.dev/game/real/3759',
 ];
 
 // выбираем случайную игру

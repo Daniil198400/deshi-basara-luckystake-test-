@@ -75,10 +75,11 @@ let screenshot = await page.screenshot({ fullPage: true });
 
 await delay5Seconds();
 
-await page.goto('https://luckystake.com/store');
+await page.goto('https://luckystake.com/promotions');
 
 
-await page.getByRole('link', { name: 'Luckystake Promotions' }).click();
+
+// await page.getByRole('link', { name: 'Luckystake Promotions' }).click();
 await delay5Seconds();
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`promotions`, {

@@ -114,7 +114,8 @@ await delay5Seconds();
   await delay5Seconds();
 
   await page.goto('https://luckystake.dev/');
-  
+  await page.getByTestId('close-button-lobbywidget').count() && await page.getByTestId('close-button-lobbywidget').click();
+
   // await page.getByRole('img', { name: 'close' }).click();
   // await page.locator('iframe').nth(3).contentFrame().getByRole('link', { name: 'START PLAYING' }).click();
   

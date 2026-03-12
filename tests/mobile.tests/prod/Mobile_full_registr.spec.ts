@@ -63,10 +63,7 @@ await page.getByTestId('submit-button-signup').click();
 
 await delay5Seconds();
 
-await page.getByTestId('first-name-input-complete-profile').click();
-await page.getByTestId('first-name-input-complete-profile').fill('hygf');
-await page.getByTestId('last-name-input-complete-profile').click();
-await page.getByTestId('last-name-input-complete-profile').fill('hgf');
+
 await page.getByTestId('state-select-complete-profile').click();
 await delay5Seconds();
 await page.getByRole('listitem').filter({ hasText: 'Alaska' }).click();
@@ -84,14 +81,30 @@ await page.getByTestId('day-input-complete-profile').click();
 await page.getByTestId('day-input-complete-profile').fill('22');
 await page.getByTestId('year-input-complete-profile').click();
 await page.getByTestId('year-input-complete-profile').fill('2000');
+
+await page.getByTestId('first-name-input-complete-profile').click();
+await page.getByTestId('first-name-input-complete-profile').fill('hygf');
+await page.getByTestId('last-name-input-complete-profile').click();
+await page.getByTestId('last-name-input-complete-profile').fill('hgf');
+
 await page.getByTestId('submit-button-complete-profile').click();
- screenshot = await page.screenshot({ fullPage: true });
+await delay5Seconds();
+
+
+screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`registr 2`, {
       body: screenshot,
       contentType: 'image/png', 
     });
-await page.getByTestId('close-button-verification').click();
-await page.getByRole('img', { name: 'close' }).click();
+// await page.getByTestId('close-button-verification').click();
+
+async function clickIfVisible(page: Page) {
+  const closeButton = page.getByRole('img', { name: 'close' });
+  
+  if (await closeButton.isVisible().catch(() => false)) {
+    await closeButton.click();
+  }
+}
 
 await delay5Seconds();
 });

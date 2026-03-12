@@ -96,7 +96,8 @@ await page.locator('iframe[name="chat-widget"]').contentFrame().getByRole('butto
 // await page.locator('iframe[name="chat-widget"]').contentFrame().getByRole('textbox', { name: 'Write a message…' }).click();
 await page.locator('iframe[name="chat-widget"]').contentFrame().getByRole('textbox', { name: 'Write a message…' }).fill('hey');
 await page.locator('iframe[name="chat-widget"]').contentFrame().getByRole('button', { name: 'Send a message' }).click();
-await delay10Seconds();  
+await delay10Seconds(); 
+await delay10Seconds(); 
 screenshot = await page.screenshot({ fullPage: true });
     test.info().attach(`chat bot is opened`, {
       body: screenshot,

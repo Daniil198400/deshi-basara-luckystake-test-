@@ -55,7 +55,7 @@ export async function handleAllPopups(page: import('@playwright/test').Page, att
   console.log('Все попытки закрытия окон завершены');
 }
 
-test('@Regress login logout', async ({ page }) => {
+test('@Regress footers', async ({ page }) => {
 
 
 await page.goto('https://luckystake.com/');
