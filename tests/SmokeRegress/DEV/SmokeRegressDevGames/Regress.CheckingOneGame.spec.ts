@@ -75,7 +75,9 @@ let screenshot = await page.screenshot();
                 contentType: 'image/png' 
             });
 await delay5Seconds();
-await page.getByRole('button', { name: 'Play now' }).click();
+const btn = page.getByRole('button', { name: 'Play now' });
+if (await btn.isVisible()) await btn.click();
+
 await delay10Seconds();
 
 await page.getByRole('button').filter({ hasText: /^$/ }).click();
@@ -120,7 +122,8 @@ screenshot = await page.screenshot();
 await page.getByRole('button', { name: '$49.99' }).click();
 await delay5Seconds();
 
-await page.locator('iframe[title="WizCashier"]').contentFrame().locator('svg').click();
+
+await page.locator('iframe[title="WizCashier"]').contentFrame().getByRole('img').nth(2).click();
 await delay5Seconds();
 
 

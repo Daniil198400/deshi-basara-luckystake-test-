@@ -65,7 +65,7 @@ if (await btn.isVisible()) await btn.click();
   await delay5Seconds();
 
   try {
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('networkidle', { timeout: 10000 });
   } catch {
     console.warn('Network idle is not found after 30 sec, keep going...');
   }
@@ -91,7 +91,7 @@ if (await btn.isVisible()) await btn.click();
       await searchButton.first().click();
 
       try {
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('Network idle is not found after 30 sec, keep going...');
       }
@@ -110,7 +110,7 @@ if (await btn.isVisible()) await btn.click();
   const buyButton = page.getByRole('button', { name: 'buy' });
   if (await clickIfVisible(buyButton, 10000)) {
     try {
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
+      await page.waitForLoadState('networkidle', { timeout: 10000 });
     } catch {
       console.warn('Network idle is not found after 30 sec, keep going...');
     }
@@ -119,7 +119,7 @@ if (await btn.isVisible()) await btn.click();
     const shot = await page.screenshot();
     test.info().attach('game_buy_button', { body: shot, contentType: 'image/png' });
 
-    const prices = ['$1.99', '$4.99', '$9.99', '$24.99', '$34.99'];
+    const prices = ['19.99', '74.99', '49.99', '$34.99'];
     const randomPrice = prices[Math.floor(Math.random() * prices.length)];
     const priceButton = page.getByRole('button', { name: randomPrice });
 
@@ -127,7 +127,7 @@ if (await btn.isVisible()) await btn.click();
       console.log(`Click on price button: ${randomPrice}`);
 
       try {
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
+        await page.waitForLoadState('networkidle', { timeout: 10000 });
       } catch {
         console.warn('Network idle is not found after 30 sec, keep going...');
       }

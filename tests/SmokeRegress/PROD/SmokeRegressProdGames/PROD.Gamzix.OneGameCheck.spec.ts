@@ -54,7 +54,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
   await delay5Seconds();
 
   try {
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState('networkidle', { timeout: 10000 });
   } catch {
     console.warn('Network idle is not found after 30 sec, keep going...');
   }
@@ -99,7 +99,7 @@ await page.getByRole('button', { name: 'Play now' }).click();
   const buyButton = page.getByRole('button', { name: 'buy' });
   if (await clickIfVisible(buyButton, 10000)) {
     try {
-      await page.waitForLoadState('networkidle', { timeout: 10000 });
+      await page.waitForLoadState('networkidle', { timeout: 5000 });
     } catch {
       console.warn('Network idle is not found after 30 sec, keep going...');
     }

@@ -192,6 +192,7 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
   await delay5Seconds();
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+  await page.goto('https://luckystake.dev/provider');
   await page.getByRole('link', { name: 'Novomatic' }).click();
   await delay5Seconds();
 
@@ -204,6 +205,7 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
 
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
   await page.getByRole('link', { name: 'Gamzix' }).click();
   await delay5Seconds();
 
@@ -217,7 +219,7 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
 
 
   await delay5Seconds();
-
+  await page.goto('https://luckystake.dev/provider');
   await page.getByRole('link', { name: 'Iconic21' }).click();
   await delay5Seconds();
 
@@ -227,6 +229,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+
+    await page.goto('https://luckystake.dev/provider');
   await page.getByRole('link', { name: 'RedRake' }).click();
   await delay5Seconds();
   screenshot = await page.screenshot({ fullPage: true });
@@ -237,6 +241,7 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
  
+  await page.goto('https://luckystake.dev/provider');
 
   await page.getByRole('link', { name: 'Four7' }).click();
   await delay5Seconds();
@@ -247,6 +252,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Max Win Gaming' }).click();
   await delay5Seconds();
 
@@ -259,6 +266,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     await delay5Seconds();
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Four Leaf Gaming' }).click();
     await delay5Seconds();
 
@@ -268,6 +277,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Storm Gaming' }).click();
   await delay5Seconds();
 
@@ -277,6 +288,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Relax' }).click();
   await delay5Seconds();
 
@@ -290,6 +303,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
 
  
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Print Studios' }).click();
     await delay5Seconds();
 
@@ -299,6 +314,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: '4ThePlayer' }).click();
     await delay5Seconds();
 
@@ -307,7 +324,9 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     body: screenshot,
     contentType: 'image/png',
   });
-  await page.getByRole('button').filter({ hasText: /^$/ }).click();
+  await page.getByRole('button').filter({ hasText: /^$/ }).click();  
+  await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Fantasma Games' }).click();
     await delay5Seconds();
 
@@ -317,6 +336,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Rubyplay' }).click();
   await delay5Seconds();
 
@@ -328,6 +349,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
 
 
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Peter & Sons' }).click();
     await delay5Seconds();
 
@@ -337,6 +360,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Trigger' }).click();
     await delay5Seconds();
 
@@ -346,6 +371,8 @@ test('@CheckPresenceOfGames Checking All Games Sections', async ({ context }) =>
     contentType: 'image/png',
   });
   await page.getByRole('button').filter({ hasText: /^$/ }).click();
+    await page.goto('https://luckystake.dev/provider');
+
   await page.getByRole('link', { name: 'Spinomenal' }).click();
     await delay5Seconds();
 
